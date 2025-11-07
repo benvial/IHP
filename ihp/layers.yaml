@@ -2027,6 +2027,7 @@ LayerViews:
     width: 1
     color: "magenta"
   Fill:
+    visible: false
     group_members:
       Activfiller:
         layer: [1, 22]
