@@ -104,9 +104,8 @@ def bondpad(
 def bondpad_array(
     n_pads: int = 4,
     pad_pitch: float = 100.0,
-    pad_diameter: float = 68.0,
+    pad_diameter: float = 80.0,
     shape: Literal["octagon", "square", "circle"] = "octagon",
-    stack_metals: bool = True,
 ) -> Component:
     """Create an array of bondpads.
 
@@ -115,7 +114,6 @@ def bondpad_array(
         pad_pitch: Pitch between bondpad centers in micrometers.
         pad_diameter: Diameter of each bondpad in micrometers.
         shape: Shape of the bondpads.
-        stack_metals: Stack all metal layers.
 
     Returns:
         Component with bondpad array.
@@ -125,7 +123,6 @@ def bondpad_array(
     for i in range(n_pads):
         pad = bondpad(
             shape=shape,
-            stack_metals=stack_metals,
             diameter=pad_diameter,
         )
         pad_ref = c.add_ref(pad)
