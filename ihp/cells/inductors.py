@@ -26,12 +26,11 @@ def inductor_min_diameter(width: float, space: float, turns: int, grid: float) -
 def inductor2(
     width: float = 2.0,
     space: float = 2.1,
-    diameter: float = 15.48,
+    diameter: float = 25.35,
     resistance: float = 0.5777,
     inductance: float = 33.303e-12,
     turns: int = 1,
     block_qrc: bool = True,
-    substrate_etch: bool = False,
 ) -> Component:
     """Create a 2-turn inductor.
 
@@ -43,7 +42,6 @@ def inductor2(
         inductance: Inductance in henries.
         turns: Number of turns (default 1 for inductor2).
         block_qrc: Block QRC layer.
-        substrate_etch: Enable substrate etching.
 
     Returns:
         Component with inductor layout.
@@ -51,10 +49,24 @@ def inductor2(
     c = Component()
 
     # Define layers
-    TM2 = (134, 5)  # TopMetal2
-    IND = (8, 5)  # IND layer
-    NoRCX = (15, 5)  # NoRCX layer
-    LBE = (24, 0)  # Substrate etch layer
+    TM2 = (134, 0)  # TopMetal2
+    IND = (27, 0)  # IND layer
+    NoRCX = (148, 0)  # NoRCX layer
+    PWellBlock = (46, 21) # PWellBlock layer
+    TopMetal2Pin = (134, 2) #TopMetal2pin layer
+
+    # No fill layers
+    NoFill_layers = [
+        (1, 23),  # ActiveNoFill
+        (5, 23),  # GatePolyNoFill
+        (8, 23),  # Metal1NoFill
+        (10, 23),  # Metal2NoFill
+        (30, 23),  # Metal3NoFill
+        (50, 23),  # Metal4NoFill
+        (67, 23),  # Metal5NoFill
+        (126, 23),  # TopMetal1NoFill
+        (134, 23),  # TopMetal2NoFill
+    ]
 
     # Grid fixing for manufacturing constraints
     grid = 0.01
@@ -62,91 +74,73 @@ def inductor2(
     s = round(space / grid) * grid
     d = round(diameter / (2 * grid)) * 2 * grid
 
-    # Check minimum diameter
-    min_d = inductor_min_diameter(w, s, turns, grid)
-    if d < min_d:
-        d = min_d
-
     # Calculate geometry parameters
+    r = d / 2 + s
+    octagon_center_y = 3 * r
+    pi_over_4 = math.radians(45)
 
-    # Create octagonal spiral inductor
-    # Center opening
-    octagon_points = []
-    angle_step = 45
-    for i in range(8):
-        angle = i * angle_step * math.pi / 180
-        if i % 2 == 0:  # Cardinal points
-            r = d / 2
-        else:  # Diagonal points
-            r = d / (2 * math.cos(math.pi / 8))
+    path_points = []
+    path_points.append((+space/2, octagon_center_y - r * math.cos(pi_over_4 / 2)))
+
+    for i in range(-2, 6):
+        angle = i * pi_over_4 + pi_over_4 / 2
+        r = d / 2 + s
         x = r * math.cos(angle)
-        y = r * math.sin(angle)
-        octagon_points.append((x, y))
+        y = r * math.sin(angle) + octagon_center_y
 
-    # Create spiral turns
-    for turn in range(turns):
-        turn_offset = turn * (w + s)
-
-        # Create path for this turn
-        path_points = []
-        for i in range(8):
-            angle = (i * 45 + 22.5) * math.pi / 180  # Offset by 22.5 degrees
-            if i % 2 == 0:
-                r = d / 2 + turn_offset + w / 2
-            else:
-                r = (d / 2 + turn_offset + w / 2) / math.cos(math.pi / 8)
-
-            x = r * math.cos(angle)
-            y = r * math.sin(angle)
+        if -2 <= i < 2:
+            path_points.append((x, y))
+        else:
             path_points.append((x, y))
 
-        # Add opening for connection
-        if turn == 0:
-            # Create opening in first turn for connection
-            path_points = path_points[:-1]  # Remove last point to create opening
+    path_points.append((-space/2, octagon_center_y - r * math.cos(pi_over_4 / 2)))
 
-        # Create the path
-        path = gf.Path(path_points)
-        c << gf.path.extrude(path, layer=TM2, width=w)
+    # Create the path
+    path = gf.Path(path_points)
+    c << gf.path.extrude(path, layer=TM2, width=w)
 
-    # Add connection traces and ports
-    # Port 1 - Inner connection
-    port1_trace = c << gf.components.rectangle(size=(w, d / 2 + w), layer=TM2)
-    port1_trace.move((-(d / 2 + w), -w / 2))
+    # Adding ports
+    length = 2 * r + s
+
+    port1_trace = c << gf.components.rectangle(size=(s, length), layer=TM2)
+    port1_trace.move((-s - s/2, 0))
     c.add_port(
-        name="P1", center=(-(d / 2 + w), 0.0), width=w, orientation=180, layer=TM2
+        name="P1", center=(-s, s), width=s, orientation=270, layer=TM2
     )
 
-    # Port 2 - Outer connection
-    outer_radius = d / 2 + turns * (w + s)
-    port2_trace = c << gf.components.rectangle(size=(w, outer_radius + w), layer=TM2)
-    port2_trace.move((outer_radius, -w / 2))
+    port2_trace = c << gf.components.rectangle(size=(s, length), layer=TM2)
+    port2_trace.move((s - s/2, 0))
     c.add_port(
-        name="P2", center=(outer_radius + w, 0), width=w, orientation=0, layer=TM2
+        name="P2", center=(+s, s), width=s, orientation=270, layer=TM2
     )
 
-    # Add IND marker layer
-    c << gf.components.rectangle(
-        size=(2 * outer_radius + 2 * w, 2 * outer_radius + 2 * w),
-        layer=IND,
-        centered=True,
-    )
+    # Add IND layer
+    outer_polygon_pts = []
+    for i in range(8):
+        r_outer =  (d / 2 + length) / (math.cos(pi_over_4/2))
+        angle = i * pi_over_4 + pi_over_4 / 2
+        x = r_outer * math.cos(angle)
+        y = r_outer * math.sin(angle) + octagon_center_y
+        outer_polygon_pts.append((x, y))
+    c.add_polygon(points=outer_polygon_pts, layer=IND)
 
-    # Add blocking layers if requested
+    # Add No fill layers
+    for layer in NoFill_layers:
+        c.add_polygon(points=outer_polygon_pts, layer=layer)
+
+    # Add blocking layer
     if block_qrc:
-        c << gf.components.rectangle(
-            size=(2 * outer_radius + 3 * w, 2 * outer_radius + 3 * w),
-            layer=NoRCX,
-            centered=True,
-        )
+        c.add_polygon(points=outer_polygon_pts, layer=NoRCX)
 
-    # Add substrate etch if requested
-    if substrate_etch:
-        c << gf.components.rectangle(
-            size=(2 * outer_radius + 4 * w, 2 * outer_radius + 4 * w),
-            layer=LBE,
-            centered=True,
-        )
+    # Add PWell block
+    c.add_polygon(points=outer_polygon_pts, layer=PWellBlock)
+
+    # Adding pins
+    pin_1_trace = c << gf.components.rectangle(size=(s, s), layer=TopMetal2Pin)
+    pin_1_trace.move((s/2, 0))
+
+    pin_2_trace = c << gf.components.rectangle(size=(s, s), layer=TopMetal2Pin)
+    pin_2_trace.move((-s-s/2, 0))
 
     # Add metadata
     c.info["resistance"] = resistance
@@ -204,6 +198,8 @@ if __name__ == "__main__":
 
     from ihp import PDK
     from ihp.cells import fixed
+
+    from gdsfactory.difftest import xor
 
     PDK.activate()
 
