@@ -135,9 +135,7 @@ def inductor2(
     # Add PWell block
     c.add_polygon(points=outer_polygon_pts, layer=PWellBlock)
 
-    # Adding ports
-    length = 2 * r + s
-
+    # Adding pins
     pin_1_trace = c << gf.components.rectangle(size=(s, s), layer=TopMetal2Pin)
     pin_1_trace.move((s/2, 0))
 
