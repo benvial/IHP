@@ -2,28 +2,7 @@
 
 import gdsfactory as gf
 from gdsfactory import Component
-
-# Define layers for capacitors
-LAYERS = {
-    "Metal1": (8, 0),
-    "Metal2": (10, 0),
-    "Metal3": (30, 0),
-    "Metal4": (50, 0),
-    "Metal5": (67, 0),
-    "TopMetal1": (126, 5),
-    "TopMetal2": (134, 5),
-    "Via1": (19, 0),
-    "Via2": (29, 0),
-    "Via3": (49, 0),
-    "Via4": (66, 0),
-    "TopVia1": (125, 5),
-    "TopVia2": (133, 5),
-    "MIM": (36, 0),
-    "RFPad": (81, 0),
-    "CapMark": (34, 0),
-    "NoMetFiller": (34, 10),
-    "TEXT": (63, 63),
-}
+from gdsfactory.typings import LayerSpec
 
 
 @gf.cell
@@ -32,6 +11,14 @@ def cmim(
     length: float = 5.0,
     capacitance: float | None = None,
     model: str = "cmim",
+    layer_metal4: LayerSpec = "Metal4drawing",
+    layer_metal5: LayerSpec = "Metal5drawing",
+    layer_mim: LayerSpec = "MIMdrawing",
+    layer_via4: LayerSpec = "Via4drawing",
+    layer_topmetal1: LayerSpec = "TopMetal1drawing",
+    layer_topvia1: LayerSpec = "TopVia1drawing",
+    layer_cap_mark: LayerSpec = "MemCapdrawing",
+    layer_nofill: LayerSpec = "Metal4nofill",
 ) -> Component:
     """Create a MIM (Metal-Insulator-Metal) capacitor.
 
@@ -40,6 +27,14 @@ def cmim(
         length: Length of the capacitor in micrometers.
         capacitance: Target capacitance in fF (optional).
         model: Device model name.
+        layer_metal4: Bottom plate metal layer.
+        layer_metal5: Top plate metal layer.
+        layer_mim: MIM dielectric layer.
+        layer_via4: Via layer for top plate connection.
+        layer_topmetal1: Top metal layer for connections.
+        layer_topvia1: Via to top metal layer.
+        layer_cap_mark: Capacitor marker layer.
+        layer_nofill: No metal filler layer.
 
     Returns:
         Component with MIM capacitor layout.
@@ -73,7 +68,7 @@ def cmim(
 
     bottom_plate = gf.components.rectangle(
         size=(bottom_plate_length, bottom_plate_width),
-        layer=LAYERS["Metal4"],
+        layer=layer_metal4,
         centered=True,
     )
     c.add_ref(bottom_plate)
@@ -81,7 +76,7 @@ def cmim(
     # MIM dielectric layer
     mim_layer = gf.components.rectangle(
         size=(length, width),
-        layer=LAYERS["MIM"],
+        layer=layer_mim,
         centered=True,
     )
     c.add_ref(mim_layer)
@@ -89,7 +84,7 @@ def cmim(
     # Top plate (Metal5)
     top_plate = gf.components.rectangle(
         size=(length, width),
-        layer=LAYERS["Metal5"],
+        layer=layer_metal5,
         centered=True,
     )
     c.add_ref(top_plate)
@@ -105,7 +100,7 @@ def cmim(
 
             via = gf.components.rectangle(
                 size=(cont_size, cont_size),
-                layer=LAYERS["Via4"],
+                layer=layer_via4,
                 centered=True,
             )
             via_ref = c.add_ref(via)
@@ -115,7 +110,7 @@ def cmim(
     # Left extension
     bottom_ext_left = gf.components.rectangle(
         size=(plate_enclosure + 1.0, 1.0),
-        layer=LAYERS["Metal4"],
+        layer=layer_metal4,
     )
     bottom_ext_left_ref = c.add_ref(bottom_ext_left)
     bottom_ext_left_ref.move((-(bottom_plate_length / 2), -0.5))
@@ -123,7 +118,7 @@ def cmim(
     # Right extension for top plate
     top_ext_right = gf.components.rectangle(
         size=(1.0, 1.0),
-        layer=LAYERS["Metal5"],
+        layer=layer_metal5,
     )
     top_ext_right_ref = c.add_ref(top_ext_right)
     top_ext_right_ref.move((length / 2, -0.5))
@@ -131,7 +126,7 @@ def cmim(
     # Via to connect top plate extension to TopMetal1
     top_via = gf.components.rectangle(
         size=(0.9, 0.9),
-        layer=LAYERS["TopVia1"],
+        layer=layer_topvia1,
         centered=True,
     )
     top_via_ref = c.add_ref(top_via)
@@ -139,7 +134,7 @@ def cmim(
 
     top_metal = gf.components.rectangle(
         size=(1.2, 1.2),
-        layer=LAYERS["TopMetal1"],
+        layer=layer_topmetal1,
         centered=True,
     )
     top_metal_ref = c.add_ref(top_metal)
@@ -148,7 +143,7 @@ def cmim(
     # Capacitor marker
     cap_mark = gf.components.rectangle(
         size=(bottom_plate_length + 0.5, bottom_plate_width + 0.5),
-        layer=LAYERS["CapMark"],
+        layer=layer_cap_mark,
         centered=True,
     )
     c.add_ref(cap_mark)
@@ -156,7 +151,7 @@ def cmim(
     # No metal filler region
     no_fill = gf.components.rectangle(
         size=(bottom_plate_length + 1.0, bottom_plate_width + 1.0),
-        layer=LAYERS["NoMetFiller"],
+        layer=layer_nofill,
         centered=True,
     )
     c.add_ref(no_fill)
@@ -167,7 +162,7 @@ def cmim(
         center=(-(bottom_plate_length / 2 + 0.5), 0),
         width=1.0,
         orientation=180,
-        layer=LAYERS["Metal4"],
+        layer=layer_metal4,
         port_type="electrical",
     )
 
@@ -176,7 +171,7 @@ def cmim(
         center=(length / 2 + 0.5, 0),
         width=1.0,
         orientation=0,
-        layer=LAYERS["TopMetal1"],
+        layer=layer_topmetal1,
         port_type="electrical",
     )
 
@@ -196,6 +191,15 @@ def rfcmim(
     length: float = 10.0,
     capacitance: float | None = None,
     model: str = "rfcmim",
+    layer_metal3: LayerSpec = "Metal3drawing",
+    layer_metal4: LayerSpec = "Metal4drawing",
+    layer_metal5: LayerSpec = "Metal5drawing",
+    layer_mim: LayerSpec = "MIMdrawing",
+    layer_via4: LayerSpec = "Via4drawing",
+    layer_topmetal1: LayerSpec = "TopMetal1drawing",
+    layer_topvia1: LayerSpec = "TopVia1drawing",
+    layer_rfpad: LayerSpec = "RFPaddrawing",
+    layer_cap_mark: LayerSpec = "MemCapdrawing",
 ) -> Component:
     """Create an RF MIM capacitor with optimized layout.
 
@@ -204,6 +208,15 @@ def rfcmim(
         length: Length of the capacitor in micrometers.
         capacitance: Target capacitance in fF (optional).
         model: Device model name.
+        layer_metal3: Ground shield metal layer.
+        layer_metal4: Bottom plate metal layer.
+        layer_metal5: Top plate metal layer.
+        layer_mim: MIM dielectric layer.
+        layer_via4: Via layer for top plate connection.
+        layer_topmetal1: Top metal layer for connections.
+        layer_topvia1: Via to top metal layer.
+        layer_rfpad: RF pad marker layer.
+        layer_cap_mark: Capacitor marker layer.
 
     Returns:
         Component with RF MIM capacitor layout.
@@ -238,7 +251,7 @@ def rfcmim(
 
     ground_shield = gf.components.rectangle(
         size=(shield_length, shield_width),
-        layer=LAYERS["Metal3"],
+        layer=layer_metal3,
         centered=True,
     )
     c.add_ref(ground_shield)
@@ -249,7 +262,7 @@ def rfcmim(
 
     bottom_plate = gf.components.rectangle(
         size=(bottom_plate_length, bottom_plate_width),
-        layer=LAYERS["Metal4"],
+        layer=layer_metal4,
         centered=True,
     )
     c.add_ref(bottom_plate)
@@ -257,7 +270,7 @@ def rfcmim(
     # MIM dielectric layer
     mim_layer = gf.components.rectangle(
         size=(length, width),
-        layer=LAYERS["MIM"],
+        layer=layer_mim,
         centered=True,
     )
     c.add_ref(mim_layer)
@@ -265,7 +278,7 @@ def rfcmim(
     # Top plate (Metal5)
     top_plate = gf.components.rectangle(
         size=(length, width),
-        layer=LAYERS["Metal5"],
+        layer=layer_metal5,
         centered=True,
     )
     c.add_ref(top_plate)
@@ -281,7 +294,7 @@ def rfcmim(
 
             via = gf.components.rectangle(
                 size=(cont_size, cont_size),
-                layer=LAYERS["Via4"],
+                layer=layer_via4,
                 centered=True,
             )
             via_ref = c.add_ref(via)
@@ -291,7 +304,7 @@ def rfcmim(
     # Bottom plate pad
     bottom_pad = gf.components.rectangle(
         size=(2.0, 2.0),
-        layer=LAYERS["Metal4"],
+        layer=layer_metal4,
     )
     bottom_pad_ref = c.add_ref(bottom_pad)
     bottom_pad_ref.move((-(bottom_plate_length / 2 + 1.0), -1.0))
@@ -299,7 +312,7 @@ def rfcmim(
     # Top plate pad
     top_pad = gf.components.rectangle(
         size=(2.0, 2.0),
-        layer=LAYERS["TopMetal1"],
+        layer=layer_topmetal1,
     )
     top_pad_ref = c.add_ref(top_pad)
     top_pad_ref.move((length / 2 + 1.0, -1.0))
@@ -308,7 +321,7 @@ def rfcmim(
     # Via stack from Metal5 to TopMetal1
     via5_array = gf.components.rectangle(
         size=(0.9, 0.9),
-        layer=LAYERS["TopVia1"],
+        layer=layer_topvia1,
         centered=True,
     )
     via5_ref = c.add_ref(via5_array)
@@ -316,7 +329,7 @@ def rfcmim(
 
     tm1_connect = gf.components.rectangle(
         size=(2.0, 1.0),
-        layer=LAYERS["TopMetal1"],
+        layer=layer_topmetal1,
     )
     tm1_ref = c.add_ref(tm1_connect)
     tm1_ref.move((length / 2 + 1.0, -0.5))
@@ -324,7 +337,7 @@ def rfcmim(
     # RF pad marker
     rf_pad1 = gf.components.rectangle(
         size=(3.0, 3.0),
-        layer=LAYERS["RFPad"],
+        layer=layer_rfpad,
         centered=True,
     )
     rf_pad1_ref = c.add_ref(rf_pad1)
@@ -332,7 +345,7 @@ def rfcmim(
 
     rf_pad2 = gf.components.rectangle(
         size=(3.0, 3.0),
-        layer=LAYERS["RFPad"],
+        layer=layer_rfpad,
         centered=True,
     )
     rf_pad2_ref = c.add_ref(rf_pad2)
@@ -341,7 +354,7 @@ def rfcmim(
     # Capacitor marker
     cap_mark = gf.components.rectangle(
         size=(shield_length, shield_width),
-        layer=LAYERS["CapMark"],
+        layer=layer_cap_mark,
         centered=True,
     )
     c.add_ref(cap_mark)
@@ -352,7 +365,7 @@ def rfcmim(
         center=(-(bottom_plate_length / 2 + 1.0), 0),
         width=2.0,
         orientation=180,
-        layer=LAYERS["Metal4"],
+        layer=layer_metal4,
         port_type="electrical",
     )
 
@@ -361,7 +374,7 @@ def rfcmim(
         center=(length / 2 + 2.0, 0),
         width=2.0,
         orientation=0,
-        layer=LAYERS["TopMetal1"],
+        layer=layer_topmetal1,
         port_type="electrical",
     )
 
@@ -370,7 +383,7 @@ def rfcmim(
         center=(0, -shield_width / 2),
         width=shield_length,
         orientation=270,
-        layer=LAYERS["Metal3"],
+        layer=layer_metal3,
         port_type="electrical",
     )
 

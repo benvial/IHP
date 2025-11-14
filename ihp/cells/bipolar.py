@@ -2,30 +2,7 @@
 
 import gdsfactory as gf
 from gdsfactory import Component
-
-# Define layers for bipolar transistors
-LAYERS = {
-    "NWell": (31, 0),
-    "PWell": (29, 0),
-    "PWellBlock": (28, 0),
-    "DeepNWell": (30, 0),
-    "DeepPWell": (31, 1),
-    "Activ": (1, 0),
-    "ActiveDummy": (1, 22),
-    "pSD": (14, 0),
-    "nSD": (16, 0),
-    "nBuLay": (32, 0),
-    "pBuLay": (33, 0),
-    "SiProtection": (2, 6),
-    "Cont": (6, 0),
-    "Metal1": (8, 0),
-    "Metal2": (10, 0),
-    "Via1": (19, 0),
-    "NPN": (82, 0),
-    "PNP": (83, 0),
-    "TRANS": (84, 0),
-    "TEXT": (63, 63),
-}
+from gdsfactory.typings import LayerSpec
 
 
 @gf.cell
@@ -34,6 +11,14 @@ def npn13G2(
     emitter_length: float = 0.9,
     model: str = "npn13G2",
     m: int = 1,
+    layer_nwell: LayerSpec = "NWelldrawing",
+    layer_pwell: LayerSpec = "PWelldrawing",
+    layer_activ: LayerSpec = "Activdrawing",
+    layer_psd: LayerSpec = "pSDdrawing",
+    layer_nsd: LayerSpec = "nSDdrawing",
+    layer_cont: LayerSpec = "Contdrawing",
+    layer_metal1: LayerSpec = "Metal1drawing",
+    layer_trans: LayerSpec = "TRANSdrawing",
 ) -> Component:
     """Create an NPN13G2 bipolar transistor.
 
@@ -42,6 +27,14 @@ def npn13G2(
         emitter_length: Emitter length in micrometers.
         model: Device model name.
         m: Multiplier (number of parallel devices).
+        layer_nwell: N-Well layer.
+        layer_pwell: P-Well layer.
+        layer_activ: Active area layer.
+        layer_psd: P+ source/drain doping layer.
+        layer_nsd: N+ source/drain doping layer.
+        layer_cont: Contact layer.
+        layer_metal1: Metal1 layer.
+        layer_trans: Transistor marker layer.
 
     Returns:
         Component with NPN bipolar transistor layout.
@@ -80,45 +73,37 @@ def npn13G2(
             collector_length + 2 * nwell_enclosure,
             collector_width + 2 * nwell_enclosure,
         ),
-        layer=LAYERS["NWell"],
+        layer=layer_nwell,
         centered=True,
     )
     c.add_ref(nwell)
 
-    # Deep N-Well for collector
-    deep_nwell = gf.components.rectangle(
-        size=(collector_length, collector_width),
-        layer=LAYERS["DeepNWell"],
-        centered=True,
-    )
-    c.add_ref(deep_nwell)
-
     # Collector active region (N+ ring)
     collector_ring_outer = gf.components.rectangle(
         size=(collector_length, collector_width),
-        layer=LAYERS["Activ"],
+        layer=layer_activ,
         centered=True,
     )
     collector_ring_inner = gf.components.rectangle(
         size=(base_length, base_width),
-        layer=LAYERS["Activ"],
+        layer=layer_activ,
         centered=True,
     )
     collector = gf.boolean(
-        collector_ring_outer, collector_ring_inner, "A-B", layer=LAYERS["Activ"]
+        collector_ring_outer, collector_ring_inner, "A-B", layer=layer_activ
     )
     c.add_ref(collector)
 
     # N+ implant for collector
     nsd_collector = gf.boolean(
-        collector_ring_outer, collector_ring_inner, "A-B", layer=LAYERS["nSD"]
+        collector_ring_outer, collector_ring_inner, "A-B", layer=layer_nsd
     )
     c.add_ref(nsd_collector)
 
     # Base P-Well
     pwell = gf.components.rectangle(
         size=(base_length, base_width),
-        layer=LAYERS["PWell"],
+        layer=layer_pwell,
         centered=True,
     )
     c.add_ref(pwell)
@@ -126,25 +111,25 @@ def npn13G2(
     # Base active region (P+ ring)
     base_ring_outer = gf.components.rectangle(
         size=(base_length, base_width),
-        layer=LAYERS["Activ"],
+        layer=layer_activ,
         centered=True,
     )
     base_ring_inner = gf.components.rectangle(
         size=(em_length, em_width),
-        layer=LAYERS["Activ"],
+        layer=layer_activ,
         centered=True,
     )
-    base = gf.boolean(base_ring_outer, base_ring_inner, "A-B", layer=LAYERS["Activ"])
+    base = gf.boolean(base_ring_outer, base_ring_inner, "A-B", layer=layer_activ)
     c.add_ref(base)
 
     # P+ implant for base
-    psd_base = gf.boolean(base_ring_outer, base_ring_inner, "A-B", layer=LAYERS["pSD"])
+    psd_base = gf.boolean(base_ring_outer, base_ring_inner, "A-B", layer=layer_psd)
     c.add_ref(psd_base)
 
     # Emitter active region (N+)
     emitter = gf.components.rectangle(
         size=(em_length, em_width),
-        layer=LAYERS["Activ"],
+        layer=layer_activ,
         centered=True,
     )
     c.add_ref(emitter)
@@ -152,7 +137,7 @@ def npn13G2(
     # N+ implant for emitter
     nsd_emitter = gf.components.rectangle(
         size=(em_length, em_width),
-        layer=LAYERS["nSD"],
+        layer=layer_nsd,
         centered=True,
     )
     c.add_ref(nsd_emitter)
@@ -168,7 +153,7 @@ def npn13G2(
 
             cont = gf.components.rectangle(
                 size=(cont_size, cont_size),
-                layer=LAYERS["Cont"],
+                layer=layer_cont,
             )
             cont_ref = c.add_ref(cont)
             cont_ref.move((x, y))
@@ -179,7 +164,7 @@ def npn13G2(
             em_length - 2 * cont_enc_active + 2 * cont_enc_metal,
             em_width - 2 * cont_enc_active + 2 * cont_enc_metal,
         ),
-        layer=LAYERS["Metal1"],
+        layer=layer_metal1,
         centered=True,
     )
     c.add_ref(emitter_metal)
@@ -196,7 +181,7 @@ def npn13G2(
 
         cont = gf.components.rectangle(
             size=(cont_size, cont_size),
-            layer=LAYERS["Cont"],
+            layer=layer_cont,
             centered=True,
         )
         cont_ref = c.add_ref(cont)
@@ -205,7 +190,7 @@ def npn13G2(
         # Base metal contact
         m1 = gf.components.rectangle(
             size=(cont_size + 2 * cont_enc_metal, cont_size + 2 * cont_enc_metal),
-            layer=LAYERS["Metal1"],
+            layer=layer_metal1,
             centered=True,
         )
         m1_ref = c.add_ref(m1)
@@ -223,7 +208,7 @@ def npn13G2(
 
         cont = gf.components.rectangle(
             size=(cont_size, cont_size),
-            layer=LAYERS["Cont"],
+            layer=layer_cont,
             centered=True,
         )
         cont_ref = c.add_ref(cont)
@@ -232,19 +217,19 @@ def npn13G2(
         # Collector metal contact
         m1 = gf.components.rectangle(
             size=(cont_size + 2 * cont_enc_metal, cont_size + 2 * cont_enc_metal),
-            layer=LAYERS["Metal1"],
+            layer=layer_metal1,
             centered=True,
         )
         m1_ref = c.add_ref(m1)
         m1_ref.move((x, y))
 
-    # NPN marker layer
-    npn_marker = gf.components.rectangle(
+    # Transistor marker layer
+    trans_marker = gf.components.rectangle(
         size=(collector_length, collector_width),
-        layer=LAYERS["NPN"],
+        layer=layer_trans,
         centered=True,
     )
-    c.add_ref(npn_marker)
+    c.add_ref(trans_marker)
 
     # Add ports
     c.add_port(
@@ -252,7 +237,7 @@ def npn13G2(
         center=(0, 0),
         width=em_width,
         orientation=0,
-        layer=LAYERS["Metal1"],
+        layer=layer_metal1,
         port_type="electrical",
     )
 
@@ -261,7 +246,7 @@ def npn13G2(
         center=(0, base_width / 2),
         width=cont_size,
         orientation=90,
-        layer=LAYERS["Metal1"],
+        layer=layer_metal1,
         port_type="electrical",
     )
 
@@ -270,7 +255,7 @@ def npn13G2(
         center=(collector_length / 2, 0),
         width=cont_size,
         orientation=0,
-        layer=LAYERS["Metal1"],
+        layer=layer_metal1,
         port_type="electrical",
     )
 
@@ -290,6 +275,14 @@ def npn13G2L(
     emitter_length: float = 1.26,
     model: str = "npn13G2L",
     m: int = 1,
+    layer_nwell: LayerSpec = "NWelldrawing",
+    layer_pwell: LayerSpec = "PWelldrawing",
+    layer_activ: LayerSpec = "Activdrawing",
+    layer_psd: LayerSpec = "pSDdrawing",
+    layer_nsd: LayerSpec = "nSDdrawing",
+    layer_cont: LayerSpec = "Contdrawing",
+    layer_metal1: LayerSpec = "Metal1drawing",
+    layer_trans: LayerSpec = "TRANSdrawing",
 ) -> Component:
     """Create an NPN13G2L (low-current) bipolar transistor.
 
@@ -298,6 +291,14 @@ def npn13G2L(
         emitter_length: Emitter length in micrometers.
         model: Device model name.
         m: Multiplier (number of parallel devices).
+        layer_nwell: N-Well layer.
+        layer_pwell: P-Well layer.
+        layer_activ: Active area layer.
+        layer_psd: P+ source/drain doping layer.
+        layer_nsd: N+ source/drain doping layer.
+        layer_cont: Contact layer.
+        layer_metal1: Metal1 layer.
+        layer_trans: Transistor marker layer.
 
     Returns:
         Component with NPN bipolar transistor layout.
@@ -307,6 +308,14 @@ def npn13G2L(
         emitter_length=emitter_length,
         model=model,
         m=m,
+        layer_nwell=layer_nwell,
+        layer_pwell=layer_pwell,
+        layer_activ=layer_activ,
+        layer_psd=layer_psd,
+        layer_nsd=layer_nsd,
+        layer_cont=layer_cont,
+        layer_metal1=layer_metal1,
+        layer_trans=layer_trans,
     )
 
 
@@ -316,6 +325,14 @@ def npn13G2V(
     emitter_length: float = 0.9,
     model: str = "npn13G2V",
     m: int = 1,
+    layer_nwell: LayerSpec = "NWelldrawing",
+    layer_pwell: LayerSpec = "PWelldrawing",
+    layer_activ: LayerSpec = "Activdrawing",
+    layer_psd: LayerSpec = "pSDdrawing",
+    layer_nsd: LayerSpec = "nSDdrawing",
+    layer_cont: LayerSpec = "Contdrawing",
+    layer_metal1: LayerSpec = "Metal1drawing",
+    layer_trans: LayerSpec = "TRANSdrawing",
 ) -> Component:
     """Create an NPN13G2V (varactor) bipolar transistor.
 
@@ -324,6 +341,14 @@ def npn13G2V(
         emitter_length: Emitter length in micrometers.
         model: Device model name.
         m: Multiplier (number of parallel devices).
+        layer_nwell: N-Well layer.
+        layer_pwell: P-Well layer.
+        layer_activ: Active area layer.
+        layer_psd: P+ source/drain doping layer.
+        layer_nsd: N+ source/drain doping layer.
+        layer_cont: Contact layer.
+        layer_metal1: Metal1 layer.
+        layer_trans: Transistor marker layer.
 
     Returns:
         Component with NPN bipolar transistor layout.
@@ -333,6 +358,14 @@ def npn13G2V(
         emitter_length=emitter_length,
         model=model,
         m=m,
+        layer_nwell=layer_nwell,
+        layer_pwell=layer_pwell,
+        layer_activ=layer_activ,
+        layer_psd=layer_psd,
+        layer_nsd=layer_nsd,
+        layer_cont=layer_cont,
+        layer_metal1=layer_metal1,
+        layer_trans=layer_trans,
     )
 
 
@@ -342,6 +375,14 @@ def pnpMPA(
     emitter_length: float = 0.4,
     model: str = "pnpMPA",
     m: int = 1,
+    layer_nwell: LayerSpec = "NWelldrawing",
+    layer_pwell: LayerSpec = "PWelldrawing",
+    layer_activ: LayerSpec = "Activdrawing",
+    layer_psd: LayerSpec = "pSDdrawing",
+    layer_nsd: LayerSpec = "nSDdrawing",
+    layer_cont: LayerSpec = "Contdrawing",
+    layer_metal1: LayerSpec = "Metal1drawing",
+    layer_trans: LayerSpec = "TRANSdrawing",
 ) -> Component:
     """Create a PNP MPA bipolar transistor.
 
@@ -350,6 +391,14 @@ def pnpMPA(
         emitter_length: Emitter length in micrometers.
         model: Device model name.
         m: Multiplier (number of parallel devices).
+        layer_nwell: N-Well layer.
+        layer_pwell: P-Well layer.
+        layer_activ: Active area layer.
+        layer_psd: P+ source/drain doping layer.
+        layer_nsd: N+ source/drain doping layer.
+        layer_cont: Contact layer.
+        layer_metal1: Metal1 layer.
+        layer_trans: Transistor marker layer.
 
     Returns:
         Component with PNP bipolar transistor layout.
@@ -387,45 +436,37 @@ def pnpMPA(
             collector_length + 2 * pwell_enclosure,
             collector_width + 2 * pwell_enclosure,
         ),
-        layer=LAYERS["PWell"],
+        layer=layer_pwell,
         centered=True,
     )
     c.add_ref(pwell)
 
-    # Deep P-Well for collector
-    deep_pwell = gf.components.rectangle(
-        size=(collector_length, collector_width),
-        layer=LAYERS["DeepPWell"],
-        centered=True,
-    )
-    c.add_ref(deep_pwell)
-
     # Collector active region (P+ ring)
     collector_ring_outer = gf.components.rectangle(
         size=(collector_length, collector_width),
-        layer=LAYERS["Activ"],
+        layer=layer_activ,
         centered=True,
     )
     collector_ring_inner = gf.components.rectangle(
         size=(base_length, base_width),
-        layer=LAYERS["Activ"],
+        layer=layer_activ,
         centered=True,
     )
     collector = gf.boolean(
-        collector_ring_outer, collector_ring_inner, "A-B", layer=LAYERS["Activ"]
+        collector_ring_outer, collector_ring_inner, "A-B", layer=layer_activ
     )
     c.add_ref(collector)
 
     # P+ implant for collector
     psd_collector = gf.boolean(
-        collector_ring_outer, collector_ring_inner, "A-B", layer=LAYERS["pSD"]
+        collector_ring_outer, collector_ring_inner, "A-B", layer=layer_psd
     )
     c.add_ref(psd_collector)
 
     # Base N-Well
     nwell = gf.components.rectangle(
         size=(base_length, base_width),
-        layer=LAYERS["NWell"],
+        layer=layer_nwell,
         centered=True,
     )
     c.add_ref(nwell)
@@ -433,25 +474,25 @@ def pnpMPA(
     # Base active region (N+ ring)
     base_ring_outer = gf.components.rectangle(
         size=(base_length, base_width),
-        layer=LAYERS["Activ"],
+        layer=layer_activ,
         centered=True,
     )
     base_ring_inner = gf.components.rectangle(
         size=(em_length, em_width),
-        layer=LAYERS["Activ"],
+        layer=layer_activ,
         centered=True,
     )
-    base = gf.boolean(base_ring_outer, base_ring_inner, "A-B", layer=LAYERS["Activ"])
+    base = gf.boolean(base_ring_outer, base_ring_inner, "A-B", layer=layer_activ)
     c.add_ref(base)
 
     # N+ implant for base
-    nsd_base = gf.boolean(base_ring_outer, base_ring_inner, "A-B", layer=LAYERS["nSD"])
+    nsd_base = gf.boolean(base_ring_outer, base_ring_inner, "A-B", layer=layer_nsd)
     c.add_ref(nsd_base)
 
     # Emitter active region (P+)
     emitter = gf.components.rectangle(
         size=(em_length, em_width),
-        layer=LAYERS["Activ"],
+        layer=layer_activ,
         centered=True,
     )
     c.add_ref(emitter)
@@ -459,7 +500,7 @@ def pnpMPA(
     # P+ implant for emitter
     psd_emitter = gf.components.rectangle(
         size=(em_length, em_width),
-        layer=LAYERS["pSD"],
+        layer=layer_psd,
         centered=True,
     )
     c.add_ref(psd_emitter)
@@ -475,7 +516,7 @@ def pnpMPA(
 
             cont = gf.components.rectangle(
                 size=(cont_size, cont_size),
-                layer=LAYERS["Cont"],
+                layer=layer_cont,
             )
             cont_ref = c.add_ref(cont)
             cont_ref.move((x, y))
@@ -486,18 +527,18 @@ def pnpMPA(
             em_length - 2 * cont_enc_active + 2 * cont_enc_metal,
             em_width - 2 * cont_enc_active + 2 * cont_enc_metal,
         ),
-        layer=LAYERS["Metal1"],
+        layer=layer_metal1,
         centered=True,
     )
     c.add_ref(emitter_metal)
 
-    # PNP marker layer
-    pnp_marker = gf.components.rectangle(
+    # Transistor marker layer
+    trans_marker = gf.components.rectangle(
         size=(collector_length, collector_width),
-        layer=LAYERS["PNP"],
+        layer=layer_trans,
         centered=True,
     )
-    c.add_ref(pnp_marker)
+    c.add_ref(trans_marker)
 
     # Add ports
     c.add_port(
@@ -505,7 +546,7 @@ def pnpMPA(
         center=(0, 0),
         width=em_width,
         orientation=0,
-        layer=LAYERS["Metal1"],
+        layer=layer_metal1,
         port_type="electrical",
     )
 
@@ -514,7 +555,7 @@ def pnpMPA(
         center=(0, base_width / 2),
         width=cont_size,
         orientation=90,
-        layer=LAYERS["Metal1"],
+        layer=layer_metal1,
         port_type="electrical",
     )
 
@@ -523,7 +564,7 @@ def pnpMPA(
         center=(collector_length / 2, 0),
         width=cont_size,
         orientation=0,
-        layer=LAYERS["Metal1"],
+        layer=layer_metal1,
         port_type="electrical",
     )
 

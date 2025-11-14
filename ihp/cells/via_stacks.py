@@ -2,26 +2,7 @@
 
 import gdsfactory as gf
 from gdsfactory import Component
-
-# Define metal and via layers for IHP PDK
-METAL_LAYERS = {
-    "Metal1": (8, 0),
-    "Metal2": (10, 0),
-    "Metal3": (30, 0),
-    "Metal4": (50, 0),
-    "Metal5": (67, 0),
-    "TopMetal1": (126, 5),
-    "TopMetal2": (134, 5),
-}
-
-VIA_LAYERS = {
-    "Via1": (19, 0),
-    "Via2": (29, 0),
-    "Via3": (49, 0),
-    "Via4": (66, 0),
-    "TopVia1": (125, 5),
-    "TopVia2": (133, 5),
-}
+from gdsfactory.typings import LayerSpec
 
 # Via design rules (in micrometers)
 VIA_RULES = {
@@ -90,6 +71,12 @@ def via_array(
     via_size: float | None = None,
     via_spacing: float | None = None,
     via_enclosure: float | None = None,
+    layer_via1: LayerSpec = "Via1drawing",
+    layer_via2: LayerSpec = "Via2drawing",
+    layer_via3: LayerSpec = "Via3drawing",
+    layer_via4: LayerSpec = "Via4drawing",
+    layer_topvia1: LayerSpec = "TopVia1drawing",
+    layer_topvia2: LayerSpec = "TopVia2drawing",
 ) -> Component:
     """Create an array of vias.
 
@@ -100,17 +87,33 @@ def via_array(
         via_size: Via size in micrometers (uses default if None).
         via_spacing: Via spacing in micrometers (uses default if None).
         via_enclosure: Metal enclosure in micrometers (uses default if None).
+        layer_via1: Via1 layer.
+        layer_via2: Via2 layer.
+        layer_via3: Via3 layer.
+        layer_via4: Via4 layer.
+        layer_topvia1: TopVia1 layer.
+        layer_topvia2: TopVia2 layer.
 
     Returns:
         Component with via array.
     """
     c = Component()
 
+    # Map via type to layer parameter
+    via_layer_map = {
+        "Via1": layer_via1,
+        "Via2": layer_via2,
+        "Via3": layer_via3,
+        "Via4": layer_via4,
+        "TopVia1": layer_topvia1,
+        "TopVia2": layer_topvia2,
+    }
+
     # Get via parameters
-    if via_type not in VIA_LAYERS:
+    if via_type not in via_layer_map:
         raise ValueError(f"Unknown via type: {via_type}")
 
-    via_layer = VIA_LAYERS[via_type]
+    via_layer = via_layer_map[via_type]
     rules = VIA_RULES[via_type]
 
     # Use provided values or defaults
@@ -158,6 +161,19 @@ def via_stack(
     vt1_rows: int = 1,
     vt2_columns: int = 1,
     vt2_rows: int = 1,
+    layer_metal1: LayerSpec = "Metal1drawing",
+    layer_metal2: LayerSpec = "Metal2drawing",
+    layer_metal3: LayerSpec = "Metal3drawing",
+    layer_metal4: LayerSpec = "Metal4drawing",
+    layer_metal5: LayerSpec = "Metal5drawing",
+    layer_topmetal1: LayerSpec = "TopMetal1drawing",
+    layer_topmetal2: LayerSpec = "TopMetal2drawing",
+    layer_via1: LayerSpec = "Via1drawing",
+    layer_via2: LayerSpec = "Via2drawing",
+    layer_via3: LayerSpec = "Via3drawing",
+    layer_via4: LayerSpec = "Via4drawing",
+    layer_topvia1: LayerSpec = "TopVia1drawing",
+    layer_topvia2: LayerSpec = "TopVia2drawing",
 ) -> Component:
     """Create a via stack connecting multiple metal layers.
 
@@ -171,11 +187,35 @@ def via_stack(
         vt1_rows: Number of rows for TopVia1.
         vt2_columns: Number of columns for TopVia2.
         vt2_rows: Number of rows for TopVia2.
+        layer_metal1: Metal1 layer.
+        layer_metal2: Metal2 layer.
+        layer_metal3: Metal3 layer.
+        layer_metal4: Metal4 layer.
+        layer_metal5: Metal5 layer.
+        layer_topmetal1: TopMetal1 layer.
+        layer_topmetal2: TopMetal2 layer.
+        layer_via1: Via1 layer.
+        layer_via2: Via2 layer.
+        layer_via3: Via3 layer.
+        layer_via4: Via4 layer.
+        layer_topvia1: TopVia1 layer.
+        layer_topvia2: TopVia2 layer.
 
     Returns:
         Component with via stack.
     """
     c = Component()
+
+    # Map metal names to layer parameters
+    metal_layer_map = {
+        "Metal1": layer_metal1,
+        "Metal2": layer_metal2,
+        "Metal3": layer_metal3,
+        "Metal4": layer_metal4,
+        "Metal5": layer_metal5,
+        "TopMetal1": layer_topmetal1,
+        "TopMetal2": layer_topmetal2,
+    }
 
     # Validate layers
     metal_order = [
@@ -204,7 +244,7 @@ def via_stack(
     # Add metal layers
     for idx in range(bottom_idx, top_idx + 1):
         metal_name = metal_order[idx]
-        metal_layer = METAL_LAYERS[metal_name]
+        metal_layer = metal_layer_map[metal_name]
 
         metal = gf.components.rectangle(
             size=(width, height),
@@ -254,6 +294,12 @@ def via_stack(
                     via_size=via_size,
                     via_spacing=via_spacing,
                     via_enclosure=via_enclosure,
+                    layer_via1=layer_via1,
+                    layer_via2=layer_via2,
+                    layer_via3=layer_via3,
+                    layer_via4=layer_via4,
+                    layer_topvia1=layer_topvia1,
+                    layer_topvia2=layer_topvia2,
                 )
 
                 # Center the via array
@@ -269,7 +315,7 @@ def via_stack(
         center=(0, 0),
         width=width,
         orientation=0,
-        layer=METAL_LAYERS[bottom_layer],
+        layer=metal_layer_map[bottom_layer],
         port_type="electrical",
     )
 
@@ -278,7 +324,7 @@ def via_stack(
         center=(0, 0),
         width=width,
         orientation=0,
-        layer=METAL_LAYERS[top_layer],
+        layer=metal_layer_map[top_layer],
         port_type="electrical",
     )
 
@@ -299,6 +345,19 @@ def via_stack_with_pads(
     size: tuple[float, float] = (10.0, 10.0),
     pad_size: tuple[float, float] = (20.0, 20.0),
     pad_spacing: float = 50.0,
+    layer_metal1: LayerSpec = "Metal1drawing",
+    layer_metal2: LayerSpec = "Metal2drawing",
+    layer_metal3: LayerSpec = "Metal3drawing",
+    layer_metal4: LayerSpec = "Metal4drawing",
+    layer_metal5: LayerSpec = "Metal5drawing",
+    layer_topmetal1: LayerSpec = "TopMetal1drawing",
+    layer_topmetal2: LayerSpec = "TopMetal2drawing",
+    layer_via1: LayerSpec = "Via1drawing",
+    layer_via2: LayerSpec = "Via2drawing",
+    layer_via3: LayerSpec = "Via3drawing",
+    layer_via4: LayerSpec = "Via4drawing",
+    layer_topvia1: LayerSpec = "TopVia1drawing",
+    layer_topvia2: LayerSpec = "TopVia2drawing",
 ) -> Component:
     """Create a via stack with test pads.
 
@@ -308,24 +367,61 @@ def via_stack_with_pads(
         size: Size of the via stack (width, height) in micrometers.
         pad_size: Size of the test pads (width, height) in micrometers.
         pad_spacing: Spacing between pads in micrometers.
+        layer_metal1: Metal1 layer.
+        layer_metal2: Metal2 layer.
+        layer_metal3: Metal3 layer.
+        layer_metal4: Metal4 layer.
+        layer_metal5: Metal5 layer.
+        layer_topmetal1: TopMetal1 layer.
+        layer_topmetal2: TopMetal2 layer.
+        layer_via1: Via1 layer.
+        layer_via2: Via2 layer.
+        layer_via3: Via3 layer.
+        layer_via4: Via4 layer.
+        layer_topvia1: TopVia1 layer.
+        layer_topvia2: TopVia2 layer.
 
     Returns:
         Component with via stack and test pads.
     """
     c = Component()
 
+    # Map metal names to layer parameters
+    metal_layer_map = {
+        "Metal1": layer_metal1,
+        "Metal2": layer_metal2,
+        "Metal3": layer_metal3,
+        "Metal4": layer_metal4,
+        "Metal5": layer_metal5,
+        "TopMetal1": layer_topmetal1,
+        "TopMetal2": layer_topmetal2,
+    }
+
     # Create via stack
     stack = via_stack(
         bottom_layer=bottom_layer,
         top_layer=top_layer,
         size=size,
+        layer_metal1=layer_metal1,
+        layer_metal2=layer_metal2,
+        layer_metal3=layer_metal3,
+        layer_metal4=layer_metal4,
+        layer_metal5=layer_metal5,
+        layer_topmetal1=layer_topmetal1,
+        layer_topmetal2=layer_topmetal2,
+        layer_via1=layer_via1,
+        layer_via2=layer_via2,
+        layer_via3=layer_via3,
+        layer_via4=layer_via4,
+        layer_topvia1=layer_topvia1,
+        layer_topvia2=layer_topvia2,
     )
     c.add_ref(stack)
 
     # Add bottom pad
     bottom_pad = gf.components.rectangle(
         size=pad_size,
-        layer=METAL_LAYERS[bottom_layer],
+        layer=metal_layer_map[bottom_layer],
         centered=True,
     )
     bottom_pad_ref = c.add_ref(bottom_pad)
@@ -334,7 +430,7 @@ def via_stack_with_pads(
     # Add top pad
     top_pad = gf.components.rectangle(
         size=pad_size,
-        layer=METAL_LAYERS[top_layer],
+        layer=metal_layer_map[top_layer],
         centered=True,
     )
     top_pad_ref = c.add_ref(top_pad)
@@ -343,14 +439,14 @@ def via_stack_with_pads(
     # Connect pads to stack
     bottom_trace = gf.components.rectangle(
         size=(pad_spacing / 2 - size[0] / 2, 2.0),
-        layer=METAL_LAYERS[bottom_layer],
+        layer=metal_layer_map[bottom_layer],
     )
     bottom_trace_ref = c.add_ref(bottom_trace)
     bottom_trace_ref.move((-pad_spacing / 2, -1.0))
 
     top_trace = gf.components.rectangle(
         size=(pad_spacing / 2 - size[0] / 2, 2.0),
-        layer=METAL_LAYERS[top_layer],
+        layer=metal_layer_map[top_layer],
     )
     top_trace_ref = c.add_ref(top_trace)
     top_trace_ref.move((size[0] / 2, -1.0))
@@ -361,7 +457,7 @@ def via_stack_with_pads(
         center=(-pad_spacing / 2, 0),
         width=pad_size[1],
         orientation=180,
-        layer=METAL_LAYERS[bottom_layer],
+        layer=metal_layer_map[bottom_layer],
         port_type="electrical",
     )
 
@@ -370,7 +466,7 @@ def via_stack_with_pads(
         center=(pad_spacing / 2, 0),
         width=pad_size[1],
         orientation=0,
-        layer=METAL_LAYERS[top_layer],
+        layer=metal_layer_map[top_layer],
         port_type="electrical",
     )
 
