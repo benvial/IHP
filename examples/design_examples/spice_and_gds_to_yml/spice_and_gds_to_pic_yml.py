@@ -17,6 +17,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+import gdsfactory as gf
 import yaml
 
 # ============================================================================
@@ -41,12 +42,6 @@ def extract_rppd_from_gds(
     Returns:
         List of dicts, each containing: name, x, y, rotation, mirror, dx, dy.
     """
-    try:
-        import gdsfactory as gf
-    except ImportError as err:
-        raise ImportError(
-            "gdsfactory not installed. Install with: pip install gdsfactory"
-        ) from err
 
     print(f"Extracting rppd placements from GDS: {gds_file}")
 
@@ -129,7 +124,107 @@ def extract_rppd_from_gds(
     return rppd_data
 
 
-def match_spice_to_gds_placements(
+def extract_inductors_from_gds(
+    gds_file: Path,
+    ind_layer: tuple[int, int] = (1, 23),
+) -> list[dict[str, Any]]:
+    """Extract inductor placements and dimensions from GDS file.
+
+    Reads the Activnofill (or INDdrawing) layer to find octagonal inductor shapes
+    and extracts their bounding box width as the diameter.
+
+    Args:
+        gds_file: Path to the GDS file.
+        ind_layer: The (layer, datatype) of the Activnofill layer.
+                   Defaults to (1, 23) for IHP SG13G2.
+
+    Returns:
+        List of dicts, each containing: name, x, y, rotation, mirror, diameter.
+    """
+
+    print(f"Extracting inductor placements from GDS: {gds_file}")
+
+    c = gf.import_gds(str(gds_file))
+    layout = c.kcl.layout
+    top_cell = layout.cell(c.cell_index())
+
+    # Find the inductor layer - try by name first
+    ind_layer_index = None
+
+    for layer_index in layout.layer_indexes():
+        layer_info = layout.get_info(layer_index)
+        if "Activnofill" in str(layer_info) or "INDdrawing" in str(layer_info):
+            ind_layer_index = layer_index
+            print(f"  Found inductor layer by name: {layer_info} (index {layer_index})")
+            break
+
+    # Fall back to layer number
+    if ind_layer_index is None:
+        layer_num, datatype = ind_layer
+        ind_layer_index = layout.find_layer(layer_num, datatype)
+        if ind_layer_index is not None:
+            print(
+                f"  Found inductor layer by number: {layer_num}/{datatype} (index {ind_layer_index})"
+            )
+        else:
+            raise ValueError(
+                f"Inductor layer not found by name or by number {layer_num}/{datatype}. "
+                f"Available layers: {[str(layout.get_info(i)) for i in layout.layer_indexes()[:10]]}"
+            )
+
+    inductor_data = []
+
+    for inst in top_cell.each_inst():
+        ref_cell = layout.cell(inst.cell_index)
+
+        if "inductor" not in ref_cell.name.lower():
+            continue
+
+        trans = inst.dcplx_trans
+        x = trans.disp.x
+        y = trans.disp.y
+        rotation = trans.angle
+        mirror = trans.is_mirror()
+
+        # Find octagonal polygon and extract diameter from bbox - search recursively
+        diameter = None
+        shape_iter = ref_cell.begin_shapes_rec(ind_layer_index)
+        while not shape_iter.at_end():
+            shape = shape_iter.shape()
+
+            if shape.is_polygon():
+                poly = shape.polygon
+                bbox = poly.bbox()
+
+                width = bbox.width() * layout.dbu
+                height = bbox.height() * layout.dbu
+
+                # Use the larger dimension as diameter
+                diameter = max(width, height)
+                break  # Only need one polygon
+
+            shape_iter.next()
+
+        if diameter is None:
+            print(f"  Warning: No inductor polygon found in {ref_cell.name}, skipping")
+            continue
+
+        inductor_data.append(
+            {
+                "name": ref_cell.name,
+                "x": x,
+                "y": y,
+                "rotation": rotation,
+                "mirror": mirror,
+                "diameter": diameter,
+            }
+        )
+
+    print(f"  Extracted {len(inductor_data)} inductor instances")
+    return inductor_data
+
+
+def match_rppd_to_gds(
     spice_instances: dict[str, Any],
     rppd_data: list[dict[str, Any]],
     tolerance: float = 0.01,
@@ -229,6 +324,85 @@ def match_spice_to_gds_placements(
     print(f"\n✓ Matched {len(matched_placements)} of {len(spice_rppd)} rppd instances")
 
     return matched_placements
+
+
+def match_inductors_to_gds(
+    spice_instances: dict[str, Any],
+    inductor_data: list[dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Match SPICE inductor instances to GDS placements by order.
+
+    Since inductors in SPICE don't have dimensional parameters we can match,
+    we simply match them by alphabetical order.
+
+    Args:
+        spice_instances: Dictionary of SPICE instances.
+        inductor_data: List of dicts from extract_inductors_from_gds().
+
+    Returns:
+        Dictionary mapping SPICE instance names to placement info.
+    """
+    matched_placements = {}
+
+    # Extract SPICE inductors
+    spice_inductors = []
+    for inst_name, inst_data in spice_instances.items():
+        if "inductor" in inst_data.get("model", "").lower():
+            spice_inductors.append(inst_name)
+
+    spice_inductors.sort()  # Match by alphabetical order
+
+    print("\n=== Matching Inductors ===")
+    print(
+        f"  {len(spice_inductors)} SPICE inductors → {len(inductor_data)} GDS inductors"
+    )
+
+    if len(spice_inductors) != len(inductor_data):
+        print("  ⚠ Count mismatch!")
+
+    for spice_name, gds_entry in zip(spice_inductors, inductor_data):
+        matched_placements[spice_name] = {
+            "x": gds_entry["x"],
+            "y": gds_entry["y"],
+            "rotation": gds_entry["rotation"],
+            "mirror": gds_entry["mirror"],
+            "diameter": gds_entry["diameter"],  # Include diameter for potential use
+        }
+        print(
+            f"    {spice_name} → ({gds_entry['x']:.2f}, {gds_entry['y']:.2f}), diameter={gds_entry['diameter']:.2f}"
+        )
+
+    print(f"\n✓ Matched {len(matched_placements)} of {len(spice_inductors)} inductors")
+
+    return matched_placements
+
+
+def match_spice_to_gds_placements(
+    spice_instances: dict[str, Any],
+    rppd_data: list[dict[str, Any]] | None = None,
+    inductor_data: list[dict[str, Any]] | None = None,
+) -> dict[str, dict[str, Any]]:
+    """Unified function to match SPICE instances to GDS placements.
+
+    Args:
+        spice_instances: Dictionary of SPICE instances.
+        rppd_data: Optional list of rppd data from extract_rppd_from_gds().
+        inductor_data: Optional list of inductor data from extract_inductors_from_gds().
+
+    Returns:
+        Dictionary mapping SPICE instance names to placement info.
+    """
+    all_matched = {}
+
+    if rppd_data:
+        rppd_matched = match_rppd_to_gds(spice_instances, rppd_data)
+        all_matched.update(rppd_matched)
+
+    if inductor_data:
+        inductor_matched = match_inductors_to_gds(spice_instances, inductor_data)
+        all_matched.update(inductor_matched)
+
+    return all_matched
 
 
 # ============================================================================
@@ -756,9 +930,13 @@ def convert_file(
             print(f"Warning: GDS file not found: {gds_file}, using grid layout")
         else:
             rppd_data = extract_rppd_from_gds(gds_file, poly_layer=poly_layer)
-            if rppd_data:
+            inductor_data = extract_inductors_from_gds(gds_file)
+
+            if rppd_data or inductor_data:
                 gds_placements_matched = match_spice_to_gds_placements(
-                    netlist["instances"], rppd_data
+                    netlist["instances"],
+                    rppd_data=rppd_data if rppd_data else None,
+                    inductor_data=inductor_data if inductor_data else None,
                 )
 
     print("Converting to pic.yml format...")
