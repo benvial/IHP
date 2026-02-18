@@ -289,6 +289,110 @@ def extract_nmos_from_gds(gds_file: Path) -> list[dict[str, Any]]:
     return nmos_data
 
 
+def extract_cmim_from_gds(
+    gds_file: Path,
+    mim_layer: tuple[int, int] = (36, 0),
+) -> list[dict[str, Any]]:
+    """Extract CMIM capacitor placements and dimensions from GDS file.
+
+    Reads the MIM capacitor layer to extract width and length dimensions.
+
+    Args:
+        gds_file: Path to the GDS file.
+        mim_layer: The (layer, datatype) of the MIM layer.
+                   Defaults to (36, 0) for IHP SG13G2.
+
+    Returns:
+        List of dicts, each containing: name, x, y, rotation, mirror, width, length.
+    """
+    try:
+        import gdsfactory as gf
+    except ImportError as err:
+        raise ImportError(
+            "gdsfactory not installed. Install with: pip install gdsfactory"
+        ) from err
+
+    print(f"Extracting CMIM placements from GDS: {gds_file}")
+
+    c = gf.import_gds(str(gds_file))
+    layout = c.kcl.layout
+    top_cell = layout.cell(c.cell_index())
+
+    # Find the MIM layer - try by name first
+    mim_layer_index = None
+
+    for layer_index in layout.layer_indexes():
+        layer_info = layout.get_info(layer_index)
+        if "MIM" in str(layer_info) or "Metal5" in str(layer_info):
+            mim_layer_index = layer_index
+            print(f"  Found MIM layer by name: {layer_info} (index {layer_index})")
+            break
+
+    # Fall back to layer number
+    if mim_layer_index is None:
+        layer_num, datatype = mim_layer
+        mim_layer_index = layout.find_layer(layer_num, datatype)
+        if mim_layer_index is not None:
+            print(
+                f"  Found MIM layer by number: {layer_num}/{datatype} (index {mim_layer_index})"
+            )
+        else:
+            raise ValueError(
+                f"MIM layer not found by name or by number {layer_num}/{datatype}. "
+                f"Available layers: {[str(layout.get_info(i)) for i in layout.layer_indexes()[:10]]}"
+            )
+
+    cmim_data = []
+
+    for inst in top_cell.each_inst():
+        ref_cell = layout.cell(inst.cell_index)
+
+        if "cmim" not in ref_cell.name.lower():
+            continue
+
+        trans = inst.dcplx_trans
+        x = trans.disp.x
+        y = trans.disp.y
+        rotation = trans.angle
+        mirror = trans.is_mirror()
+
+        # Extract width/length from MIM rectangle - search recursively
+        width, length = None, None
+        shape_iter = ref_cell.begin_shapes_rec(mim_layer_index)
+        while not shape_iter.at_end():
+            shape = shape_iter.shape()
+            if shape.is_box():
+                box = shape.box
+                width = box.width() * layout.dbu
+                length = box.height() * layout.dbu
+            elif shape.is_polygon():
+                bbox = shape.polygon.bbox()
+                width = bbox.width() * layout.dbu
+                length = bbox.height() * layout.dbu
+            if width is not None:
+                break
+            shape_iter.next()
+
+        if width is None:
+            print(f"  Warning: No MIM rectangle found in {ref_cell.name}, skipping")
+            continue
+
+        cmim_data.append(
+            {
+                "name": ref_cell.name,
+                "x": x,
+                "y": y,
+                "rotation": rotation,
+                "mirror": mirror,
+                "width": width,
+                "length": length,
+            }
+        )
+
+    print(f"  Extracted {len(cmim_data)} CMIM instances")
+    return cmim_data
+
+
 def match_rppd_to_gds(
     spice_instances: dict[str, Any],
     rppd_data: list[dict[str, Any]],
@@ -496,11 +600,110 @@ def match_nmos_to_gds(
     return matched_placements
 
 
+def match_cmim_to_gds(
+    spice_instances: dict[str, Any],
+    cmim_data: list[dict[str, Any]],
+    tolerance: float = 0.01,
+) -> dict[str, dict[str, Any]]:
+    """Match SPICE CMIM capacitor instances to GDS placements by width/length.
+
+    Similar to rppd matching - compares SPICE w/l against GDS width/length.
+
+    Args:
+        spice_instances: Dictionary of SPICE instances.
+        cmim_data: List of dicts from extract_cmim_from_gds().
+        tolerance: Maximum allowed difference in µm (default: 0.01).
+
+    Returns:
+        Dictionary mapping SPICE instance names to placement info.
+    """
+    matched_placements = {}
+
+    # Extract SPICE cmim instances with their w/l converted to µm
+    spice_cmim = {}
+    for inst_name, inst_data in spice_instances.items():
+        if inst_data.get("model") != "cap_cmim":
+            continue
+        params = inst_data.get("parameters", {})
+        spice_cmim[inst_name] = {
+            "width": parse_dimension(params["w"]),
+            "length": parse_dimension(params["l"]),
+        }
+
+    print("\n=== SPICE cmim instances (w/l converted to µm) ===")
+    for name, dims in sorted(spice_cmim.items()):
+        print(f"  {name}: width={dims['width']:.4f}, length={dims['length']:.4f}")
+
+    print("\n=== GDS cmim instances (width/length from MIM layer) ===")
+    for entry in cmim_data:
+        print(
+            f"  {entry['name']}: width={entry['width']:.4f}, length={entry['length']:.4f} @ ({entry['x']:.2f}, {entry['y']:.2f})"
+        )
+
+    # Group GDS by dimensions
+    gds_by_dims: dict[tuple, list] = {}
+    for entry in cmim_data:
+        key = (round(entry["width"], 3), round(entry["length"], 3))
+        if key not in gds_by_dims:
+            gds_by_dims[key] = []
+        gds_by_dims[key].append(entry)
+
+    # Group SPICE by dimensions
+    spice_by_dims: dict[tuple, list] = {}
+    for inst_name, dims in spice_cmim.items():
+        key = (round(dims["width"], 3), round(dims["length"], 3))
+        if key not in spice_by_dims:
+            spice_by_dims[key] = []
+        spice_by_dims[key].append(inst_name)
+
+    # Sort each group alphabetically
+    for key in spice_by_dims:
+        spice_by_dims[key].sort()
+
+    # Match
+    print("\n=== Matching ===")
+    for dims_key, spice_names in sorted(spice_by_dims.items()):
+        width, length = dims_key
+
+        # Find GDS entries with matching dimensions
+        gds_matches = []
+        for (gds_w, gds_l), gds_entries in gds_by_dims.items():
+            if abs(gds_w - width) <= tolerance and abs(gds_l - length) <= tolerance:
+                gds_matches.extend(gds_entries)
+
+        print(
+            f"\n  width={width}, length={length}: {len(spice_names)} SPICE → {len(gds_matches)} GDS"
+        )
+
+        if len(spice_names) != len(gds_matches):
+            print(
+                f"  ⚠ Count mismatch! SPICE has {len(spice_names)}, GDS has {len(gds_matches)}"
+            )
+
+        for spice_name, gds_entry in zip(spice_names, gds_matches):
+            matched_placements[spice_name] = {
+                "x": gds_entry["x"],
+                "y": gds_entry["y"],
+                "rotation": gds_entry["rotation"],
+                "mirror": gds_entry["mirror"],
+            }
+            print(f"    {spice_name} → ({gds_entry['x']:.2f}, {gds_entry['y']:.2f})")
+
+    unmatched = [n for n in spice_cmim if n not in matched_placements]
+    if unmatched:
+        print(f"\n  ⚠ Unmatched SPICE instances: {unmatched}")
+
+    print(f"\n✓ Matched {len(matched_placements)} of {len(spice_cmim)} cmim instances")
+
+    return matched_placements
+
+
 def match_spice_to_gds_placements(
     spice_instances: dict[str, Any],
     rppd_data: list[dict[str, Any]] | None = None,
     inductor_data: list[dict[str, Any]] | None = None,
     nmos_data: list[dict[str, Any]] | None = None,
+    cmim_data: list[dict[str, Any]] | None = None,
 ) -> dict[str, dict[str, Any]]:
     """Unified function to match SPICE instances to GDS placements.
 
@@ -509,6 +712,7 @@ def match_spice_to_gds_placements(
         rppd_data: Optional list of rppd data from extract_rppd_from_gds().
         inductor_data: Optional list of inductor data from extract_inductors_from_gds().
         nmos_data: Optional list of NMOS data from extract_nmos_from_gds().
+        cmim_data: Optional list of CMIM data from extract_cmim_from_gds().
 
     Returns:
         Dictionary mapping SPICE instance names to placement info.
@@ -526,6 +730,10 @@ def match_spice_to_gds_placements(
     if nmos_data:
         nmos_matched = match_nmos_to_gds(spice_instances, nmos_data)
         all_matched.update(nmos_matched)
+
+    if cmim_data:
+        cmim_matched = match_cmim_to_gds(spice_instances, cmim_data)
+        all_matched.update(cmim_matched)
 
     return all_matched
 
@@ -1057,13 +1265,15 @@ def convert_file(
             rppd_data = extract_rppd_from_gds(gds_file, poly_layer=poly_layer)
             inductor_data = extract_inductors_from_gds(gds_file)
             nmos_data = extract_nmos_from_gds(gds_file)
+            cmim_data = extract_cmim_from_gds(gds_file)
 
-            if rppd_data or inductor_data or nmos_data:
+            if rppd_data or inductor_data or nmos_data or cmim_data:
                 gds_placements_matched = match_spice_to_gds_placements(
                     netlist["instances"],
                     rppd_data=rppd_data if rppd_data else None,
                     inductor_data=inductor_data if inductor_data else None,
                     nmos_data=nmos_data if nmos_data else None,
+                    cmim_data=cmim_data if cmim_data else None,
                 )
 
     print("Converting to pic.yml format...")
