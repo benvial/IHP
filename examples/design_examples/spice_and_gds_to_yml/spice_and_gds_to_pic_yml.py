@@ -224,6 +224,71 @@ def extract_inductors_from_gds(
     return inductor_data
 
 
+def extract_nmos_from_gds(gds_file: Path) -> list[dict[str, Any]]:
+    """Extract NMOS transistor placements and dimensions from GDS file.
+
+    Uses recursive traversal to find all NMOS cells and extracts their bounding
+    box dimensions as a proxy for device size (correlates with nf).
+
+    Args:
+        gds_file: Path to the GDS file.
+
+    Returns:
+        List of dicts, each containing: name, x, y, rotation, mirror, width, length.
+    """
+    try:
+        import gdsfactory as gf
+        import klayout.db as kdb
+    except ImportError as err:
+        raise ImportError(
+            "gdsfactory and klayout not installed. Install with: pip install gdsfactory"
+        ) from err
+
+    print(f"Extracting NMOS placements from GDS: {gds_file}")
+
+    c = gf.import_gds(str(gds_file))
+    layout = c.kcl.layout
+    top_cell = layout.cell(c.cell_index())
+    dbu = layout.dbu
+
+    def walk_instances(cell, parent_trans=None):
+        """Recursively walk through cell hierarchy."""
+        if parent_trans is None:
+            parent_trans = kdb.DCplxTrans()
+
+        for inst in cell.each_inst():
+            ref_cell = layout.cell(inst.cell_index)
+            total_trans = parent_trans * inst.dcplx_trans
+
+            yield ref_cell, total_trans
+            yield from walk_instances(ref_cell, total_trans)
+
+    nmos_data = []
+
+    for ref_cell, trans in walk_instances(top_cell):
+        if "nmos" not in ref_cell.name.lower():
+            continue
+
+        bbox = ref_cell.bbox()
+        width = (bbox.right - bbox.left) * dbu
+        height = (bbox.top - bbox.bottom) * dbu
+
+        nmos_data.append(
+            {
+                "name": ref_cell.name,
+                "x": trans.disp.x,
+                "y": trans.disp.y,
+                "rotation": trans.angle,
+                "mirror": trans.is_mirror(),
+                "width": width,
+                "length": height,
+            }
+        )
+
+    print(f"  Extracted {len(nmos_data)} NMOS instances")
+    return nmos_data
+
+
 def match_rppd_to_gds(
     spice_instances: dict[str, Any],
     rppd_data: list[dict[str, Any]],
@@ -377,10 +442,65 @@ def match_inductors_to_gds(
     return matched_placements
 
 
+def match_nmos_to_gds(
+    spice_instances: dict[str, Any],
+    nmos_data: list[dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Match SPICE NMOS instances to GDS placements by nf (number of fingers).
+
+    Higher nf → wider device in GDS. We sort both by width/nf and match in order.
+
+    Args:
+        spice_instances: Dictionary of SPICE instances.
+        nmos_data: List of dicts from extract_nmos_from_gds().
+
+    Returns:
+        Dictionary mapping SPICE instance names to placement info.
+    """
+    matched_placements = {}
+
+    # Extract SPICE NMOS with their nf values
+    spice_nmos = []
+    for inst_name, inst_data in spice_instances.items():
+        model = inst_data.get("model", "")
+        if "nmos" in model.lower():
+            params = inst_data.get("parameters", {})
+            nf = int(float(params.get("ng", params.get("nf", 1))))
+            spice_nmos.append((inst_name, nf))
+
+    # Sort SPICE by nf (ascending)
+    spice_nmos.sort(key=lambda x: x[1])
+
+    # Sort GDS by width (ascending) - width correlates with nf
+    nmos_data_sorted = sorted(nmos_data, key=lambda x: x["width"])
+
+    print("\n=== Matching NMOS ===")
+    print(f"  {len(spice_nmos)} SPICE NMOS → {len(nmos_data_sorted)} GDS NMOS")
+
+    if len(spice_nmos) != len(nmos_data_sorted):
+        print("  ⚠ Count mismatch!")
+
+    for (spice_name, nf), gds_entry in zip(spice_nmos, nmos_data_sorted):
+        matched_placements[spice_name] = {
+            "x": gds_entry["x"],
+            "y": gds_entry["y"],
+            "rotation": gds_entry["rotation"],
+            "mirror": gds_entry["mirror"],
+        }
+        print(
+            f"    {spice_name} (nf={nf}) → ({gds_entry['x']:.2f}, {gds_entry['y']:.2f}), width={gds_entry['width']:.2f}"
+        )
+
+    print(f"\n✓ Matched {len(matched_placements)} of {len(spice_nmos)} NMOS")
+
+    return matched_placements
+
+
 def match_spice_to_gds_placements(
     spice_instances: dict[str, Any],
     rppd_data: list[dict[str, Any]] | None = None,
     inductor_data: list[dict[str, Any]] | None = None,
+    nmos_data: list[dict[str, Any]] | None = None,
 ) -> dict[str, dict[str, Any]]:
     """Unified function to match SPICE instances to GDS placements.
 
@@ -388,6 +508,7 @@ def match_spice_to_gds_placements(
         spice_instances: Dictionary of SPICE instances.
         rppd_data: Optional list of rppd data from extract_rppd_from_gds().
         inductor_data: Optional list of inductor data from extract_inductors_from_gds().
+        nmos_data: Optional list of NMOS data from extract_nmos_from_gds().
 
     Returns:
         Dictionary mapping SPICE instance names to placement info.
@@ -401,6 +522,10 @@ def match_spice_to_gds_placements(
     if inductor_data:
         inductor_matched = match_inductors_to_gds(spice_instances, inductor_data)
         all_matched.update(inductor_matched)
+
+    if nmos_data:
+        nmos_matched = match_nmos_to_gds(spice_instances, nmos_data)
+        all_matched.update(nmos_matched)
 
     return all_matched
 
@@ -931,12 +1056,14 @@ def convert_file(
         else:
             rppd_data = extract_rppd_from_gds(gds_file, poly_layer=poly_layer)
             inductor_data = extract_inductors_from_gds(gds_file)
+            nmos_data = extract_nmos_from_gds(gds_file)
 
-            if rppd_data or inductor_data:
+            if rppd_data or inductor_data or nmos_data:
                 gds_placements_matched = match_spice_to_gds_placements(
                     netlist["instances"],
                     rppd_data=rppd_data if rppd_data else None,
                     inductor_data=inductor_data if inductor_data else None,
+                    nmos_data=nmos_data if nmos_data else None,
                 )
 
     print("Converting to pic.yml format...")
