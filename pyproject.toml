@@ -125,9 +125,6 @@ cmd = "grep -q -F {new_version} CHANGELOG.md"
 name = "create & check changelog"
 
 [[tool.tbump.file]]
-src = "README.md"
-
-[[tool.tbump.file]]
 src = "pyproject.toml"
 
 [[tool.tbump.file]]
