@@ -539,8 +539,8 @@ def cmim(
 
 @gf.cell
 def rfcmim(
-    width: float = 6.0,
-    length: float = 6.0,
+    width: float = 7.0,
+    length: float = 7.0,
     layer_pwellblock: LayerSpec = "PWellblock",
     layer_metal5: LayerSpec = "Metal5drawing",
     layer_mim: LayerSpec = "MIMdrawing",

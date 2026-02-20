@@ -1,0 +1,8 @@
+info: {}
+name: tline1_L100_W14_SCStopmetal2_routing_GCSmetal3_routing_N2
+settings:
+  ground_cross_section: metal3_routing
+  length: 100
+  npoints: 2
+  signal_cross_section: topmetal2_routing
+  width: 14

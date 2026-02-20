@@ -1,7 +1,7 @@
 info:
-  area_um2: 36
-  capacitance_fF: 55.142
-  length: 6
+  area_um2: 49
+  capacitance_fF: 74.832
+  length: 7
   model: rfcmim
   vlsir:
     model: cap_rfcmim
@@ -17,8 +17,8 @@ info:
     - bn
     spice_lib: capacitors_mod.lib
     spice_type: SUBCKT
-  width: 6
-name: rfcmim_W6_L6_LPPWellblock_LMMetal5drawing_LMMIMdrawing__0ebcbadb
+  width: 7
+name: rfcmim_W7_L7_LPPWellblock_LMMetal5drawing_LMMIMdrawing__5095ef1b
 settings:
   layer_activ: Activdrawing
   layer_activnoqrc: Activnoqrc
@@ -48,6 +48,6 @@ settings:
   layer_topmetal1noqrc: TopMetal1noqrc
   layer_topmetal1pin: TopMetal1pin
   layer_vmim: Vmimdrawing
-  length: 6
+  length: 7
   model: rfcmim
-  width: 6
+  width: 7
