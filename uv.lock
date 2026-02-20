@@ -1233,7 +1233,7 @@ wheels = [
 
 [[package]]
 name = "ihp-gdsfactory"
-version = "0.2.0"
+version = "0.2.1"
 source = { editable = "." }
 dependencies = [
     { name = "doroutes" },
@@ -1264,7 +1264,7 @@ simulation = [
 [package.metadata]
 requires-dist = [
     { name = "autodoc-pydantic", marker = "extra == 'docs'" },
-    { name = "doroutes", specifier = ">=0.2.0" },
+    { name = "doroutes", specifier = ">=0.2.1" },
     { name = "gdsfactory", specifier = "~=9.34.0" },
     { name = "gplugins", extras = ["sax"], specifier = "~=2.0.0" },
     { name = "gsim", marker = "python_full_version >= '3.12' and extra == 'simulation'" },
