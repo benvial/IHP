@@ -4,9 +4,14 @@ info:
   n_layers: 2
   top_layer: Metal2
   width: 10
-name: via_stack_BLMetal1_TLMetal2_S10_10_VC2_VR2_VC1_VR1_VC1__0ba730a0
+name: via_stack_BLMetal1_TLMetal2_S10_10_VC2_VR2_VC1_VR1_VC1__fd26eaf7
 settings:
   bottom_layer: Metal1
+  layer_activ: Activdrawing
+  layer_activ_pin: Activpin
+  layer_cont: Contdrawing
+  layer_gatpoly: GatPolydrawing
+  layer_gatpoly_pin: GatPolypin
   layer_metal1: Metal1drawing
   layer_metal1_pin: Metal1pin
   layer_metal2: Metal2drawing

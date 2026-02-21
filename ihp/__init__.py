@@ -38,6 +38,8 @@ __all__ = [
 connectivity = cast(
     list[ConnectivitySpec],
     [
+        ("POLY", "CONT", "METAL1"),
+        ("ACTIVE", "CONT", "METAL1"),
         ("METAL1", "VIA1", "METAL2"),
         ("METAL2", "VIA2", "METAL3"),
         ("METAL3", "VIA3", "METAL4"),
