@@ -6,11 +6,7 @@ from typing import Literal
 import gdsfactory as gf
 from gdsfactory.typings import LayerSpec
 
-from cni.tech import Tech
 from ihp.tech import TECH as _TECH
-
-tech_name = "SG13_dev"
-tech = Tech.get("SG13_dev").getTechParams()
 
 
 def fix(value: float) -> int:
@@ -34,9 +30,9 @@ def GridFix(x: float) -> float:
     Returns:
         The grid-aligned coordinate value.
     """
-    SG13_GRID = tech["grid"]
+    SG13_GRID = _TECH.grid  # tech["grid"]
     SG13_IGRID = 1 / SG13_GRID
-    SG13_EPSILON = tech["epsilon1"]
+    SG13_EPSILON = _TECH.epsilon  # tech["epsilon1"]
     return (
         fix(x * SG13_IGRID + SG13_EPSILON) * SG13_GRID
     )  # always use "nice" numbers, as 1/grid may be irrational
@@ -72,7 +68,7 @@ def DrawContArray(
         enclosing the generated contact array in the form
         ``(x_min, y_min, x_max, y_max)``.
     """
-    epsilon = tech["epsilon1"]
+    epsilon = _TECH.epsilon
 
     xanz = fix(
         (width - 2 * cont_diff_over + cont_dist + epsilon) / (cont_size + cont_dist)
@@ -81,27 +77,20 @@ def DrawContArray(
         (length - 2 * cont_diff_over + cont_dist + epsilon) / (cont_size + cont_dist)
     )
 
-    name = tech["libName"]
-    if name == "SG13_dev":
-        cont_dist_big = tech["Cnt_b1"]
-        cont_dist_big_nr = tech["Cnt_b1_nr"]
-        # now check, if it is cont and more than 4 rows/lines
-        if (
-            cont_layer == "Cont"
-            and xanz >= cont_dist_big_nr
-            and yanz >= cont_dist_big_nr
-        ):
-            # it has to be bigger space between contacts
-            cont_dist = cont_dist_big
-            # it has to be bigger space between contacts
-            xanz = fix(
-                (width - 2 * cont_diff_over + cont_dist + epsilon)
-                / (cont_size + cont_dist)
-            )
-            yanz = fix(
-                (length - 2 * cont_diff_over + cont_dist + epsilon)
-                / (cont_size + cont_dist)
-            )
+    cont_dist_big = _TECH.cont_b1
+    cont_dist_big_nr = _TECH.cont_b1_nr
+    # now check, if it is cont and more than 4 rows/lines
+    if cont_layer == "Cont" and xanz >= cont_dist_big_nr and yanz >= cont_dist_big_nr:
+        # it has to be bigger space between contacts
+        cont_dist = cont_dist_big
+        # it has to be bigger space between contacts
+        xanz = fix(
+            (width - 2 * cont_diff_over + cont_dist + epsilon) / (cont_size + cont_dist)
+        )
+        yanz = fix(
+            (length - 2 * cont_diff_over + cont_dist + epsilon)
+            / (cont_size + cont_dist)
+        )
 
     xmin = xanz * (cont_size + cont_dist) - cont_dist + 2 * cont_diff_over
     ymin = yanz * (cont_size + cont_dist) - cont_dist + 2 * cont_diff_over
@@ -181,11 +170,11 @@ def dantenna(
     diods_layer: LayerSpec = "Recogdiode"
     layer_text: LayerSpec = "TEXTdrawing"
 
-    cont_size = tech["Cnt_a"]
-    cont_dist = tech["Cnt_b"]
-    cont_diff_over = tech["Cnt_c"]
-    pdiffx_over = tech["pSD_a"]
-    diods_over = float(tech["dantenna_dov"].rstrip("u"))
+    cont_size = _TECH.cont_size
+    cont_dist = _TECH.cont_spacing
+    cont_diff_over = _TECH.cont_enc_active
+    pdiffx_over = _TECH.pSD_a
+    diods_over = _TECH.dantenna_dov
 
     typ = "N"
 
@@ -301,12 +290,12 @@ def dpantenna(
     layer_text: LayerSpec = "TEXTdrawing"
     layer_nwell: LayerSpec = "NWelldrawing"
 
-    cont_size = tech["Cnt_a"]
-    cont_dist = tech["Cnt_b"]
-    cont_diff_over = tech["Cnt_c"]
-    pdiffx_over = tech["pSD_c"]
-    diods_over = float(tech["dpantenna_dov"].rstrip("u"))
-    NW_c = tech["NW_c"]
+    cont_size = _TECH.cont_size
+    cont_dist = _TECH.cont_spacing
+    cont_diff_over = _TECH.cont_enc_active
+    pdiffx_over = _TECH.psd_activ_over
+    diods_over = _TECH.dpantenna_dov
+    NW_c = _TECH.nw_activ_over_lv
 
     x_min, y_min, x_max, y_max = DrawContArray(
         c,
