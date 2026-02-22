@@ -5,11 +5,7 @@ import math
 import gdsfactory as gf
 from gdsfactory.typings import LayerSpec
 
-from cni.tech import Tech
 from ihp.tech import TECH as _TECH
-
-tech_name = "SG13_dev"
-tech = Tech.get("SG13_dev").getTechParams()
 
 
 def fix(value):
@@ -1373,9 +1369,9 @@ def npn13G2V(
     Emi_Metal1_enc_vert = 0.28
     Emi_Metal1_enc_hori = 0.07
 
-    Via1Width = tech["V1_a"]
-    Via1Space = tech["V1_b"]
-    m1EncVia1 = tech["V1_c"]
+    Via1Width = _TECH.via1_size_rf
+    Via1Space = _TECH.via1_spacing_narrow
+    m1EncVia1 = _TECH.via1_enc
 
     column_pitch = 2.34
 
@@ -1951,7 +1947,7 @@ def contactArray(
             Distance between first column from left edge, last column from right edge, first (bottom) row and bottom edge, and last (top) row and top edge.
 
     """
-    eps = tech["epsilon1"]
+    eps = _TECH.epsilon
 
     nx = math.floor((length - ox * 2 + ds) / (ws + ds) + eps)
 
@@ -2024,18 +2020,18 @@ def pnpMPA(length: float = 2, width: float = 0.7) -> gf.Component:
 
     c = gf.Component()
 
-    SG13_GRID = tech["grid"]
+    SG13_GRID = _TECH.grid
     SG13_IGRID = 1.0 / SG13_GRID
-    epsilon = tech["epsilon1"]
+    epsilon = _TECH.epsilon
 
     hact = (fix(length * SG13_IGRID + epsilon) * SG13_GRID) * 0.5
     wact = (fix(width * SG13_IGRID + epsilon) * SG13_GRID) * 0.5
 
-    Cnt_a = tech["Cnt_a"]
-    Cnt_b = tech["Cnt_b"]
-    Cnt_b1 = tech["Cnt_b1"]
-    M1_c1 = tech["M1_c1"]
-    pSD_c = tech["pSD_c"]
+    Cnt_a = _TECH.cont_size
+    Cnt_b = _TECH.cont_spacing
+    Cnt_b1 = _TECH.cont_b1
+    M1_c1 = _TECH.m1_endcap
+    pSD_c = _TECH.psd_activ_over
 
     w1m1 = wact - 0.02
     h1m1 = hact - 0.02

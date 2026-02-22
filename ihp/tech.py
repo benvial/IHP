@@ -449,6 +449,27 @@ def add_labels_to_ports_optical(
 margin = 0.5
 
 
+def get_routing_stack() -> LayerStack:
+    """Returns IHP PDK LayerStack with only metallization and GatPoly layers.
+
+    Subset of get_layer_stack() for routing and interconnect visualization.
+    """
+    _routing_keys = {
+        "poly",
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4",
+        "metal5",
+        "topmetal1",
+        "topmetal2",
+    }
+    full = get_layer_stack()
+    return LayerStack(
+        layers={k: v for k, v in full.layers.items() if k in _routing_keys}
+    )
+
+
 def get_layer_stack(
     thickness_gatpoly: float = 0.16,  # GatPoly thickness (160nm from process spec)
     thickness_cont: float = 0.64,  # Activ-M1 Cont thickness (640nm from process spec)
@@ -779,6 +800,8 @@ class TechIHP(BaseModel):
     cont_enc_active: float = 0.07
     cont_enc_poly: float = 0.07
     cont_enc_metal: float = 0.06
+    cont_b1: float = 0.2
+    cont_b1_nr: float = 4.0
 
     via1_size: float = 0.26
     via1_spacing: float = 0.36
@@ -821,6 +844,7 @@ class TechIHP(BaseModel):
     gat_d: float = 0.07  # Gat_d
     psd_activ_over: float = 0.18  # pSD_c
     psd_gate_over_lv: float = 0.3  # pSD_i
+    pSD_a: float = 0.31
     psd_gate_over_hv: float = 0.4  # pSD_i1
     nw_activ_over_lv: float = 0.31  # NW_c
     nw_activ_over_hv: float = 0.62  # NW_c1
@@ -966,6 +990,14 @@ class TechIHP(BaseModel):
     rfcmim_min_size: float = 7.0
     rfcmim_max_size: float = 1000.0
 
+    # MIM capacitor model parameters (from sg13g2_tech.json)
+    cmim_caspec: float = 1.5  # fF/um² — area-specific capacitance
+    cmim_cpspec: float = 0.04  # fF/um  — perimeter-specific capacitance
+    cmim_lwd: float = 0.01  # um     — line-width delta
+    rfcmim_caspec: float = 1.5  # fF/um²
+    rfcmim_cpspec: float = 0.04  # fF/um
+    rfcmim_lwd: float = 0.01  # um
+
     # Taps
     ptap1_min_size: float = 0.78
     ptap1_max_size: float = 10_000_000.0
@@ -977,10 +1009,12 @@ class TechIHP(BaseModel):
     dantenna_max_width: float = 1000.0
     dantenna_min_length: float = 0.48
     dantenna_max_length: float = 1000.0
+    dantenna_dov: float = 0.02
     dpantenna_min_width: float = 0.48
     dpantenna_max_width: float = 1000.0
     dpantenna_min_length: float = 0.48
     dpantenna_max_length: float = 1000.0
+    dpantenna_dov: float = 0.02
 
     # Sealring
     sealring_min_width: float = 150.0
@@ -991,7 +1025,44 @@ class TechIHP(BaseModel):
 
 TECH = TechIHP()
 LAYER_STACK = get_layer_stack()
+ROUTING_STACK = get_routing_stack()
 LAYER_VIEWS = gf.technology.LayerViews(PATH.lyp_yaml)
+
+
+def CbCapCalc(calc: str, c: float, length: float, width: float, cell: str) -> float:
+    """Calculate MIM capacitor parameters (all dimensions in um, capacitance in fF).
+
+    Args:
+        calc: "C" (capacitance from l/w), "l" (length from C/w),
+              "w" (width from C/l), "lw" (square dimension from C).
+        c: Capacitance in fF (used when calc != "C").
+        l: Length in um.
+        w: Width in um.
+        cell: Model name ("cmim" or "rfcmim").
+    """
+    from math import sqrt
+
+    caspec = getattr(TECH, f"{cell}_caspec")  # fF/um²
+    cpspec = getattr(TECH, f"{cell}_cpspec")  # fF/um
+    lwd = getattr(TECH, f"{cell}_lwd")  # um
+
+    if calc == "C":
+        leff = length + lwd
+        weff = width + lwd
+        return leff * weff * caspec + 2.0 * (leff + weff) * cpspec
+    elif calc == "l":
+        weff = width + lwd
+        return (c - 2.0 * weff * cpspec) / (caspec * weff + 2.0 * cpspec) - lwd
+    elif calc == "w":
+        leff = length + lwd
+        return (c - 2.0 * leff * cpspec) / (caspec * leff + 2.0 * cpspec) - lwd
+    elif calc == "lw":
+        return (
+            -2.0 * cpspec / caspec
+            + sqrt(4.0 * cpspec**2 / caspec**2 + c / caspec)
+            - lwd
+        )
+    return 0.0
 
 
 ############################
