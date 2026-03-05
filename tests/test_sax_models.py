@@ -82,7 +82,9 @@ class TestRppd:
     def test_higher_rsh_than_rsil(self):
         s_lo = rsil(f=F_SINGLE, width=1.0, length=1.0)
         s_hi = rppd(f=F_SINGLE, width=1.0, length=1.0)
-        assert float(jnp.abs(s_hi[("o1", "o1")])[0]) > float(jnp.abs(s_lo[("o1", "o1")])[0])
+        assert float(jnp.abs(s_hi[("o1", "o1")])[0]) > float(
+            jnp.abs(s_lo[("o1", "o1")])[0]
+        )
 
 
 # -- rhigh -----------------------------------------------------------------
@@ -95,7 +97,9 @@ class TestRhigh:
     def test_highest_rsh(self):
         s_mid = rppd(f=F_SINGLE, width=1.0, length=1.0)
         s_hi = rhigh(f=F_SINGLE, width=1.0, length=1.0)
-        assert float(jnp.abs(s_hi[("o1", "o1")])[0]) > float(jnp.abs(s_mid[("o1", "o1")])[0])
+        assert float(jnp.abs(s_hi[("o1", "o1")])[0]) > float(
+            jnp.abs(s_mid[("o1", "o1")])[0]
+        )
 
 
 # -- models dict -----------------------------------------------------------
