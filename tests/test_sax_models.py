@@ -1,11 +1,9 @@
 """Tests for IHP SAX models."""
 
 import jax.numpy as jnp
-import sax
 
 from ihp.models.sax import models
 from ihp.models.sax.resistors import resistor, rhigh, rppd, rsil
-
 
 # -- helpers ---------------------------------------------------------------
 
