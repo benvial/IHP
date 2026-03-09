@@ -5,6 +5,8 @@ Wraps sax.models.rf.impedance with IHP process sheet resistances
 extracted from cornerRES.lib.
 """
 
+from functools import partial
+
 import jax
 import sax
 from sax.models.rf import impedance
@@ -19,6 +21,7 @@ from ihp.models.sax.constants import (
 
 __all__ = ["resistor", "rsil", "rppd", "rhigh"]
 
+
 @partial(jax.jit, inline=True)
 def resistor(
     *,
@@ -30,6 +33,7 @@ def resistor(
     Two-port resistor. Wrapper around ``sax.models.rf.impedance``.
     """
     return impedance(f=f, z=resistance, z0=z0)
+
 
 @partial(jax.jit, inline=True)
 def rsil(
@@ -52,6 +56,7 @@ def rsil(
     """
     return resistor(f=f, resistance=sheet_resistance * length / width, z0=z0)
 
+
 @partial(jax.jit, inline=True)
 def rppd(
     *,
@@ -72,6 +77,7 @@ def rppd(
         z0: Reference impedance in Ohm.
     """
     return resistor(f=f, resistance=sheet_resistance * length / width, z0=z0)
+
 
 @partial(jax.jit, inline=True)
 def rhigh(
