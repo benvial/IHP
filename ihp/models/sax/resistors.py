@@ -5,6 +5,7 @@ Wraps sax.models.rf.impedance with IHP process sheet resistances
 extracted from cornerRES.lib.
 """
 
+import jax
 import sax
 from sax.models.rf import impedance
 
@@ -18,7 +19,7 @@ from ihp.models.sax.constants import (
 
 __all__ = ["resistor", "rsil", "rppd", "rhigh"]
 
-
+@partial(jax.jit, inline=True)
 def resistor(
     *,
     f: sax.FloatArrayLike = DEFAULT_FREQUENCY,
@@ -30,7 +31,7 @@ def resistor(
     """
     return impedance(f=f, z=resistance, z0=z0)
 
-
+@partial(jax.jit, inline=True)
 def rsil(
     *,
     f: sax.FloatArrayLike = DEFAULT_FREQUENCY,
@@ -51,7 +52,7 @@ def rsil(
     """
     return resistor(f=f, resistance=sheet_resistance * length / width, z0=z0)
 
-
+@partial(jax.jit, inline=True)
 def rppd(
     *,
     f: sax.FloatArrayLike = DEFAULT_FREQUENCY,
@@ -72,7 +73,7 @@ def rppd(
     """
     return resistor(f=f, resistance=sheet_resistance * length / width, z0=z0)
 
-
+@partial(jax.jit, inline=True)
 def rhigh(
     *,
     f: sax.FloatArrayLike = DEFAULT_FREQUENCY,
