@@ -151,3 +151,17 @@ uv run pytest tests/test_xor_transistors.py -v # polygon-exact XOR vs PyCell
 ## License
 
 [Apache 2.0](LICENSE)
+
+## Pre-commit
+
+```bash
+make pre-commit
+```
+
+## Release
+
+Releases are automated via GitHub Actions.
+
+1. Merge your changes to `main`.
+2. A draft release is automatically created/updated by the release drafter.
+3. When ready, publish the draft release with a tag (e.g. `v1.0.0`). This triggers the release workflow that builds wheels and uploads them.
