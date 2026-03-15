@@ -8,7 +8,7 @@ from numpy import floor
 from ihp import tech
 from ihp.cells.passives import guard_ring
 from ihp.cells.via_stacks import via_array, via_stack
-from ihp.cells2.ihp_pycell.utility_functions import CbCapCalc
+from ihp.tech import CbCapCalc
 
 
 def snap_to_grid(p, grid: float = 0.005):
@@ -513,7 +513,7 @@ def cmim(
     # fringe_factor = kwargs.get("fringe_factor", 0.355)
     # capacitance = width * length * mim_drc['mim_cap_density']
     # capacitance *= (1+fringe_factor)
-    capacitance = CbCapCalc("C", 0, length * 1e-6, width * 1e-6, model) / 1e-15
+    capacitance = CbCapCalc("C", 0, length, width, model)
 
     c.add_label(
         text=f"C = {capacitance} fF", position=(c.x, c.y - width / 2), layer=layer_text
@@ -539,8 +539,8 @@ def cmim(
 
 @gf.cell
 def rfcmim(
-    width: float = 6.0,
-    length: float = 6.0,
+    width: float = 7.0,
+    length: float = 7.0,
     layer_pwellblock: LayerSpec = "PWellblock",
     layer_metal5: LayerSpec = "Metal5drawing",
     layer_mim: LayerSpec = "MIMdrawing",

@@ -94,17 +94,17 @@ The `run_drc.py` script takes your gds to run DRC rule decks with switches to se
   --no_offgrid          Disable offgrid rule checks.
 ```
 
-> **ℹ️ Note**  
+> **ℹ️ Note**
 >
-> By default, the **main DRC rule set** is executed, which includes checks such as **density rules**.  
+> By default, the **main DRC rule set** is executed, which includes checks such as **density rules**.
 > To skip density checks, use the `--no_density` option.
 >
 > If the `--drc_json=<json_path>` option is **not specified**, the script will get rule values as following:
 >
-> 1. Attempt to load the **SG13G2 technology JSON file**:  
+> 1. Attempt to load the **SG13G2 technology JSON file**:
 >    [SG13G2 tech JSON](../../python/sg13g2_pycell_lib/sg13g2_tech_mod.json)
 >
-> 2. If not found, fall back to the **default DRC rule set**:  
+> 2. If not found, fall back to the **default DRC rule set**:
 >    [Default DRC values](./rule_decks/default_drc_rules.json)
 
 #### DRC Outputs
@@ -212,12 +212,12 @@ Upon executing the DRC, the result database will appear on your layout interface
 
 The current SG13G2 DRC rules are categorized as follows:
 
-- **PreCheck Rule Set** – Refer to the [README](docs/precheck_rules.md):  
+- **PreCheck Rule Set** – Refer to the [README](docs/precheck_rules.md):
   This set contains the essential DRC rules that are required for baseline verification. All rules in this category have been thoroughly verified, tested, and optimized for performance. This rule set is intended for foundry precheck purposes.
 
-- **Main Rule Set** – Refer to the [README](docs/main_rules.md):  
+- **Main Rule Set** – Refer to the [README](docs/main_rules.md):
   This set includes rules that were not previously implemented. It also incorporates essential DRC rules already available in the [PreCheck Rule Set](docs/precheck_rules.md).
 
-- **Extra Rule Set** – Refer to the [README](docs/extra_rules.md):  
+- **Extra Rule Set** – Refer to the [README](docs/extra_rules.md):
   This set includes additional residual rules that are not part of the main set. These rules can be deactivated by using the `--disable_extra_rules` switch when executing the DRC. Please note that these rules have not been verified or tested and may be slower.
 ---

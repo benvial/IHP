@@ -9,8 +9,7 @@ from gdsfactory.typings import (
 )
 
 from ihp import cells, tech
-
-# from ihp.models import get_models
+from ihp.models import get_models
 from ihp.tech import (
     LAYER,
     LAYER_STACK,
@@ -23,7 +22,7 @@ from .config import PATH
 
 components = cells
 
-__version__ = "0.2.0"
+__version__ = "0.2.7"
 __all__ = [
     "PATH",
     "components",
@@ -38,6 +37,8 @@ __all__ = [
 connectivity = cast(
     list[ConnectivitySpec],
     [
+        ("POLY", "CONT", "METAL1"),
+        ("ACTIVE", "CONT", "METAL1"),
         ("METAL1", "VIA1", "METAL2"),
         ("METAL2", "VIA2", "METAL3"),
         ("METAL3", "VIA3", "METAL4"),
@@ -52,7 +53,7 @@ PDK = Pdk(
     name="IHP",
     cells=_cells,
     cross_sections=cross_sections,
-    # models=get_models(),
+    models=get_models(),
     layers=LAYER,
     layer_stack=LAYER_STACK,
     layer_views=LAYER_VIEWS,
