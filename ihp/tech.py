@@ -455,18 +455,22 @@ def get_routing_stack() -> LayerStack:
     Subset of get_layer_stack() for routing and interconnect visualization.
     """
     _routing_keys = {
-        "poly" : "GatPoly",
-        "metal1" : "Metal1",
-        "metal2" : "Metal2",
-        "metal3" : "Metal3",
-        "metal4" : "Metal4",
-        "metal5" : "Metal5",
-        "topmetal1" : "TopMetal1",
-        "topmetal2" : "TopMetal2",
+        "poly": "GatPoly",
+        "metal1": "Metal1",
+        "metal2": "Metal2",
+        "metal3": "Metal3",
+        "metal4": "Metal4",
+        "metal5": "Metal5",
+        "topmetal1": "TopMetal1",
+        "topmetal2": "TopMetal2",
     }
     full = get_layer_stack()
     return LayerStack(
-        layers={_routing_keys[k]: v for k, v in full.layers.items() if k in _routing_keys.keys()}
+        layers={
+            _routing_keys[k]: v
+            for k, v in full.layers.items()
+            if k in _routing_keys.keys()
+        }
     )
 
 
