@@ -151,3 +151,26 @@ uv run pytest tests/test_xor_transistors.py -v # polygon-exact XOR vs PyCell
 ## License
 
 [Apache 2.0](LICENSE)
+
+## Pre-commit
+
+```bash
+make pre-commit
+```
+
+## Release
+
+1. Bump the version:
+
+```bash
+tbump 0.0.1
+```
+
+2. Push the tag:
+
+```bash
+git push --tags
+```
+This triggers the release workflow that builds wheels and uploads them.
+
+3. Create a pull request with the updated changelog since last release.
