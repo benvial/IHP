@@ -534,9 +534,9 @@ def nmos(
         )
     if nf < 1 or nf > TECH.nmos_max_nf:
         raise ValueError(f"nmos nf={nf} out of range [1, {TECH.nmos_max_nf}]")
-    if width < TECH.nmos_min_width * nf or width > TECH.nmos_max_width * nf:
+    if width < TECH.nmos_min_width or width > TECH.nmos_max_width:
         raise ValueError(
-            f"nmos width={width} out of range [{TECH.nmos_min_width * nf}, {TECH.nmos_max_width * nf}] for this nf={nf}"
+            f"nmos width={width} out of range [{TECH.nmos_min_width}, {TECH.nmos_max_width}]"
         )
 
     c = _mos_core(width, length, nf, is_pmos=False, is_hv=False)
