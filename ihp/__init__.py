@@ -9,7 +9,7 @@ from gdsfactory.typings import (
 )
 
 from ihp import cells, tech
-from ihp.models import get_models
+from ihp.models import models
 from ihp.tech import (
     LAYER,
     LAYER_STACK,
@@ -53,7 +53,7 @@ PDK = Pdk(
     name="IHP",
     cells=_cells,
     cross_sections=cross_sections,
-    models=get_models(),
+    models=models,
     layers=LAYER,
     layer_stack=LAYER_STACK,
     layer_views=LAYER_VIEWS,

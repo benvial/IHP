@@ -1,8 +1,46 @@
-"""IHP SG13G2 PDK models."""
+"""S-parameter model definitions for IHP PDK."""
 
-from ihp.models.sax import models as sax_models
+import sax
 
+from .generic import (
+    capacitor,
+    gamma_0_load,
+    inductor,
+    open,
+    resistor,
+    short,
+    single_admittance_element,
+    single_impedance_element,
+    tee,
+)
+from .waveguides import (
+    bend_circular,
+    bend_euler,
+    bend_s,
+    straight,
+    straight_metal,
+)
 
-def get_models() -> dict:
-    """Return a dictionary of SAX models for use with the IHP PDK."""
-    return dict(sax_models)
+sax.set_port_naming_strategy("optical")
+
+models = {
+    func.__name__: func
+    for func in (
+        bend_circular,
+        bend_euler,
+        bend_s,
+        capacitor,
+        gamma_0_load,
+        inductor,
+        open,
+        resistor,
+        short,
+        single_admittance_element,
+        single_impedance_element,
+        straight,
+        straight_metal,
+        tee,
+    )
+}
+
+__all__ = ["models", *models.keys()]

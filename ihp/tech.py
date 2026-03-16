@@ -1090,6 +1090,7 @@ def metal_routing(
         width=width,
         layer=layer,
         radius=radius,
+        radius_min=None,
         port_names=port_names,
         port_types=port_types,
         **kwargs,
