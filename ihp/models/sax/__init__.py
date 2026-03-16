@@ -21,7 +21,16 @@ Example usage::
 
 import sax
 
+from ihp.models.sax.capacitors import (
+    cmim,
+    cmim_capacitance,
+    cmom,
+    cmom_capacitance,
+    rfcmim,
+    rfcmim_capacitance,
+)
 from ihp.models.sax.constants import DEFAULT_FREQUENCY, Z0_DEFAULT
+from ihp.models.sax.inductors import inductor2, inductor3, inductor_with_loss
 from ihp.models.sax.resistors import (
     resistor,
     rhigh,
@@ -32,8 +41,17 @@ from ihp.models.sax.resistors import (
 __all__ = [
     "DEFAULT_FREQUENCY",
     "Z0_DEFAULT",
+    "cmim",
+    "cmim_capacitance",
+    "cmom",
+    "cmom_capacitance",
+    "inductor2",
+    "inductor3",
+    "inductor_with_loss",
     "models",
     "resistor",
+    "rfcmim",
+    "rfcmim_capacitance",
     "rhigh",
     "rppd",
     "rsil",
@@ -44,4 +62,10 @@ models: dict[str, sax.Model] = {
     "rsil": rsil,
     "rppd": rppd,
     "rhigh": rhigh,
+    "cmim": cmim,
+    "rfcmim": rfcmim,
+    "cmom": cmom,
+    "inductor2": inductor2,
+    "inductor3": inductor3,
+    "inductor_with_loss": inductor_with_loss,
 }

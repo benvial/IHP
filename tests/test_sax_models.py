@@ -3,6 +3,14 @@
 import jax.numpy as jnp
 
 from ihp.models.sax import models
+from ihp.models.sax.capacitors import (
+    cmim,
+    cmim_capacitance,
+    cmom,
+    cmom_capacitance,
+    rfcmim,
+)
+from ihp.models.sax.inductors import inductor2, inductor3, inductor_with_loss
 from ihp.models.sax.resistors import resistor, rhigh, rppd, rsil
 
 # -- helpers ---------------------------------------------------------------
@@ -29,7 +37,7 @@ def _check_two_port(result):
         assert jnp.all(jnp.isfinite(v))
 
 
-# -- resistor (generic) ----------------------------------------------------
+# -- resistor --------------------------------------------------------------
 
 
 class TestResistor:
@@ -42,7 +50,6 @@ class TestResistor:
         assert abs(float(jnp.abs(s[("o1", "o1")])[0]) - 1 / 3) < 1e-6
 
     def test_zero_resistance(self):
-        """Short circuit: full transmission."""
         s = resistor(f=F_SINGLE, resistance=0.0)
         assert abs(float(jnp.abs(s[("o1", "o2")])[0]) - 1.0) < 1e-6
 
@@ -51,15 +58,11 @@ class TestResistor:
         assert len(s[("o1", "o1")]) == len(F)
 
 
-# -- rsil ------------------------------------------------------------------
-
-
 class TestRsil:
     def test_basics(self):
         _check_two_port(rsil(f=F, width=1.0, length=10.0))
 
     def test_one_square_is_7_ohm(self):
-        """1-square rsil: R=7, so S11 = 7/107."""
         s = rsil(f=F_SINGLE, width=1.0, length=1.0)
         expected = 7.0 / (7.0 + 2 * 50.0)
         assert abs(float(jnp.abs(s[("o1", "o1")])[0]) - expected) < 1e-6
@@ -68,9 +71,6 @@ class TestRsil:
         s1 = rsil(f=F_SINGLE, width=1.0, length=1.0)
         s2 = rsil(f=F_SINGLE, width=1.0, length=2.0)
         assert float(jnp.abs(s2[("o1", "o1")])[0]) > float(jnp.abs(s1[("o1", "o1")])[0])
-
-
-# -- rppd ------------------------------------------------------------------
 
 
 class TestRppd:
@@ -85,9 +85,6 @@ class TestRppd:
         )
 
 
-# -- rhigh -----------------------------------------------------------------
-
-
 class TestRhigh:
     def test_basics(self):
         _check_two_port(rhigh(f=F, width=0.5, length=10.0))
@@ -100,12 +97,128 @@ class TestRhigh:
         )
 
 
+# -- capacitors ------------------------------------------------------------
+
+
+class TestCmimCapacitance:
+    def test_known_value(self):
+        """7x7 um MIM should be ~74.8 fF."""
+        c = cmim_capacitance(length=7.0, width=7.0)
+        assert 70e-15 < c < 80e-15
+
+    def test_scales_with_area(self):
+        """Doubling both dimensions ~ 4x capacitance."""
+        c1 = cmim_capacitance(length=10.0, width=10.0)
+        c2 = cmim_capacitance(length=20.0, width=20.0)
+        assert 3.5 < c2 / c1 < 4.5
+
+    def test_positive(self):
+        assert cmim_capacitance() > 0
+
+
+class TestCmim:
+    def test_basics(self):
+        _check_two_port(cmim(f=F, length=10.0, width=10.0))
+
+    def test_more_transparent_at_higher_freq(self):
+        s = cmim(f=jnp.array([1e9, 10e9]), length=10.0, width=10.0)
+        assert float(jnp.abs(s[("o1", "o2")])[1]) > float(jnp.abs(s[("o1", "o2")])[0])
+
+    def test_bigger_cap_more_transparent(self):
+        s_small = cmim(f=F_SINGLE, length=7.0, width=7.0)
+        s_big = cmim(f=F_SINGLE, length=50.0, width=50.0)
+        assert float(jnp.abs(s_big[("o1", "o2")])[0]) > float(
+            jnp.abs(s_small[("o1", "o2")])[0]
+        )
+
+
+class TestRfcmim:
+    def test_basics(self):
+        _check_two_port(rfcmim(f=F, length=10.0, width=10.0, wfeed=2.0))
+
+    def test_differs_from_ideal(self):
+        """Parasitics should visibly shift S-params from ideal cmim."""
+        s_ideal = cmim(f=F, length=10.0, width=10.0)
+        s_rf = rfcmim(f=F, length=10.0, width=10.0, wfeed=2.0)
+        diff = jnp.max(jnp.abs(s_ideal[("o1", "o1")] - s_rf[("o1", "o1")]))
+        assert float(diff) > 1e-4
+
+
+class TestCmom:
+    def test_basics(self):
+        _check_two_port(cmom(f=F, nfingers=4, length=10.0))
+
+    def test_more_fingers_more_capacitance(self):
+        s1 = cmom(f=F_SINGLE, nfingers=2, length=10.0)
+        s2 = cmom(f=F_SINGLE, nfingers=8, length=10.0)
+        assert float(jnp.abs(s2[("o1", "o2")])[0]) > float(jnp.abs(s1[("o1", "o2")])[0])
+
+
+class TestCmomCapacitance:
+    def test_positive(self):
+        assert cmom_capacitance(nfingers=4, length=10.0) > 0
+
+    def test_scales_with_fingers(self):
+        assert cmom_capacitance(nfingers=8) > cmom_capacitance(nfingers=2)
+
+
+# -- inductors -------------------------------------------------------------
+
+
+class TestInductorWithLoss:
+    def test_basics(self):
+        _check_two_port(inductor_with_loss(f=F, inductance=1e-9, resistance=1.0))
+
+    def test_reflection_increases_with_freq(self):
+        s = inductor_with_loss(
+            f=jnp.array([1e9, 10e9]), inductance=1e-9, resistance=0.5
+        )
+        assert float(jnp.abs(s[("o1", "o1")])[1]) > float(jnp.abs(s[("o1", "o1")])[0])
+
+    def test_transparent_near_dc(self):
+        s = inductor_with_loss(f=jnp.array([1e3]), inductance=1e-12, resistance=0.0)
+        assert float(jnp.abs(s[("o1", "o2")])[0]) > 0.99
+
+    def test_resistance_reduces_transmission(self):
+        s_lo = inductor_with_loss(f=jnp.array([1e6]), inductance=1e-12, resistance=0.0)
+        s_hi = inductor_with_loss(f=jnp.array([1e6]), inductance=1e-12, resistance=10.0)
+        assert float(jnp.abs(s_hi[("o1", "o2")])[0]) < float(
+            jnp.abs(s_lo[("o1", "o2")])[0]
+        )
+
+
+class TestInductor2:
+    def test_basics(self):
+        _check_two_port(inductor2(f=F))
+
+    def test_runs_with_defaults(self):
+        s = inductor2(f=F_SINGLE)
+        assert isinstance(s, dict) and len(s) == 4
+
+
+class TestInductor3:
+    def test_basics(self):
+        _check_two_port(inductor3(f=F))
+
+
 # -- models dict -----------------------------------------------------------
 
 
 class TestModelsDict:
     def test_expected_keys(self):
-        assert set(models.keys()) == {"resistor", "rsil", "rppd", "rhigh"}
+        expected = {
+            "resistor",
+            "rsil",
+            "rppd",
+            "rhigh",
+            "cmim",
+            "rfcmim",
+            "cmom",
+            "inductor2",
+            "inductor3",
+            "inductor_with_loss",
+        }
+        assert set(models.keys()) == expected
 
     def test_all_run_with_defaults(self):
         for name, fn in models.items():
