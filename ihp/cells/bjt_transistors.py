@@ -4,8 +4,11 @@ import math
 
 import gdsfactory as gf
 from gdsfactory.typings import LayerSpec
+from kfactory.schematic import DSchematic
 
 from ihp.tech import TECH as _TECH
+
+_XS = "metal1_routing"
 
 
 def fix(value):
@@ -29,7 +32,49 @@ def _snap_width_to_grid(width_um: float) -> float:
     return round(w / grid) * grid
 
 
-@gf.cell
+def npn13G2_schematic(
+    baspolyx: float = 0.3,
+    bipwinx: float = 0.07,
+    bipwiny: float = 0.1,
+    empolyx: float = 0.15,
+    empolyy: float = 0.18,
+    STI: float = 0.44,
+    emitter_length: float = 0.9,
+    emitter_width: float = 0.7,
+    Nx: int = 1,
+    Ny: int = 1,
+    text: str = "npn13G2",
+    CMetY1: float = 0,
+    CMetY2: float = 0,
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "bjt", "npn"]
+    s.info["symbol"] = "npn"
+    s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "npn13G2",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_hbt_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["C", "B", "E", "BN"],
+            "params": {
+                "Nx": Nx,
+                "Ny": Ny,
+                "we": emitter_width * 1e-6,
+                "le": emitter_length * 1e-6,
+            },
+        }
+    ]
+    s.create_port(name="C", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="E", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="BN", cross_section=_XS, x=0, y=1, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=npn13G2_schematic)
 def npn13G2(
     baspolyx: float = 0.3,
     bipwinx: float = 0.07,
@@ -720,27 +765,42 @@ def npn13G2(
             port_type="electrical",
         )
 
-        # VLSIR Simulation Metadata
-        c.info["vlsir"] = {
-            "model": "npn13G2",
-            "spice_type": "SUBCKT",
-            "spice_lib": "sg13g2_hbt_mod.lib",
-            "port_order": ["c", "b", "e", "bn"],
-            "port_map": {"C": "c", "B": "b", "E": "e"},
-            "params": {
-                "Nx": Nx,
-                "Ny": Ny,
-                "we": emitter_width * 1e-6,
-                "le": emitter_length * 1e-6,
-            },
-        }
-
         # TODO: Extend to handle empoly, bipwin, cmet
 
     return c
 
 
-@gf.cell
+def npn13G2L_schematic(
+    emitter_length: float = 1,
+    emitter_width: float = 0.07,
+    Nx: int = 1,
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "bjt", "npn"]
+    s.info["symbol"] = "npn"
+    s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "npn13G2l",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_hbt_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["C", "B", "E", "BN"],
+            "params": {
+                "we": emitter_width * 1e-6,
+                "le": emitter_length * 1e-6,
+            },
+        }
+    ]
+    s.create_port(name="C", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="E", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="BN", cross_section=_XS, x=0, y=1, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=npn13G2L_schematic)
 def npn13G2L(
     emitter_length: float = 1,
     emitter_width: float = 0.07,
@@ -1295,23 +1355,41 @@ def npn13G2L(
         ),
     )
 
-    # VLSIR Simulation Metadata
-    c.info["vlsir"] = {
-        "model": "npn13G2l",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_hbt_mod.lib",
-        "port_order": ["c", "b", "e", "bn"],
-        "port_map": {"C": "c", "B": "b", "E": "e"},
-        "params": {
-            "we": emitter_width * 1e-6,
-            "le": emitter_length * 1e-6,
-        },
-    }
 
     return c
 
 
-@gf.cell
+def npn13G2V_schematic(
+    emitter_length: float = 1,
+    emitter_width: float = 0.12,
+    Nx: int = 1,
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "bjt", "npn"]
+    s.info["symbol"] = "npn"
+    s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "npn13G2v",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_hbt_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["C", "B", "E", "BN"],
+            "params": {
+                "we": emitter_width * 1e-6,
+                "le": emitter_length * 1e-6,
+            },
+        }
+    ]
+    s.create_port(name="C", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="E", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="BN", cross_section=_XS, x=0, y=1, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=npn13G2V_schematic)
 def npn13G2V(
     emitter_length: float = 1,
     emitter_width: float = 0.12,
@@ -1887,18 +1965,6 @@ def npn13G2V(
         ),
     )
 
-    # VLSIR Simulation Metadata
-    c.info["vlsir"] = {
-        "model": "npn13G2v",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_hbt_mod.lib",
-        "port_order": ["c", "b", "e", "bn"],
-        "port_map": {"C": "c", "B": "b", "E": "e"},
-        "params": {
-            "we": emitter_width * 1e-6,
-            "le": emitter_length * 1e-6,
-        },
-    }
 
     return c
 
@@ -1992,7 +2058,29 @@ def contactArray(
         x = x + ws + dsx
 
 
-@gf.cell
+def pnpMPA_schematic(length: float = 2, width: float = 0.7) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "bjt", "pnp"]
+    s.info["symbol"] = "pnp"
+    s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "pnpMPA",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_hbt_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["C", "B", "E"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="C", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="E", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+@gf.cell(schematic_function=pnpMPA_schematic)
 def pnpMPA(length: float = 2, width: float = 0.7) -> gf.Component:
     """Returns the IHP pnpMPA BJT transistor as a gdsfactory Component.
 
@@ -2445,14 +2533,6 @@ def pnpMPA(length: float = 2, width: float = 0.7) -> gf.Component:
         orientation=270.0,
         port_type="electrical",
     )
-
-    c.info["vlsir"] = {
-        "model": "pnpMPA",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_hbt_mod.lib",
-        "port_order": ["c", "b", "e"],
-        "port_map": {"MINUS": "c", "TIE": "b", "PLUS": "e"},
-    }
 
     return c
 

@@ -14,8 +14,11 @@ import math
 import gdsfactory as gf
 from gdsfactory import Component
 from gdsfactory.typings import LayerSpec
+from kfactory.schematic import DSchematic
 
 from ..tech import TECH
+
+_XS = "metal1_routing"
 
 
 # ---------------------------------------------------------------------------
@@ -505,7 +508,41 @@ def _mos_core(
 # ---------------------------------------------------------------------------
 # Public cell functions
 # ---------------------------------------------------------------------------
-@gf.cell
+def nmos_schematic(
+    width: float = 0.15,
+    length: float = 0.13,
+    nf: int = 1,
+    m: int = 1,
+    model: str = "sg13_lv_nmos",
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "mos", "lv"]
+    s.info["symbol"] = "nmos"
+    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "sg13_lv_nmos",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_moslv_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["D", "G", "S", "B"],
+            "params": {
+                "w": width * 1e-6,
+                "l": length * 1e-6,
+                "ng": nf,
+                "m": m,
+            },
+        }
+    ]
+    s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)
+    s.create_port(name="G", cross_section=_XS, x=-1, y=0, orientation=270)
+    s.create_port(name="S", cross_section=_XS, x=0, y=-1, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=1, y=0, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=nmos_schematic)
 def nmos(
     width: float = 0.15,
     length: float = 0.13,
@@ -540,26 +577,40 @@ def nmos(
         )
 
     c = _mos_core(width, length, nf, is_pmos=False, is_hv=False)
-
-    # VLSIR simulation metadata
-    c.info["vlsir"] = {
-        "model": "sg13_lv_nmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moslv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {"D": "d", "G": "g", "S": "s"},
-        "params": {
-            "w": width * 1e-6,
-            "l": length * 1e-6,
-            "ng": nf,
-            "m": m,
-        },
-    }
-
     return c
 
 
-@gf.cell
+
+def pmos_schematic(
+    width: float = 0.15,
+    length: float = 0.13,
+    nf: int = 1,
+    m: int = 1,
+    model: str = "sg13_lv_pmos",
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "mos", "lv"]
+    s.info["symbol"] = "pmos"
+    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "sg13_lv_pmos",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_moslv_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["D", "G", "S", "B"],
+            "params": {"w": width * 1e-6, "l": length * 1e-6, "ng": nf, "m": m},
+        }
+    ]
+    s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)
+    s.create_port(name="G", cross_section=_XS, x=-1, y=0, orientation=270)
+    s.create_port(name="S", cross_section=_XS, x=0, y=-1, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=1, y=0, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=pmos_schematic)
 def pmos(
     width: float = 0.15,
     length: float = 0.13,
@@ -594,26 +645,39 @@ def pmos(
         raise ValueError(f"pmos nf={nf} out of range [1, {TECH.pmos_max_nf}]")
 
     c = _mos_core(width, length, nf, is_pmos=True, is_hv=False)
-
-    # VLSIR simulation metadata
-    c.info["vlsir"] = {
-        "model": "sg13_lv_pmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moslv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {"D": "d", "G": "g", "S": "s"},
-        "params": {
-            "w": width * 1e-6,
-            "l": length * 1e-6,
-            "ng": nf,
-            "m": m,
-        },
-    }
-
     return c
 
 
-@gf.cell
+def nmos_hv_schematic(
+    width: float = 0.60,
+    length: float = 0.45,
+    nf: int = 1,
+    m: int = 1,
+    model: str = "sg13_hv_nmos",
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "mos", "hv"]
+    s.info["symbol"] = "nmos"
+    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "sg13_hv_nmos",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_moshv_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["D", "G", "S", "B"],
+            "params": {"w": width * 1e-6, "l": length * 1e-6, "ng": nf, "m": m},
+        }
+    ]
+    s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)
+    s.create_port(name="G", cross_section=_XS, x=-1, y=0, orientation=270)
+    s.create_port(name="S", cross_section=_XS, x=0, y=-1, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=1, y=0, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=nmos_hv_schematic)
 def nmos_hv(
     width: float = 0.60,
     length: float = 0.45,
@@ -648,26 +712,39 @@ def nmos_hv(
         raise ValueError(f"nmos_hv nf={nf} out of range [1, {TECH.nmos_hv_max_nf}]")
 
     c = _mos_core(width, length, nf, is_pmos=False, is_hv=True)
-
-    # VLSIR simulation metadata
-    c.info["vlsir"] = {
-        "model": "sg13_hv_nmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moshv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {"D": "d", "G": "g", "S": "s"},
-        "params": {
-            "w": width * 1e-6,
-            "l": length * 1e-6,
-            "ng": nf,
-            "m": m,
-        },
-    }
-
     return c
 
 
-@gf.cell
+def pmos_hv_schematic(
+    width: float = 0.30,
+    length: float = 0.40,
+    nf: int = 1,
+    m: int = 1,
+    model: str = "sg13_hv_pmos",
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "mos", "hv"]
+    s.info["symbol"] = "pmos"
+    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "sg13_hv_pmos",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_moshv_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["D", "G", "S", "B"],
+            "params": {"w": width * 1e-6, "l": length * 1e-6, "ng": nf, "m": m},
+        }
+    ]
+    s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)
+    s.create_port(name="G", cross_section=_XS, x=-1, y=0, orientation=270)
+    s.create_port(name="S", cross_section=_XS, x=0, y=-1, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=1, y=0, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=pmos_hv_schematic)
 def pmos_hv(
     width: float = 0.30,
     length: float = 0.40,
@@ -702,22 +779,6 @@ def pmos_hv(
         raise ValueError(f"pmos_hv nf={nf} out of range [1, {TECH.pmos_hv_max_nf}]")
 
     c = _mos_core(width, length, nf, is_pmos=True, is_hv=True)
-
-    # VLSIR simulation metadata
-    c.info["vlsir"] = {
-        "model": "sg13_hv_pmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moshv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {"D": "d", "G": "g", "S": "s"},
-        "params": {
-            "w": width * 1e-6,
-            "l": length * 1e-6,
-            "ng": nf,
-            "m": m,
-        },
-    }
-
     return c
 
 

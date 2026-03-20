@@ -11,9 +11,12 @@ import math
 import gdsfactory as gf
 from gdsfactory import Component
 from gdsfactory.typings import LayerSpec
+from kfactory.schematic import DSchematic
 
 from ..tech import TECH
 from .fet_transistors import _add_rect, _even_dbu, _fix, _grid_fix
+
+_XS = "metal1_routing"
 
 
 # ---------------------------------------------------------------------------
@@ -884,7 +887,46 @@ def _rf_mos_core(
 # ---------------------------------------------------------------------------
 # Public RF cell functions
 # ---------------------------------------------------------------------------
-@gf.cell
+def rfnmos_schematic(
+    width: float = 1.0,
+    length: float = 0.13,
+    nf: int = 1,
+    m: int = 1,
+    cnt_rows: int = 1,
+    met2_cont: bool = True,
+    gat_ring: bool = True,
+    guard_ring: str = "Yes",
+    model: str = "sg13_lv_nmos",
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "mos", "lv", "rf"]
+    s.info["symbol"] = "nmos"
+    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "sg13_lv_nmos",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_moslv_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["D", "G", "S", "B"],
+            "params": {
+                "w": width * 1e-6,
+                "l": length * 1e-6,
+                "ng": nf,
+                "m": m,
+                "rfmode": 1,
+            },
+        }
+    ]
+    s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)
+    s.create_port(name="G", cross_section=_XS, x=-1, y=0, orientation=270)
+    s.create_port(name="S", cross_section=_XS, x=0, y=-1, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=1, y=0, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=rfnmos_schematic)
 def rfnmos(
     width: float = 1.0,
     length: float = 0.13,
@@ -937,24 +979,49 @@ def rfnmos(
         is_pmos=False,
         is_hv=False,
     )
-    c.info["vlsir"] = {
-        "model": "sg13_lv_nmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moslv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {"D": "d", "G": "g", "S": "s"},
-        "params": {
-            "w": width * 1e-6,
-            "l": length * 1e-6,
-            "ng": nf,
-            "m": m,
-            "rfmode": 1,
-        },
-    }
     return c
 
 
-@gf.cell
+def rfpmos_schematic(
+    width: float = 1.0,
+    length: float = 0.13,
+    nf: int = 1,
+    m: int = 1,
+    cnt_rows: int = 1,
+    met2_cont: bool = True,
+    gat_ring: bool = True,
+    guard_ring: str = "Yes",
+    model: str = "sg13_lv_pmos",
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "mos", "lv", "rf"]
+    s.info["symbol"] = "pmos"
+    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "sg13_lv_pmos",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_moslv_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["D", "G", "S", "B"],
+            "params": {
+                "w": width * 1e-6,
+                "l": length * 1e-6,
+                "ng": nf,
+                "m": m,
+                "rfmode": 1,
+            },
+        }
+    ]
+    s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)
+    s.create_port(name="G", cross_section=_XS, x=-1, y=0, orientation=270)
+    s.create_port(name="S", cross_section=_XS, x=0, y=-1, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=1, y=0, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=rfpmos_schematic)
 def rfpmos(
     width: float = 1.0,
     length: float = 0.13,
@@ -1007,24 +1074,49 @@ def rfpmos(
         is_pmos=True,
         is_hv=False,
     )
-    c.info["vlsir"] = {
-        "model": "sg13_lv_pmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moslv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {"D": "d", "G": "g", "S": "s"},
-        "params": {
-            "w": width * 1e-6,
-            "l": length * 1e-6,
-            "ng": nf,
-            "m": m,
-            "rfmode": 1,
-        },
-    }
     return c
 
 
-@gf.cell
+def rfnmos_hv_schematic(
+    width: float = 1.0,
+    length: float = 0.45,
+    nf: int = 1,
+    m: int = 1,
+    cnt_rows: int = 1,
+    met2_cont: bool = True,
+    gat_ring: bool = True,
+    guard_ring: str = "Yes",
+    model: str = "sg13_hv_nmos",
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "mos", "hv", "rf"]
+    s.info["symbol"] = "nmos"
+    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "sg13_hv_nmos",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_moshv_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["D", "G", "S", "B"],
+            "params": {
+                "w": width * 1e-6,
+                "l": length * 1e-6,
+                "ng": nf,
+                "m": m,
+                "rfmode": 1,
+            },
+        }
+    ]
+    s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)
+    s.create_port(name="G", cross_section=_XS, x=-1, y=0, orientation=270)
+    s.create_port(name="S", cross_section=_XS, x=0, y=-1, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=1, y=0, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=rfnmos_hv_schematic)
 def rfnmos_hv(
     width: float = 1.0,
     length: float = 0.45,
@@ -1077,24 +1169,49 @@ def rfnmos_hv(
         is_pmos=False,
         is_hv=True,
     )
-    c.info["vlsir"] = {
-        "model": "sg13_hv_nmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moshv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {"D": "d", "G": "g", "S": "s"},
-        "params": {
-            "w": width * 1e-6,
-            "l": length * 1e-6,
-            "ng": nf,
-            "m": m,
-            "rfmode": 1,
-        },
-    }
     return c
 
 
-@gf.cell
+def rfpmos_hv_schematic(
+    width: float = 1.0,
+    length: float = 0.40,
+    nf: int = 1,
+    m: int = 1,
+    cnt_rows: int = 1,
+    met2_cont: bool = True,
+    gat_ring: bool = True,
+    guard_ring: str = "Yes",
+    model: str = "sg13_hv_pmos",
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["transistor", "mos", "hv", "rf"]
+    s.info["symbol"] = "pmos"
+    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "sg13_hv_pmos",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_moshv_mod.lib",
+            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "port_order": ["D", "G", "S", "B"],
+            "params": {
+                "w": width * 1e-6,
+                "l": length * 1e-6,
+                "ng": nf,
+                "m": m,
+                "rfmode": 1,
+            },
+        }
+    ]
+    s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)
+    s.create_port(name="G", cross_section=_XS, x=-1, y=0, orientation=270)
+    s.create_port(name="S", cross_section=_XS, x=0, y=-1, orientation=0)
+    s.create_port(name="B", cross_section=_XS, x=1, y=0, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=rfpmos_hv_schematic)
 def rfpmos_hv(
     width: float = 1.0,
     length: float = 0.40,
@@ -1147,18 +1264,4 @@ def rfpmos_hv(
         is_pmos=True,
         is_hv=True,
     )
-    c.info["vlsir"] = {
-        "model": "sg13_hv_pmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moshv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {"D": "d", "G": "g", "S": "s"},
-        "params": {
-            "w": width * 1e-6,
-            "l": length * 1e-6,
-            "ng": nf,
-            "m": m,
-            "rfmode": 1,
-        },
-    }
     return c
