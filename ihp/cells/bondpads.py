@@ -29,6 +29,7 @@ def bondpad_schematic(
     shape: Literal["octagon", "square", "circle"] = "octagon",
     diameter: float = 80.0,
 ) -> DSchematic:
+    _shape_map = {"octagon": 0, "square": 1, "circle": 2}
     s = DSchematic()
     s.info["tags"] = ["IHP", "bondpad"]
     s.info["symbol"] = "pad"
@@ -43,7 +44,7 @@ def bondpad_schematic(
             "port_order": ["PAD"],
             "params": {
                 "size": "diameter * 1e-6",
-                "shape": '{"octagon": 0, "square": 1, "circle": 2}[shape]',
+                "shape": str(_shape_map[shape]),
                 "padtype": "0",
             },
         }

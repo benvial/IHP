@@ -25,7 +25,7 @@ def svaricap_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "varicap", "hv"]
     s.info["symbol"] = "varicap"
-    s.info["ports"] = {"left": ["G1"], "right": ["W"], "bottom": ["G2"]}
+    s.info["ports"] = {"top": ["BN"], "left": ["G1"], "right": ["W"], "bottom": ["G2"]}
     s.info["models"] = [
         {
             "language": "spice",
@@ -33,7 +33,7 @@ def svaricap_schematic(
             "spice_type": "SUBCKT",
             "library": "cornerMOShv.lib",
             "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
-            "port_order": ["G1", "W", "G2", "bn"],
+            "port_order": ["G1", "W", "G2", "BN"],
             "params": {"w": "width * 1e-6", "l": "length * 1e-6", "Nx": "nf"},
         }
     ]

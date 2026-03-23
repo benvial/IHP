@@ -50,7 +50,7 @@ def npn13G2_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
-    s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["ports"] = {"top": ["BN"], "left": ["B"], "right": ["C"], "bottom": ["E"]}
     s.info["models"] = [
         {
             "language": "spice",
@@ -778,7 +778,7 @@ def npn13G2L_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
-    s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["ports"] = {"top": ["BN"], "left": ["B"], "right": ["C"], "bottom": ["E"]}
     s.info["models"] = [
         {
             "language": "spice",
@@ -1366,7 +1366,7 @@ def npn13G2V_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
-    s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["ports"] = {"top": ["BN"], "left": ["B"], "right": ["C"], "bottom": ["E"]}
     s.info["models"] = [
         {
             "language": "spice",

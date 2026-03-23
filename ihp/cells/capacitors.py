@@ -562,7 +562,7 @@ def rfcmim_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "capacitor", "mim", "rf"]
     s.info["symbol"] = "capacitor"
-    s.info["ports"] = {"left": ["MINUS"], "right": ["PLUS"]}
+    s.info["ports"] = {"left": ["MINUS"], "right": ["PLUS"], "bottom": ["BN"]}
     s.info["models"] = [
         {
             "language": "spice",
@@ -570,12 +570,13 @@ def rfcmim_schematic(
             "spice_type": "SUBCKT",
             "library": "cornerCAP.lib",
             "sections": ["cap_typ", "cap_bcs", "cap_wcs"],
-            "port_order": ["PLUS", "MINUS", "bn"],
+            "port_order": ["PLUS", "MINUS", "BN"],
             "params": {"l": "length * 1e-6", "w": "width * 1e-6"},
         }
     ]
     s.create_port(name="PLUS", cross_section=_XS, x=1, y=0, orientation=0)
     s.create_port(name="MINUS", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="BN", cross_section=_XS, x=0, y=-1, orientation=270)
     return s
 
 
