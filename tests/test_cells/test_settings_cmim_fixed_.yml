@@ -1,11 +1,3 @@
-info:
-  vlsir:
-    model: cmim
-    port_map: {}
-    port_order:
-    - PLUS
-    - MINUS
-    spice_lib: capacitors_mod.lib
-    spice_type: SUBCKT
+info: {}
 name: cmim_fixed
 settings: {}

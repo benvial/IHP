@@ -317,10 +317,9 @@ def cmom(
 def cmim_schematic(
     width: float = 6.0,
     length: float = 6.0,
-    model: str = "cmim",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["capacitor", "mim"]
+    s.info["tags"] = ["IHP", "capacitor", "mim"]
     s.info["symbol"] = "capacitor"
     s.info["ports"] = {"left": ["MINUS"], "right": ["PLUS"]}
     s.info["models"] = [
@@ -328,10 +327,10 @@ def cmim_schematic(
             "language": "spice",
             "name": "cap_cmim",
             "spice_type": "SUBCKT",
-            "library": "capacitors_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerCAP.lib",
+            "sections": ["cap_typ", "cap_bcs", "cap_wcs"],
             "port_order": ["PLUS", "MINUS"],
-            "params": {"w": width * 1e-6, "l": length * 1e-6},
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6"},
         }
     ]
     s.create_port(name="PLUS", cross_section=_XS, x=1, y=0, orientation=0)
@@ -559,10 +558,9 @@ def cmim(
 def rfcmim_schematic(
     width: float = 7.0,
     length: float = 7.0,
-    model: str = "rfcmim",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["capacitor", "mim", "rf"]
+    s.info["tags"] = ["IHP", "capacitor", "mim", "rf"]
     s.info["symbol"] = "capacitor"
     s.info["ports"] = {"left": ["MINUS"], "right": ["PLUS"]}
     s.info["models"] = [
@@ -570,10 +568,10 @@ def rfcmim_schematic(
             "language": "spice",
             "name": "cap_rfcmim",
             "spice_type": "SUBCKT",
-            "library": "capacitors_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerCAP.lib",
+            "sections": ["cap_typ", "cap_bcs", "cap_wcs"],
             "port_order": ["PLUS", "MINUS", "bn"],
-            "params": {"l": length * 1e-6, "w": width * 1e-6},
+            "params": {"l": "length * 1e-6", "w": "width * 1e-6"},
         }
     ]
     s.create_port(name="PLUS", cross_section=_XS, x=1, y=0, orientation=0)
@@ -677,6 +675,7 @@ def rfcmim(
         model=model,
     )
     c.info = cap.info
+    c.info["model"] = "cap_rfcmim"
     c.add_ref(cap)
     c.ports = cap.ports
     # add pwell block

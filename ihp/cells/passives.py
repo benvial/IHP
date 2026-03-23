@@ -21,10 +21,9 @@ def svaricap_schematic(
     width: float = 1.0,
     length: float = 1.0,
     nf: int = 1,
-    model: str = "sg13_hv_svaricap",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["varicap", "mos", "hv"]
+    s.info["tags"] = ["IHP", "varicap", "hv"]
     s.info["symbol"] = "varicap"
     s.info["ports"] = {"left": ["G1"], "right": ["W"], "bottom": ["G2"]}
     s.info["models"] = [
@@ -32,10 +31,10 @@ def svaricap_schematic(
             "language": "spice",
             "name": "sg13_hv_svaricap",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_svaricaphv_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerMOShv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["G1", "W", "G2", "bn"],
-            "params": {"w": width * 1e-6, "l": length * 1e-6, "Nx": nf},
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6", "Nx": "nf"},
         }
     ]
     s.create_port(name="G1", cross_section=_XS, x=-1, y=0, orientation=180)
@@ -213,10 +212,9 @@ def esd_nmos_schematic(
     width: float = 50.0,
     length: float = 0.5,
     nf: int = 10,
-    model: str = "nmoscl_2",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["esd", "mos", "lv"]
+    s.info["tags"] = ["IHP", "esd", "lv"]
     s.info["symbol"] = "nmos"
     s.info["ports"] = {"top": ["VDD"], "bottom": ["VSS"]}
     s.info["models"] = [
@@ -224,10 +222,10 @@ def esd_nmos_schematic(
             "language": "spice",
             "name": "nmoscl_2",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_moslv_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerMOSlv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["VDD", "VSS"],
-            "params": {"w": width * 1e-6, "l": length * 1e-6, "ng": nf},
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6", "ng": "nf"},
         }
     ]
     s.create_port(name="VDD", cross_section=_XS, x=0, y=1, orientation=90)
@@ -414,7 +412,7 @@ def ptap1_schematic(
     cols: int = 1,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["tap", "substrate", "p-type"]
+    s.info["tags"] = ["IHP", "tap", "p-type"]
     s.info["symbol"] = "tap"
     s.info["ports"] = {"top": ["P1"], "bottom": ["P2"]}
     s.info["models"] = [
@@ -422,10 +420,10 @@ def ptap1_schematic(
             "language": "spice",
             "name": "ptap1",
             "spice_type": "SUBCKT",
-            "library": "resistors_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerRES.lib",
+            "sections": ["res_typ", "res_bcs", "res_wcs"],
             "port_order": ["1", "2"],
-            "params": {"w": width * 1e-6, "l": length * 1e-6},
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6"},
         }
     ]
     s.create_port(name="P1", cross_section=_XS, x=0, y=1, orientation=90)
@@ -553,7 +551,7 @@ def ntap1_schematic(
     cols: int = 1,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["tap", "substrate", "n-type"]
+    s.info["tags"] = ["IHP", "tap", "n-type"]
     s.info["symbol"] = "tap"
     s.info["ports"] = {"top": ["P1"], "bottom": ["P2"]}
     s.info["models"] = [
@@ -561,10 +559,10 @@ def ntap1_schematic(
             "language": "spice",
             "name": "ntap1",
             "spice_type": "SUBCKT",
-            "library": "resistors_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerRES.lib",
+            "sections": ["res_typ", "res_bcs", "res_wcs"],
             "port_order": ["1", "2"],
-            "params": {"w": width * 1e-6, "l": length * 1e-6},
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6"},
         }
     ]
     s.create_port(name="P1", cross_section=_XS, x=0, y=1, orientation=90)

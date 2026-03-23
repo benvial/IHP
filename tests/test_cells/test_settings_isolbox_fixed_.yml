@@ -1,12 +1,3 @@
-info:
-  vlsir:
-    model: isolbox
-    port_map: {}
-    port_order:
-    - isoub
-    - NWell
-    - bn
-    spice_lib: diodes.lib
-    spice_type: SUBCKT
+info: {}
 name: isolbox_fixed
 settings: {}

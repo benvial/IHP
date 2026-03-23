@@ -4,8 +4,11 @@ import warnings
 from functools import partial, wraps
 
 import gdsfactory as gf
+from kfactory.schematic import DSchematic
 
 from ..config import PATH
+
+_XS = "metal1_routing"
 
 
 def deprecated(func):
@@ -32,6 +35,529 @@ _add_ports_metal2 = partial(
 _add_ports = (_add_ports_metal1, _add_ports_metal2)
 gdsdir = PATH.gds
 import_gds = partial(gf.import_gds, post_process=_add_ports)
+
+
+# ---------------------------------------------------------------------------
+# Schematic functions for fixed cells
+# ---------------------------------------------------------------------------
+
+
+def _svaricap_fixed_schematic() -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "varicap", "hv"]
+    s.info["symbol"] = "varicap"
+    s.info["ports"] = {"left": ["G1"], "right": ["W"], "bottom": ["G2"], "top": ["bn"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "svaricap",
+            "spice_type": "SUBCKT",
+            "library": "cornerMOShv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
+            "port_order": ["G1", "W", "G2", "bn"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="G1", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="W", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="G2", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="bn", cross_section=_XS, x=0, y=1, orientation=90)
+    return s
+
+
+def _bondpad_fixed_schematic() -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "bondpad"]
+    s.info["symbol"] = "pad"
+    s.info["ports"] = {"top": ["PAD"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "bondpad",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_bondpad.lib",
+            "sections": [],
+            "port_order": ["PAD"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="PAD", cross_section=_XS, x=0, y=1, orientation=90)
+    return s
+
+
+def _cmim_fixed_schematic() -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "capacitor", "mim"]
+    s.info["symbol"] = "capacitor"
+    s.info["ports"] = {"left": ["MINUS"], "right": ["PLUS"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "cmim",
+            "spice_type": "SUBCKT",
+            "library": "cornerCAP.lib",
+            "sections": ["cap_typ", "cap_bcs", "cap_wcs"],
+            "port_order": ["PLUS", "MINUS"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="MINUS", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="PLUS", cross_section=_XS, x=1, y=0, orientation=0)
+    return s
+
+
+def _dantenna_fixed_schematic() -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "diode", "antenna"]
+    s.info["symbol"] = "diode"
+    s.info["ports"] = {"top": ["1"], "bottom": ["2"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "dantenna",
+            "spice_type": "SUBCKT",
+            "library": "cornerDIO.lib",
+            "sections": ["dio_tt", "dio_ss", "dio_ff"],
+            "port_order": ["1", "2"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="1", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="2", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+def _esd_diode_fixed_schematic(model_name: str) -> DSchematic:
+    """Shared schematic for ESD diode fixed cells."""
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "esd"]
+    s.info["symbol"] = "diode"
+    s.info["ports"] = {"top": ["VDD"], "right": ["PAD"], "bottom": ["VSS"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": model_name,
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_esd.lib",
+            "sections": [],
+            "port_order": ["VDD", "PAD", "VSS"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="VDD", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="PAD", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="VSS", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+def _diodevdd_2kv_fixed_schematic() -> DSchematic:
+    return _esd_diode_fixed_schematic("diodevdd_2kv")
+
+
+def _diodevdd_4kv_fixed_schematic() -> DSchematic:
+    return _esd_diode_fixed_schematic("diodevdd_4kv")
+
+
+def _diodevss_2kv_fixed_schematic() -> DSchematic:
+    return _esd_diode_fixed_schematic("diodevss_2kv")
+
+
+def _diodevss_4kv_fixed_schematic() -> DSchematic:
+    return _esd_diode_fixed_schematic("diodevss_4kv")
+
+
+def _dpantenna_fixed_schematic() -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "diode", "antenna"]
+    s.info["symbol"] = "diode"
+    s.info["ports"] = {"top": ["1"], "bottom": ["2"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "dpantenna",
+            "spice_type": "SUBCKT",
+            "library": "cornerDIO.lib",
+            "sections": ["dio_tt", "dio_ss", "dio_ff"],
+            "port_order": ["1", "2"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="1", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="2", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+def _dummy1_fixed_schematic() -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "resistor"]
+    s.info["symbol"] = "resistor"
+    s.info["ports"] = {"left": ["W"], "right": ["2"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "dummy1",
+            "spice_type": "RESISTOR",
+            "library": "cornerRES.lib",
+            "sections": ["res_typ", "res_bcs", "res_wcs"],
+            "port_order": ["W", "2"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="W", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="2", cross_section=_XS, x=1, y=0, orientation=0)
+    return s
+
+
+def _isolbox_fixed_schematic() -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "diode", "antenna"]
+    s.info["symbol"] = "subcircuit"
+    s.info["ports"] = {"left": ["isoub"], "right": ["NWell"], "bottom": ["bn"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "isolbox",
+            "spice_type": "SUBCKT",
+            "library": "cornerDIO.lib",
+            "sections": ["dio_tt", "dio_ss", "dio_ff"],
+            "port_order": ["isoub", "NWell", "bn"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="isoub", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="NWell", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="bn", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+def _lv_mos_fixed_schematic(model_name: str, symbol: str) -> DSchematic:
+    """Shared schematic for LV MOS fixed cells."""
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "mos", "lv"]
+    s.info["symbol"] = symbol
+    s.info["ports"] = {"top": ["d"], "bottom": ["s"], "left": ["g"], "right": ["b"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": model_name,
+            "spice_type": "SUBCKT",
+            "library": "cornerMOSlv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
+            "port_order": ["d", "g", "s", "b"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="d", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="s", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="g", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="b", cross_section=_XS, x=1, y=0, orientation=0)
+    return s
+
+
+def _hv_mos_fixed_schematic(model_name: str, symbol: str) -> DSchematic:
+    """Shared schematic for HV MOS fixed cells."""
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "mos", "hv"]
+    s.info["symbol"] = symbol
+    s.info["ports"] = {"top": ["d"], "bottom": ["s"], "left": ["g"], "right": ["b"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": model_name,
+            "spice_type": "SUBCKT",
+            "library": "cornerMOShv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
+            "port_order": ["d", "g", "s", "b"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="d", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="s", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="g", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="b", cross_section=_XS, x=1, y=0, orientation=0)
+    return s
+
+
+def _rf_lv_mos_fixed_schematic(model_name: str, symbol: str) -> DSchematic:
+    """Shared schematic for RF LV MOS fixed cells."""
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "mos", "lv", "rf"]
+    s.info["symbol"] = symbol
+    s.info["ports"] = {"top": ["d"], "bottom": ["s"], "left": ["g"], "right": ["b"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": model_name,
+            "spice_type": "SUBCKT",
+            "library": "cornerMOSlv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
+            "port_order": ["d", "g", "s", "b"],
+            "params": {"rfmode": "1"},
+        }
+    ]
+    s.create_port(name="d", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="s", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="g", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="b", cross_section=_XS, x=1, y=0, orientation=0)
+    return s
+
+
+def _rf_hv_mos_fixed_schematic(model_name: str, symbol: str) -> DSchematic:
+    """Shared schematic for RF HV MOS fixed cells."""
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "mos", "hv", "rf"]
+    s.info["symbol"] = symbol
+    s.info["ports"] = {"top": ["d"], "bottom": ["s"], "left": ["g"], "right": ["b"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": model_name,
+            "spice_type": "SUBCKT",
+            "library": "cornerMOShv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
+            "port_order": ["d", "g", "s", "b"],
+            "params": {"rfmode": "1"},
+        }
+    ]
+    s.create_port(name="d", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="s", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="g", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="b", cross_section=_XS, x=1, y=0, orientation=0)
+    return s
+
+
+def _nmos_fixed_schematic() -> DSchematic:
+    return _lv_mos_fixed_schematic("sg13_lv_nmos", "nmos")
+
+
+def _nmosHV_fixed_schematic() -> DSchematic:
+    return _hv_mos_fixed_schematic("sg13_hv_nmos", "nmos")
+
+
+def _nmoscl_lv_fixed_schematic(model_name: str) -> DSchematic:
+    """Shared schematic for nmoscl fixed cells."""
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "mos", "lv"]
+    s.info["symbol"] = "nmos"
+    s.info["ports"] = {"top": ["VDD"], "bottom": ["VSS"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": model_name,
+            "spice_type": "SUBCKT",
+            "library": "cornerMOSlv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
+            "port_order": ["VDD", "VSS"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="VDD", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="VSS", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+def _nmoscl_2_fixed_schematic() -> DSchematic:
+    return _nmoscl_lv_fixed_schematic("nmoscl_2")
+
+
+def _nmoscl_4_fixed_schematic() -> DSchematic:
+    return _nmoscl_lv_fixed_schematic("nmoscl_4")
+
+
+def _npn_fixed_schematic(model_name: str) -> DSchematic:
+    """Shared schematic for NPN BJT fixed cells."""
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "bjt", "npn"]
+    s.info["symbol"] = "npn"
+    s.info["ports"] = {"right": ["c"], "left": ["b"], "bottom": ["e"], "top": ["bn"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": model_name,
+            "spice_type": "SUBCKT",
+            "library": "cornerHBT.lib",
+            "sections": ["hbt_typ", "hbt_bcs", "hbt_wcs"],
+            "port_order": ["c", "b", "e", "bn"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="c", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="b", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="e", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="bn", cross_section=_XS, x=0, y=1, orientation=90)
+    return s
+
+
+def _npn13G2_fixed_schematic() -> DSchematic:
+    return _npn_fixed_schematic("npn13G2")
+
+
+def _npn13G2L_fixed_schematic() -> DSchematic:
+    return _npn_fixed_schematic("npn13G2l")
+
+
+def _npn13G2V_fixed_schematic() -> DSchematic:
+    return _npn_fixed_schematic("npn13G2v")
+
+
+def _tap_fixed_schematic(model_name: str) -> DSchematic:
+    """Shared schematic for tap fixed cells."""
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "tap"]
+    s.info["symbol"] = "tap"
+    s.info["ports"] = {"top": ["1"], "bottom": ["2"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": model_name,
+            "spice_type": "SUBCKT",
+            "library": "cornerRES.lib",
+            "sections": ["res_typ", "res_bcs", "res_wcs"],
+            "port_order": ["1", "2"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="1", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="2", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+def _ntap1_fixed_schematic() -> DSchematic:
+    return _tap_fixed_schematic("ntap1")
+
+
+def _ptap1_fixed_schematic() -> DSchematic:
+    return _tap_fixed_schematic("ptap1")
+
+
+def _pmos_fixed_schematic() -> DSchematic:
+    return _lv_mos_fixed_schematic("sg13_lv_pmos", "pmos")
+
+
+def _pmosHV_fixed_schematic() -> DSchematic:
+    return _hv_mos_fixed_schematic("sg13_hv_pmos", "pmos")
+
+
+def _pnpMPA_fixed_schematic() -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "bjt", "pnp"]
+    s.info["symbol"] = "pnp"
+    s.info["ports"] = {"right": ["c"], "left": ["b"], "bottom": ["e"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "pnpMPA",
+            "spice_type": "SUBCKT",
+            "library": "cornerHBT.lib",
+            "sections": ["hbt_typ", "hbt_bcs", "hbt_wcs"],
+            "port_order": ["c", "b", "e"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="c", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="b", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="e", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+def _rfcmim_fixed_schematic() -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "capacitor", "mim", "rf"]
+    s.info["symbol"] = "capacitor"
+    s.info["ports"] = {"left": ["MINUS"], "right": ["PLUS"], "bottom": ["bn"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "cap_rfcmim",
+            "spice_type": "SUBCKT",
+            "library": "cornerCAP.lib",
+            "sections": ["cap_typ", "cap_bcs", "cap_wcs"],
+            "port_order": ["PLUS", "MINUS", "bn"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="MINUS", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="PLUS", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="bn", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+def _rfnmos_fixed_schematic() -> DSchematic:
+    return _rf_lv_mos_fixed_schematic("sg13_lv_nmos", "nmos")
+
+
+def _rfnmosHV_fixed_schematic() -> DSchematic:
+    return _rf_hv_mos_fixed_schematic("sg13_hv_nmos", "nmos")
+
+
+def _rfpmos_fixed_schematic() -> DSchematic:
+    return _rf_lv_mos_fixed_schematic("sg13_lv_pmos", "pmos")
+
+
+def _rfpmosHV_fixed_schematic() -> DSchematic:
+    return _rf_hv_mos_fixed_schematic("sg13_hv_pmos", "pmos")
+
+
+def _resistor_3port_fixed_schematic(model_name: str) -> DSchematic:
+    """Shared schematic for 3-port resistor fixed cells."""
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "resistor"]
+    s.info["symbol"] = "resistor"
+    s.info["ports"] = {"top": ["1"], "bottom": ["3"], "right": ["bn"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": model_name,
+            "spice_type": "SUBCKT",
+            "library": "cornerRES.lib",
+            "sections": ["res_typ", "res_bcs", "res_wcs"],
+            "port_order": ["1", "3", "bn"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="1", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="3", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="bn", cross_section=_XS, x=1, y=0, orientation=0)
+    return s
+
+
+def _rhigh_fixed_schematic() -> DSchematic:
+    return _resistor_3port_fixed_schematic("rhigh")
+
+
+def _rppd_fixed_schematic() -> DSchematic:
+    return _resistor_3port_fixed_schematic("rppd")
+
+
+def _rsil_fixed_schematic() -> DSchematic:
+    return _resistor_3port_fixed_schematic("rsil")
+
+
+def _schottky_nbl1_fixed_schematic() -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "diode", "schottky"]
+    s.info["symbol"] = "diode"
+    s.info["ports"] = {"top": ["A"], "bottom": ["C"], "right": ["S"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "schottky_nbl1",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_dschottky_nbl1_mod.lib",
+            "sections": [],
+            "port_order": ["A", "C", "S"],
+            "params": {},
+        }
+    ]
+    s.create_port(name="A", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="C", cross_section=_XS, x=0, y=-1, orientation=270)
+    s.create_port(name="S", cross_section=_XS, x=1, y=0, orientation=0)
+    return s
+
+
+# ---------------------------------------------------------------------------
+# Fixed GDS cells
+# ---------------------------------------------------------------------------
 
 
 @deprecated
@@ -177,7 +703,7 @@ def NoFillerStack_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_svaricap_fixed_schematic)
 def SVaricap_fixed() -> gf.Component:
     """Returns SVaricap fixed cell.
 
@@ -189,16 +715,7 @@ def SVaricap_fixed() -> gf.Component:
       c = ihp.cells.SVaricap()
       c.plot()
     """
-    c = import_gds(gdsdir / "SVaricap.gds")
-    c.info["vlsir"] = {
-        "model": "svaricap",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_svaricap_mod.lib",
-        "port_order": ["G1", "W", "G2", "bn"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "SVaricap.gds")
 
 
 @deprecated
@@ -266,7 +783,7 @@ def ViaStack_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_bondpad_fixed_schematic)
 def bondpad_fixed() -> gf.Component:
     """Returns bondpad fixed cell.
 
@@ -278,16 +795,7 @@ def bondpad_fixed() -> gf.Component:
       c = ihp.cells.bondpad()
       c.plot()
     """
-    c = import_gds(gdsdir / "bondpad.gds")
-    c.info["vlsir"] = {
-        "model": "bondpad",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_bondpad.lib",
-        "port_order": ["PAD"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "bondpad.gds")
 
 
 @deprecated
@@ -307,7 +815,7 @@ def chipText_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_cmim_fixed_schematic)
 def cmim_fixed() -> gf.Component:
     """Returns cmim fixed cell.
 
@@ -319,16 +827,7 @@ def cmim_fixed() -> gf.Component:
       c = ihp.cells.cmim()
       c.plot()
     """
-    c = import_gds(gdsdir / "cmim.gds")
-    c.info["vlsir"] = {
-        "model": "cmim",
-        "spice_type": "SUBCKT",
-        "spice_lib": "capacitors_mod.lib",
-        "port_order": ["PLUS", "MINUS"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "cmim.gds")
 
 
 @deprecated
@@ -348,7 +847,7 @@ def colors_and_stipples_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_dantenna_fixed_schematic)
 def dantenna_fixed() -> gf.Component:
     """Returns dantenna fixed cell.
 
@@ -360,16 +859,7 @@ def dantenna_fixed() -> gf.Component:
       c = ihp.cells.dantenna()
       c.plot()
     """
-    c = import_gds(gdsdir / "dantenna.gds")
-    c.info["vlsir"] = {
-        "model": "dantenna",
-        "spice_type": "SUBCKT",
-        "spice_lib": "diodes.lib",
-        "port_order": ["1", "2"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "dantenna.gds")
 
 
 @deprecated
@@ -389,7 +879,7 @@ def diffstbprobe_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_diodevdd_2kv_fixed_schematic)
 def diodevdd_2kv_fixed() -> gf.Component:
     """Returns diodevdd_2kv fixed cell.
 
@@ -401,20 +891,11 @@ def diodevdd_2kv_fixed() -> gf.Component:
       c = ihp.cells.diodevdd_2kv()
       c.plot()
     """
-    c = import_gds(gdsdir / "diodevdd_2kv.gds")
-    c.info["vlsir"] = {
-        "model": "diodevdd_2kv",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_esd.lib",
-        "port_order": ["VDD", "PAD", "VSS"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "diodevdd_2kv.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_diodevdd_4kv_fixed_schematic)
 def diodevdd_4kv_fixed() -> gf.Component:
     """Returns diodevdd_4kv fixed cell.
 
@@ -426,20 +907,11 @@ def diodevdd_4kv_fixed() -> gf.Component:
       c = ihp.cells.diodevdd_4kv()
       c.plot()
     """
-    c = import_gds(gdsdir / "diodevdd_4kv.gds")
-    c.info["vlsir"] = {
-        "model": "diodevdd_4kv",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_esd.lib",
-        "port_order": ["VDD", "PAD", "VSS"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "diodevdd_4kv.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_diodevss_2kv_fixed_schematic)
 def diodevss_2kv_fixed() -> gf.Component:
     """Returns diodevss_2kv fixed cell.
 
@@ -451,20 +923,11 @@ def diodevss_2kv_fixed() -> gf.Component:
       c = ihp.cells.diodevss_2kv()
       c.plot()
     """
-    c = import_gds(gdsdir / "diodevss_2kv.gds")
-    c.info["vlsir"] = {
-        "model": "diodevss_2kv",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_esd.lib",
-        "port_order": ["VDD", "PAD", "VSS"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "diodevss_2kv.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_diodevss_4kv_fixed_schematic)
 def diodevss_4kv_fixed() -> gf.Component:
     """Returns diodevss_4kv fixed cell.
 
@@ -476,20 +939,11 @@ def diodevss_4kv_fixed() -> gf.Component:
       c = ihp.cells.diodevss_4kv()
       c.plot()
     """
-    c = import_gds(gdsdir / "diodevss_4kv.gds")
-    c.info["vlsir"] = {
-        "model": "diodevss_4kv",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_esd.lib",
-        "port_order": ["VDD", "PAD", "VSS"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "diodevss_4kv.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_dpantenna_fixed_schematic)
 def dpantenna_fixed() -> gf.Component:
     """Returns dpantenna fixed cell.
 
@@ -501,20 +955,11 @@ def dpantenna_fixed() -> gf.Component:
       c = ihp.cells.dpantenna()
       c.plot()
     """
-    c = import_gds(gdsdir / "dpantenna.gds")
-    c.info["vlsir"] = {
-        "model": "dpantenna",
-        "spice_type": "SUBCKT",
-        "spice_lib": "diodes.lib",
-        "port_order": ["1", "2"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "dpantenna.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_dummy1_fixed_schematic)
 def dummy1_fixed() -> gf.Component:
     """Returns dummy1 fixed cell.
 
@@ -526,16 +971,7 @@ def dummy1_fixed() -> gf.Component:
       c = ihp.cells.dummy1()
       c.plot()
     """
-    c = import_gds(gdsdir / "dummy1.gds")
-    c.info["vlsir"] = {
-        "model": "dummy1",
-        "spice_type": "RESISTOR",
-        "spice_lib": "sg13g2_svaricaphv_mod.lib",
-        "port_order": ["W", "2"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "dummy1.gds")
 
 
 @deprecated
@@ -587,7 +1023,7 @@ def iprobe_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_isolbox_fixed_schematic)
 def isolbox_fixed() -> gf.Component:
     """Returns isolbox fixed cell.
 
@@ -599,16 +1035,7 @@ def isolbox_fixed() -> gf.Component:
       c = ihp.cells.isolbox()
       c.plot()
     """
-    c = import_gds(gdsdir / "isolbox.gds")
-    c.info["vlsir"] = {
-        "model": "isolbox",
-        "spice_type": "SUBCKT",
-        "spice_lib": "diodes.lib",
-        "port_order": ["isoub", "NWell", "bn"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "isolbox.gds")
 
 
 @deprecated
@@ -628,7 +1055,7 @@ def lvsres_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_nmos_fixed_schematic)
 def nmos_fixed() -> gf.Component:
     """Returns nmos fixed cell.
 
@@ -640,20 +1067,11 @@ def nmos_fixed() -> gf.Component:
       c = ihp.cells.nmos()
       c.plot()
     """
-    c = import_gds(gdsdir / "nmos.gds")
-    c.info["vlsir"] = {
-        "model": "sg13_lv_nmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moslv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "nmos.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_nmosHV_fixed_schematic)
 def nmosHV_fixed() -> gf.Component:
     """Returns nmosHV fixed cell.
 
@@ -665,20 +1083,11 @@ def nmosHV_fixed() -> gf.Component:
       c = ihp.cells.nmosHV()
       c.plot()
     """
-    c = import_gds(gdsdir / "nmosHV.gds")
-    c.info["vlsir"] = {
-        "model": "sg13_hv_nmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moshv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "nmosHV.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_nmoscl_2_fixed_schematic)
 def nmoscl_2_fixed() -> gf.Component:
     """Returns nmoscl_2 fixed cell.
 
@@ -690,20 +1099,11 @@ def nmoscl_2_fixed() -> gf.Component:
       c = ihp.cells.nmoscl_2()
       c.plot()
     """
-    c = import_gds(gdsdir / "nmoscl_2.gds")
-    c.info["vlsir"] = {
-        "model": "nmoscl_2",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moslv_mod.lib",
-        "port_order": ["VDD", "VSS"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "nmoscl_2.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_nmoscl_4_fixed_schematic)
 def nmoscl_4_fixed() -> gf.Component:
     """Returns nmoscl_4 fixed cell.
 
@@ -715,20 +1115,11 @@ def nmoscl_4_fixed() -> gf.Component:
       c = ihp.cells.nmoscl_4()
       c.plot()
     """
-    c = import_gds(gdsdir / "nmoscl_4.gds")
-    c.info["vlsir"] = {
-        "model": "nmoscl_4",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moslv_mod.lib",
-        "port_order": ["VDD", "VSS"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "nmoscl_4.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_npn13G2_fixed_schematic)
 def npn13G2_fixed() -> gf.Component:
     """Returns npn13G2 fixed cell.
 
@@ -740,20 +1131,11 @@ def npn13G2_fixed() -> gf.Component:
       c = ihp.cells.npn13G2()
       c.plot()
     """
-    c = import_gds(gdsdir / "npn13G2.gds")
-    c.info["vlsir"] = {
-        "model": "npn13G2",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_hbt_mod.lib",
-        "port_order": ["c", "b", "e", "bn"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "npn13G2.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_npn13G2L_fixed_schematic)
 def npn13G2L_fixed() -> gf.Component:
     """Returns npn13G2L fixed cell.
 
@@ -765,20 +1147,11 @@ def npn13G2L_fixed() -> gf.Component:
       c = ihp.cells.npn13G2L()
       c.plot()
     """
-    c = import_gds(gdsdir / "npn13G2L.gds")
-    c.info["vlsir"] = {
-        "model": "npn13G2l",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_hbt_mod.lib",
-        "port_order": ["c", "b", "e", "bn"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "npn13G2L.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_npn13G2V_fixed_schematic)
 def npn13G2V_fixed() -> gf.Component:
     """Returns npn13G2V fixed cell.
 
@@ -790,16 +1163,7 @@ def npn13G2V_fixed() -> gf.Component:
       c = ihp.cells.npn13G2V()
       c.plot()
     """
-    c = import_gds(gdsdir / "npn13G2V.gds")
-    c.info["vlsir"] = {
-        "model": "npn13G2v",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_hbt_mod.lib",
-        "port_order": ["c", "b", "e", "bn"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "npn13G2V.gds")
 
 
 @deprecated
@@ -836,7 +1200,7 @@ def ntap_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_ntap1_fixed_schematic)
 def ntap1_fixed() -> gf.Component:
     """Returns ntap1 fixed cell.
 
@@ -848,20 +1212,11 @@ def ntap1_fixed() -> gf.Component:
       c = ihp.cells.ntap1()
       c.plot()
     """
-    c = import_gds(gdsdir / "ntap1.gds")
-    c.info["vlsir"] = {
-        "model": "ntap1",
-        "spice_type": "SUBCKT",
-        "spice_lib": "resistors.lib",
-        "port_order": ["1", "2"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "ntap1.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_pmos_fixed_schematic)
 def pmos_fixed() -> gf.Component:
     """Returns pmos fixed cell.
 
@@ -873,20 +1228,11 @@ def pmos_fixed() -> gf.Component:
       c = ihp.cells.pmos()
       c.plot()
     """
-    c = import_gds(gdsdir / "pmos.gds")
-    c.info["vlsir"] = {
-        "model": "sg13_lv_pmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moslv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "pmos.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_pmosHV_fixed_schematic)
 def pmosHV_fixed() -> gf.Component:
     """Returns pmosHV fixed cell.
 
@@ -898,20 +1244,11 @@ def pmosHV_fixed() -> gf.Component:
       c = ihp.cells.pmosHV()
       c.plot()
     """
-    c = import_gds(gdsdir / "pmosHV.gds")
-    c.info["vlsir"] = {
-        "model": "sg13_hv_pmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moshv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "pmosHV.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_pnpMPA_fixed_schematic)
 def pnpMPA_fixed() -> gf.Component:
     """Returns pnpMPA fixed cell.
 
@@ -923,16 +1260,7 @@ def pnpMPA_fixed() -> gf.Component:
       c = ihp.cells.pnpMPA()
       c.plot()
     """
-    c = import_gds(gdsdir / "pnpMPA.gds")
-    c.info["vlsir"] = {
-        "model": "pnpMPA",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_hbt_mod.lib",
-        "port_order": ["c", "b", "e"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "pnpMPA.gds")
 
 
 @deprecated
@@ -953,7 +1281,7 @@ def ptap_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_ptap1_fixed_schematic)
 def ptap1_fixed() -> gf.Component:
     """Returns ptap1 fixed cell.
 
@@ -965,20 +1293,11 @@ def ptap1_fixed() -> gf.Component:
       c = ihp.cells.ptap1()
       c.plot()
     """
-    c = import_gds(gdsdir / "ptap1.gds")
-    c.info["vlsir"] = {
-        "model": "ptap1",
-        "spice_type": "SUBCKT",
-        "spice_lib": "resistors.lib",
-        "port_order": ["1", "2"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "ptap1.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_rfcmim_fixed_schematic)
 def rfcmim_fixed() -> gf.Component:
     """Returns rfcmim fixed cell.
 
@@ -990,20 +1309,11 @@ def rfcmim_fixed() -> gf.Component:
       c = ihp.cells.rfcmim()
       c.plot()
     """
-    c = import_gds(gdsdir / "rfcmim.gds")
-    c.info["vlsir"] = {
-        "model": "cap_rfcmim",
-        "spice_type": "SUBCKT",
-        "spice_lib": "capacitors_mod.lib",
-        "port_order": ["PLUS", "MINUS", "bn"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "rfcmim.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_rfnmos_fixed_schematic)
 def rfnmos_fixed() -> gf.Component:
     """Returns rfnmos fixed cell.
 
@@ -1015,21 +1325,11 @@ def rfnmos_fixed() -> gf.Component:
       c = ihp.cells.rfnmos()
       c.plot()
     """
-    c = import_gds(gdsdir / "rfnmos.gds")
-    c.info["vlsir"] = {
-        "model": "sg13_lv_nmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moslv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {},
-        "params": {"rfmode": 1},
-    }
-
-    return c
+    return import_gds(gdsdir / "rfnmos.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_rfnmosHV_fixed_schematic)
 def rfnmosHV_fixed() -> gf.Component:
     """Returns rfnmosHV fixed cell.
 
@@ -1041,21 +1341,11 @@ def rfnmosHV_fixed() -> gf.Component:
       c = ihp.cells.rfnmosHV()
       c.plot()
     """
-    c = import_gds(gdsdir / "rfnmosHV.gds")
-    c.info["vlsir"] = {
-        "model": "sg13_hv_nmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moshv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {},
-        "params": {"rfmode": 1},
-    }
-
-    return c
+    return import_gds(gdsdir / "rfnmosHV.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_rfpmos_fixed_schematic)
 def rfpmos_fixed() -> gf.Component:
     """Returns rfpmos fixed cell.
 
@@ -1067,21 +1357,11 @@ def rfpmos_fixed() -> gf.Component:
       c = ihp.cells.rfpmos()
       c.plot()
     """
-    c = import_gds(gdsdir / "rfpmos.gds")
-    c.info["vlsir"] = {
-        "model": "sg13_lv_pmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moslv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {},
-        "params": {"rfmode": 1},
-    }
-
-    return c
+    return import_gds(gdsdir / "rfpmos.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_rfpmosHV_fixed_schematic)
 def rfpmosHV_fixed() -> gf.Component:
     """Returns rfpmosHV fixed cell.
 
@@ -1093,21 +1373,11 @@ def rfpmosHV_fixed() -> gf.Component:
       c = ihp.cells.rfpmosHV()
       c.plot()
     """
-    c = import_gds(gdsdir / "rfpmosHV.gds")
-    c.info["vlsir"] = {
-        "model": "sg13_hv_pmos",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_moshv_mod.lib",
-        "port_order": ["d", "g", "s", "b"],
-        "port_map": {},
-        "params": {"rfmode": 1},
-    }
-
-    return c
+    return import_gds(gdsdir / "rfpmosHV.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_rhigh_fixed_schematic)
 def rhigh_fixed() -> gf.Component:
     """Returns rhigh fixed cell.
 
@@ -1119,20 +1389,11 @@ def rhigh_fixed() -> gf.Component:
       c = ihp.cells.rhigh()
       c.plot()
     """
-    c = import_gds(gdsdir / "rhigh.gds")
-    c.info["vlsir"] = {
-        "model": "rhigh",
-        "spice_type": "SUBCKT",
-        "spice_lib": "resistors.lib",
-        "port_order": ["1", "3", "bn"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "rhigh.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_rppd_fixed_schematic)
 def rppd_fixed() -> gf.Component:
     """Returns rppd fixed cell.
 
@@ -1144,20 +1405,11 @@ def rppd_fixed() -> gf.Component:
       c = ihp.cells.rppd()
       c.plot()
     """
-    c = import_gds(gdsdir / "rppd.gds")
-    c.info["vlsir"] = {
-        "model": "rppd",
-        "spice_type": "SUBCKT",
-        "spice_lib": "resistors.lib",
-        "port_order": ["1", "3", "bn"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "rppd.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_rsil_fixed_schematic)
 def rsil_fixed() -> gf.Component:
     """Returns rsil fixed cell.
 
@@ -1169,20 +1421,11 @@ def rsil_fixed() -> gf.Component:
       c = ihp.cells.rsil()
       c.plot()
     """
-    c = import_gds(gdsdir / "rsil.gds")
-    c.info["vlsir"] = {
-        "model": "rsil",
-        "spice_type": "SUBCKT",
-        "spice_lib": "resistors.lib",
-        "port_order": ["1", "3", "bn"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "rsil.gds")
 
 
 @deprecated
-@gf.cell
+@gf.cell(schematic_function=_schottky_nbl1_fixed_schematic)
 def schottky_nbl1_fixed() -> gf.Component:
     """Returns schottky_nbl1 fixed cell.
 
@@ -1194,16 +1437,7 @@ def schottky_nbl1_fixed() -> gf.Component:
       c = ihp.cells.schottky_nbl1()
       c.plot()
     """
-    c = import_gds(gdsdir / "schottky_nbl1.gds")
-    c.info["vlsir"] = {
-        "model": "schottky_nbl1",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_dschottky_nbl1_mod.lib",
-        "port_order": ["A", "C", "S"],
-        "port_map": {},
-    }
-
-    return c
+    return import_gds(gdsdir / "schottky_nbl1.gds")
 
 
 @deprecated

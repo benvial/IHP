@@ -513,25 +513,24 @@ def nmos_schematic(
     length: float = 0.13,
     nf: int = 1,
     m: int = 1,
-    model: str = "sg13_lv_nmos",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "mos", "lv"]
+    s.info["tags"] = ["IHP", "mos", "lv"]
     s.info["symbol"] = "nmos"
-    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
     s.info["models"] = [
         {
             "language": "spice",
             "name": "sg13_lv_nmos",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_moslv_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerMOSlv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
             "params": {
-                "w": width * 1e-6,
-                "l": length * 1e-6,
-                "ng": nf,
-                "m": m,
+                "w": "width * 1e-6",
+                "l": "length * 1e-6",
+                "ng": "nf",
+                "m": "m",
             },
         }
     ]
@@ -580,27 +579,25 @@ def nmos(
     return c
 
 
-
 def pmos_schematic(
     width: float = 0.15,
     length: float = 0.13,
     nf: int = 1,
     m: int = 1,
-    model: str = "sg13_lv_pmos",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "mos", "lv"]
+    s.info["tags"] = ["IHP", "mos", "lv"]
     s.info["symbol"] = "pmos"
-    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
     s.info["models"] = [
         {
             "language": "spice",
             "name": "sg13_lv_pmos",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_moslv_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerMOSlv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
-            "params": {"w": width * 1e-6, "l": length * 1e-6, "ng": nf, "m": m},
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6", "ng": "nf", "m": "m"},
         }
     ]
     s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)
@@ -653,21 +650,20 @@ def nmos_hv_schematic(
     length: float = 0.45,
     nf: int = 1,
     m: int = 1,
-    model: str = "sg13_hv_nmos",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "mos", "hv"]
+    s.info["tags"] = ["IHP", "mos", "hv"]
     s.info["symbol"] = "nmos"
-    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
     s.info["models"] = [
         {
             "language": "spice",
             "name": "sg13_hv_nmos",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_moshv_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerMOShv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
-            "params": {"w": width * 1e-6, "l": length * 1e-6, "ng": nf, "m": m},
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6", "ng": "nf", "m": "m"},
         }
     ]
     s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)
@@ -720,21 +716,20 @@ def pmos_hv_schematic(
     length: float = 0.40,
     nf: int = 1,
     m: int = 1,
-    model: str = "sg13_hv_pmos",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "mos", "hv"]
+    s.info["tags"] = ["IHP", "mos", "hv"]
     s.info["symbol"] = "pmos"
-    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
     s.info["models"] = [
         {
             "language": "spice",
             "name": "sg13_hv_pmos",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_moshv_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerMOShv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
-            "params": {"w": width * 1e-6, "l": length * 1e-6, "ng": nf, "m": m},
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6", "ng": "nf", "m": "m"},
         }
     ]
     s.create_port(name="D", cross_section=_XS, x=0, y=1, orientation=180)

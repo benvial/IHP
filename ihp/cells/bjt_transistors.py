@@ -48,7 +48,7 @@ def npn13G2_schematic(
     CMetY2: float = 0,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "bjt", "npn"]
+    s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
     s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
     s.info["models"] = [
@@ -56,14 +56,14 @@ def npn13G2_schematic(
             "language": "spice",
             "name": "npn13G2",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_hbt_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerHBT.lib",
+            "sections": ["hbt_typ", "hbt_bcs", "hbt_wcs"],
             "port_order": ["C", "B", "E", "BN"],
             "params": {
-                "Nx": Nx,
-                "Ny": Ny,
-                "we": emitter_width * 1e-6,
-                "le": emitter_length * 1e-6,
+                "Nx": "Nx",
+                "Ny": "Ny",
+                "we": "emitter_width * 1e-6",
+                "le": "emitter_length * 1e-6",
             },
         }
     ]
@@ -776,7 +776,7 @@ def npn13G2L_schematic(
     Nx: int = 1,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "bjt", "npn"]
+    s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
     s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
     s.info["models"] = [
@@ -784,12 +784,12 @@ def npn13G2L_schematic(
             "language": "spice",
             "name": "npn13G2l",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_hbt_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerHBT.lib",
+            "sections": ["hbt_typ", "hbt_bcs", "hbt_wcs"],
             "port_order": ["C", "B", "E", "BN"],
             "params": {
-                "we": emitter_width * 1e-6,
-                "le": emitter_length * 1e-6,
+                "we": "emitter_width * 1e-6",
+                "le": "emitter_length * 1e-6",
             },
         }
     ]
@@ -1355,7 +1355,6 @@ def npn13G2L(
         ),
     )
 
-
     return c
 
 
@@ -1365,7 +1364,7 @@ def npn13G2V_schematic(
     Nx: int = 1,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "bjt", "npn"]
+    s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
     s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
     s.info["models"] = [
@@ -1373,12 +1372,12 @@ def npn13G2V_schematic(
             "language": "spice",
             "name": "npn13G2v",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_hbt_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerHBT.lib",
+            "sections": ["hbt_typ", "hbt_bcs", "hbt_wcs"],
             "port_order": ["C", "B", "E", "BN"],
             "params": {
-                "we": emitter_width * 1e-6,
-                "le": emitter_length * 1e-6,
+                "we": "emitter_width * 1e-6",
+                "le": "emitter_length * 1e-6",
             },
         }
     ]
@@ -1965,7 +1964,6 @@ def npn13G2V(
         ),
     )
 
-
     return c
 
 
@@ -2060,7 +2058,7 @@ def contactArray(
 
 def pnpMPA_schematic(length: float = 2, width: float = 0.7) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "bjt", "pnp"]
+    s.info["tags"] = ["IHP", "bjt", "pnp"]
     s.info["symbol"] = "pnp"
     s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
     s.info["models"] = [
@@ -2068,8 +2066,8 @@ def pnpMPA_schematic(length: float = 2, width: float = 0.7) -> DSchematic:
             "language": "spice",
             "name": "pnpMPA",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_hbt_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerHBT.lib",
+            "sections": ["hbt_typ", "hbt_bcs", "hbt_wcs"],
             "port_order": ["C", "B", "E"],
             "params": {},
         }

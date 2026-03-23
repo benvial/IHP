@@ -1,12 +1,3 @@
-info:
-  vlsir:
-    model: diodevdd_2kv
-    port_map: {}
-    port_order:
-    - VDD
-    - PAD
-    - VSS
-    spice_lib: sg13g2_esd.lib
-    spice_type: SUBCKT
+info: {}
 name: diodevdd_2kv_fixed
 settings: {}

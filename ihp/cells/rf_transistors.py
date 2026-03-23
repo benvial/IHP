@@ -896,26 +896,25 @@ def rfnmos_schematic(
     met2_cont: bool = True,
     gat_ring: bool = True,
     guard_ring: str = "Yes",
-    model: str = "sg13_lv_nmos",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "mos", "lv", "rf"]
+    s.info["tags"] = ["IHP", "mos", "lv", "rf"]
     s.info["symbol"] = "nmos"
-    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
     s.info["models"] = [
         {
             "language": "spice",
             "name": "sg13_lv_nmos",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_moslv_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerMOSlv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
             "params": {
-                "w": width * 1e-6,
-                "l": length * 1e-6,
-                "ng": nf,
-                "m": m,
-                "rfmode": 1,
+                "w": "width * 1e-6",
+                "l": "length * 1e-6",
+                "ng": "nf",
+                "m": "m",
+                "rfmode": "1",
             },
         }
     ]
@@ -991,26 +990,25 @@ def rfpmos_schematic(
     met2_cont: bool = True,
     gat_ring: bool = True,
     guard_ring: str = "Yes",
-    model: str = "sg13_lv_pmos",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "mos", "lv", "rf"]
+    s.info["tags"] = ["IHP", "mos", "lv", "rf"]
     s.info["symbol"] = "pmos"
-    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
     s.info["models"] = [
         {
             "language": "spice",
             "name": "sg13_lv_pmos",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_moslv_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerMOSlv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
             "params": {
-                "w": width * 1e-6,
-                "l": length * 1e-6,
-                "ng": nf,
-                "m": m,
-                "rfmode": 1,
+                "w": "width * 1e-6",
+                "l": "length * 1e-6",
+                "ng": "nf",
+                "m": "m",
+                "rfmode": "1",
             },
         }
     ]
@@ -1086,26 +1084,25 @@ def rfnmos_hv_schematic(
     met2_cont: bool = True,
     gat_ring: bool = True,
     guard_ring: str = "Yes",
-    model: str = "sg13_hv_nmos",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "mos", "hv", "rf"]
+    s.info["tags"] = ["IHP", "mos", "hv", "rf"]
     s.info["symbol"] = "nmos"
-    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
     s.info["models"] = [
         {
             "language": "spice",
             "name": "sg13_hv_nmos",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_moshv_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerMOShv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
             "params": {
-                "w": width * 1e-6,
-                "l": length * 1e-6,
-                "ng": nf,
-                "m": m,
-                "rfmode": 1,
+                "w": "width * 1e-6",
+                "l": "length * 1e-6",
+                "ng": "nf",
+                "m": "m",
+                "rfmode": "1",
             },
         }
     ]
@@ -1181,26 +1178,25 @@ def rfpmos_hv_schematic(
     met2_cont: bool = True,
     gat_ring: bool = True,
     guard_ring: str = "Yes",
-    model: str = "sg13_hv_pmos",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["transistor", "mos", "hv", "rf"]
+    s.info["tags"] = ["IHP", "mos", "hv", "rf"]
     s.info["symbol"] = "pmos"
-    s.info["ports"] = {"left": ["G"], "right": ["D", "S"], "bottom": ["B"]}
+    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
     s.info["models"] = [
         {
             "language": "spice",
             "name": "sg13_hv_pmos",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_moshv_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerMOShv.lib",
+            "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
             "params": {
-                "w": width * 1e-6,
-                "l": length * 1e-6,
-                "ng": nf,
-                "m": m,
-                "rfmode": 1,
+                "w": "width * 1e-6",
+                "l": "length * 1e-6",
+                "ng": "nf",
+                "m": "m",
+                "rfmode": "1",
             },
         }
     ]

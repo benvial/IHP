@@ -28,10 +28,9 @@ def rsil_schematic(
     dy: float = 0.5,
     dx: float = 0.5,
     resistance: float | None = None,
-    model: str = "rsil",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["resistor", "poly", "silicided"]
+    s.info["tags"] = ["IHP", "resistor", "silicided"]
     s.info["symbol"] = "resistor"
     s.info["ports"] = {"top": ["P1"], "bottom": ["P2"]}
     s.info["models"] = [
@@ -39,10 +38,10 @@ def rsil_schematic(
             "language": "spice",
             "name": "rsil",
             "spice_type": "SUBCKT",
-            "library": "resistors_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerRES.lib",
+            "sections": ["res_typ", "res_bcs", "res_wcs"],
             "port_order": ["1", "2", "bn"],
-            "params": {"w": dx * 1e-6, "l": dy * 1e-6, "m": 1},
+            "params": {"w": "dx * 1e-6", "l": "dy * 1e-6", "m": "1"},
         }
     ]
     s.create_port(name="P1", cross_section=_XS, x=0, y=1, orientation=90)
@@ -233,10 +232,9 @@ def rppd_schematic(
     dy: float = 0.5,
     dx: float = 0.5,
     resistance: float | None = None,
-    model: str = "rppd",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["resistor", "poly", "unsilicided"]
+    s.info["tags"] = ["IHP", "resistor", "unsilicided"]
     s.info["symbol"] = "resistor"
     s.info["ports"] = {"top": ["P1"], "bottom": ["P2"]}
     s.info["models"] = [
@@ -244,10 +242,10 @@ def rppd_schematic(
             "language": "spice",
             "name": "rppd",
             "spice_type": "SUBCKT",
-            "library": "resistors_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerRES.lib",
+            "sections": ["res_typ", "res_bcs", "res_wcs"],
             "port_order": ["1", "3", "bn"],
-            "params": {"w": dx * 1e-6, "l": dy * 1e-6, "m": 1},
+            "params": {"w": "dx * 1e-6", "l": "dy * 1e-6", "m": "1"},
         }
     ]
     s.create_port(name="P1", cross_section=_XS, x=0, y=1, orientation=90)
@@ -452,10 +450,9 @@ def rhigh_schematic(
     dy: float = 0.96,
     dx: float = 0.5,
     resistance: float | None = None,
-    model: str = "rhigh",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["resistor", "poly", "high-r"]
+    s.info["tags"] = ["IHP", "resistor", "high-r"]
     s.info["symbol"] = "resistor"
     s.info["ports"] = {"top": ["P1"], "bottom": ["P2"]}
     s.info["models"] = [
@@ -463,10 +460,10 @@ def rhigh_schematic(
             "language": "spice",
             "name": "rhigh",
             "spice_type": "SUBCKT",
-            "library": "resistors_mod.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerRES.lib",
+            "sections": ["res_typ", "res_bcs", "res_wcs"],
             "port_order": ["1", "3", "bn"],
-            "params": {"w": dx * 1e-6, "l": dy * 1e-6, "m": 1},
+            "params": {"w": "dx * 1e-6", "l": "dy * 1e-6", "m": "1"},
         }
     ]
     s.create_port(name="P1", cross_section=_XS, x=0, y=1, orientation=90)

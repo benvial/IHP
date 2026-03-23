@@ -6,6 +6,9 @@ from typing import Literal
 import gdsfactory as gf
 from gdsfactory import Component
 from gdsfactory.typings import LayerSpec
+from kfactory.schematic import DSchematic
+
+_XS = "metal1_routing"
 
 
 def regular_octagon_points(diameter: float):
@@ -22,7 +25,34 @@ def regular_octagon_points(diameter: float):
     ]
 
 
-@gf.cell
+def bondpad_schematic(
+    shape: Literal["octagon", "square", "circle"] = "octagon",
+    diameter: float = 80.0,
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "bondpad"]
+    s.info["symbol"] = "pad"
+    s.info["ports"] = {"top": ["PAD"]}
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "bondpad",
+            "spice_type": "SUBCKT",
+            "library": "sg13g2_bondpad.lib",
+            "sections": [],
+            "port_order": ["PAD"],
+            "params": {
+                "size": "diameter * 1e-6",
+                "shape": '{"octagon": 0, "square": 1, "circle": 2}[shape]',
+                "padtype": "0",
+            },
+        }
+    ]
+    s.create_port(name="PAD", cross_section=_XS, x=0, y=1, orientation=90)
+    return s
+
+
+@gf.cell(schematic_function=bondpad_schematic)
 def bondpad(
     shape: Literal["octagon", "square", "circle"] = "octagon",
     diameter: float = 80.0,
@@ -101,20 +131,6 @@ def bondpad(
     c.info["shape"] = shape
     c.info["diameter"] = diameter
     c.info["top_metal"] = layer_top_metal
-
-    # VLSIR Simulation Metadata
-    c.info["vlsir"] = {
-        "model": "bondpad",
-        "spice_type": "SUBCKT",
-        "spice_lib": "sg13g2_bondpad.lib",
-        "port_order": ["PAD"],
-        "port_map": {"pad": "PAD"},
-        "params": {
-            "size": diameter * 1e-6,
-            "shape": {"octagon": 0, "square": 1, "circle": 2}[shape],
-            "padtype": 0,  # TODO
-        },
-    }
 
     return c
 

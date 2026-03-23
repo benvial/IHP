@@ -131,7 +131,7 @@ def dantenna_schematic(
     guardRingDistance: float = 1.0,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["diode", "antenna", "esd"]
+    s.info["tags"] = ["IHP", "diode", "antenna"]
     s.info["symbol"] = "diode"
     s.info["ports"] = {"top": ["1"], "bottom": ["2"]}
     s.info["models"] = [
@@ -139,10 +139,10 @@ def dantenna_schematic(
             "language": "spice",
             "name": "dantenna",
             "spice_type": "SUBCKT",
-            "library": "diodes.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerDIO.lib",
+            "sections": ["dio_tt", "dio_ss", "dio_ff"],
             "port_order": ["1", "2"],
-            "params": {"w": width * 1e-6, "l": length * 1e-6},
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6"},
         }
     ]
     s.create_port(name="1", cross_section=_XS, x=0, y=1, orientation=90)
@@ -266,7 +266,7 @@ def dpantenna_schematic(
     guardRingDistance: float = 1.0,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["diode", "antenna", "esd"]
+    s.info["tags"] = ["IHP", "diode", "antenna"]
     s.info["symbol"] = "diode"
     s.info["ports"] = {"top": ["1"], "bottom": ["2"]}
     s.info["models"] = [
@@ -274,10 +274,10 @@ def dpantenna_schematic(
             "language": "spice",
             "name": "dpantenna",
             "spice_type": "SUBCKT",
-            "library": "diodes.lib",
-            "sections": ["tt", "ff", "ss", "sf", "fs"],
+            "library": "cornerDIO.lib",
+            "sections": ["dio_tt", "dio_ss", "dio_ff"],
             "port_order": ["1", "2"],
-            "params": {"w": width * 1e-6, "l": length * 1e-6},
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6"},
         }
     ]
     s.create_port(name="1", cross_section=_XS, x=0, y=1, orientation=90)
