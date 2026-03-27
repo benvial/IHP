@@ -39,7 +39,7 @@ def bondpad_schematic(
             "language": "spice",
             "name": "bondpad",
             "spice_type": "SUBCKT",
-            "library": "sg13g2_bondpad.lib",
+            "library": "ihp/models/ngspice/models/sg13g2_bondpad.lib",
             "sections": [],
             "port_order": ["PAD"],
             "params": {

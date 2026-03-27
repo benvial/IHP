@@ -906,7 +906,7 @@ def rfnmos_schematic(
             "language": "spice",
             "name": "sg13_lv_nmos",
             "spice_type": "SUBCKT",
-            "library": "cornerMOSlv.lib",
+            "library": "ihp/models/ngspice/models/cornerMOSlv.lib",
             "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
             "params": {
@@ -1000,7 +1000,7 @@ def rfpmos_schematic(
             "language": "spice",
             "name": "sg13_lv_pmos",
             "spice_type": "SUBCKT",
-            "library": "cornerMOSlv.lib",
+            "library": "ihp/models/ngspice/models/cornerMOSlv.lib",
             "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
             "params": {
@@ -1094,7 +1094,7 @@ def rfnmos_hv_schematic(
             "language": "spice",
             "name": "sg13_hv_nmos",
             "spice_type": "SUBCKT",
-            "library": "cornerMOShv.lib",
+            "library": "ihp/models/ngspice/models/cornerMOShv.lib",
             "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
             "params": {
@@ -1188,7 +1188,7 @@ def rfpmos_hv_schematic(
             "language": "spice",
             "name": "sg13_hv_pmos",
             "spice_type": "SUBCKT",
-            "library": "cornerMOShv.lib",
+            "library": "ihp/models/ngspice/models/cornerMOShv.lib",
             "sections": ["mos_tt", "mos_ss", "mos_ff", "mos_sf", "mos_fs"],
             "port_order": ["D", "G", "S", "B"],
             "params": {
