@@ -56,7 +56,7 @@ def npn13G2_schematic(
             "language": "spice",
             "name": "npn13G2",
             "spice_type": "SUBCKT",
-            "library": "cornerHBT.lib",
+            "library": "ihp/models/ngspice/models/cornerHBT.lib",
             "sections": ["hbt_typ", "hbt_bcs", "hbt_wcs"],
             "port_order": ["C", "B", "E", "BN"],
             "params": {
@@ -784,7 +784,7 @@ def npn13G2L_schematic(
             "language": "spice",
             "name": "npn13G2l",
             "spice_type": "SUBCKT",
-            "library": "cornerHBT.lib",
+            "library": "ihp/models/ngspice/models/cornerHBT.lib",
             "sections": ["hbt_typ", "hbt_bcs", "hbt_wcs"],
             "port_order": ["C", "B", "E", "BN"],
             "params": {
@@ -1372,7 +1372,7 @@ def npn13G2V_schematic(
             "language": "spice",
             "name": "npn13G2v",
             "spice_type": "SUBCKT",
-            "library": "cornerHBT.lib",
+            "library": "ihp/models/ngspice/models/cornerHBT.lib",
             "sections": ["hbt_typ", "hbt_bcs", "hbt_wcs"],
             "port_order": ["C", "B", "E", "BN"],
             "params": {
@@ -2066,7 +2066,7 @@ def pnpMPA_schematic(length: float = 2, width: float = 0.7) -> DSchematic:
             "language": "spice",
             "name": "pnpMPA",
             "spice_type": "SUBCKT",
-            "library": "cornerHBT.lib",
+            "library": "ihp/models/ngspice/models/cornerHBT.lib",
             "sections": ["hbt_typ", "hbt_bcs", "hbt_wcs"],
             "port_order": ["C", "B", "E"],
             "params": {},
