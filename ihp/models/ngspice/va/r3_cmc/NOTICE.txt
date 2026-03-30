@@ -1,4 +1,4 @@
-The R3_CMC standard has been developed by the Silicon Integration Initiative's Compact Model Coalition. 
+The R3_CMC standard has been developed by the Silicon Integration Initiative's Compact Model Coalition.
 
 CMC Release Date: September 22, 2020
 Public Release Date: December 1, 2021

@@ -468,4 +468,3 @@ if (zflaggat > 0.5) begin \
         `mypower((1.0 - vjv * vbiinvgat), one_minus_PGAT, tmpv) \
         qjungat      = qprefgat * (1.0 - tmpv) + qpref2gat * (V - vjv); \
 end
-

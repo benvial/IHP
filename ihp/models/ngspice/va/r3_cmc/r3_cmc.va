@@ -8,8 +8,8 @@
  #
  #     http://www.apache.org/licenses/LICENSE-2.0
  #
- # This file incorporates code from the orginal R3_CMC model released under 
- # the Educational Community License, Version 2.0 (the "Original License"); 
+ # This file incorporates code from the orginal R3_CMC model released under
+ # the Educational Community License, Version 2.0 (the "Original License");
  # http://www.si2.org/cmc
  # Modifications:
  # - __XYCE__ macro added to support ADMS compiler

@@ -5,7 +5,7 @@
                     Compact Model Coalition In-Code Statement
 
   Copyright 2004-2017 NXP Semiconductors, 2015-2017 Commissariat a l’energie atomique
-  et aux energies alternatives (CEA), 2012-2015 Delft University of Technology and 
+  et aux energies alternatives (CEA), 2012-2015 Delft University of Technology and
   2004-2011 Arizona State University Licensed under the Educational Community License,
   Version 2.0 (the "License"); you may not use this file except in compliance with the
   License. You may obtain a copy of the License at
@@ -36,7 +36,7 @@
   information can be found on:
 
        http://www.cea.fr/cea-tech/leti/pspsupport
-       
+
 ======================================================================================
 ======================================================================================
 
@@ -98,9 +98,9 @@ scaling rules and new clipping values of local parameters:
       now calculated using the variable CT_T: lines 356 to 359
 
 - PSP103_module.include:
-    - Addition of new local parameters related to the new model of interface states 
+    - Addition of new local parameters related to the new model of interface states
       CTG, CTB and STCT: lines 181 to 185
-    - Addition of new global parameters related to the new model of interface states 
+    - Addition of new global parameters related to the new model of interface states
       CTGO, CTBO and STCTO: lines 392 to 400
     - Addition of new global parameter related to edge transistor doping NSUBEDGELEXP:
       line 552
@@ -110,7 +110,7 @@ scaling rules and new clipping values of local parameters:
     - New variable declarations for OP info related to interface states model: lines
       908 to 910
     - Calculation of CTG_p, CTB_p, STCT_p: lines 1238 to 1240 and lines 1379 to 1383
-    - Addition of an exponent parameter NSUBEDGELEXP in calculation of NEFFEDGE_p: 
+    - Addition of an exponent parameter NSUBEDGELEXP in calculation of NEFFEDGE_p:
       line 1490
     - Calculation of CTG_i, CTB_i and STCT_i: lines 1621 to 1623
     - modification of min clipping values of NOV_i and NOVD_i, now in line with local

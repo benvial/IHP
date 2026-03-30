@@ -311,4 +311,3 @@
             Igout    = Igout + igin * IG_TP * TYPE * (IG_lnDsi - IG_lnDgate); \
         end \
     end
-
