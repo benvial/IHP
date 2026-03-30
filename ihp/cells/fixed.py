@@ -600,7 +600,7 @@ def L2_IND_LVS_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.L2_IND_LVS()
+      c = ihp.cells.L2_IND_LVS_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "L2_IND_LVS.gds")
@@ -616,7 +616,7 @@ def M1_GatPoly_CDNS_675179387644_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.M1_GatPoly_CDNS_675179387644()
+      c = ihp.cells.M1_GatPoly_CDNS_675179387644_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "M1_GatPoly_CDNS_675179387644.gds")
@@ -632,7 +632,7 @@ def M2_M1_CDNS_675179387643_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.M2_M1_CDNS_675179387643()
+      c = ihp.cells.M2_M1_CDNS_675179387643_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "M2_M1_CDNS_675179387643.gds")
@@ -648,7 +648,7 @@ def M3_M2_CDNS_675179387642_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.M3_M2_CDNS_675179387642()
+      c = ihp.cells.M3_M2_CDNS_675179387642_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "M3_M2_CDNS_675179387642.gds")
@@ -664,7 +664,7 @@ def M4_M3_CDNS_675179387641_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.M4_M3_CDNS_675179387641()
+      c = ihp.cells.M4_M3_CDNS_675179387641_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "M4_M3_CDNS_675179387641.gds")
@@ -680,7 +680,7 @@ def M5_M4_CDNS_675179387640_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.M5_M4_CDNS_675179387640()
+      c = ihp.cells.M5_M4_CDNS_675179387640_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "M5_M4_CDNS_675179387640.gds")
@@ -696,7 +696,7 @@ def NoFillerStack_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.NoFillerStack()
+      c = ihp.cells.NoFillerStack_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "NoFillerStack.gds")
@@ -712,7 +712,7 @@ def SVaricap_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.SVaricap()
+      c = ihp.cells.SVaricap_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "SVaricap.gds")
@@ -728,7 +728,7 @@ def TM1_M5_CDNS_675179387645_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.TM1_M5_CDNS_675179387645()
+      c = ihp.cells.TM1_M5_CDNS_675179387645_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "TM1_M5_CDNS_675179387645.gds")
@@ -744,7 +744,7 @@ def TM2_TM1_CDNS_675179387646_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.TM2_TM1_CDNS_675179387646()
+      c = ihp.cells.TM2_TM1_CDNS_675179387646_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "TM2_TM1_CDNS_675179387646.gds")
@@ -760,7 +760,7 @@ def TSV_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.TSV()
+      c = ihp.cells.TSV_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "TSV.gds")
@@ -776,7 +776,7 @@ def ViaStack_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.ViaStack()
+      c = ihp.cells.ViaStack_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "ViaStack.gds")
@@ -808,7 +808,7 @@ def chipText_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.chipText()
+      c = ihp.cells.chipText_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "chipText.gds")
@@ -840,7 +840,7 @@ def colors_and_stipples_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.colors_and_stipples()
+      c = ihp.cells.colors_and_stipples_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "colors_and_stipples.gds")
@@ -872,7 +872,7 @@ def diffstbprobe_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.diffstbprobe()
+      c = ihp.cells.diffstbprobe_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "diffstbprobe.gds")
@@ -888,7 +888,7 @@ def diodevdd_2kv_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.diodevdd_2kv()
+      c = ihp.cells.diodevdd_2kv_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "diodevdd_2kv.gds")
@@ -904,7 +904,7 @@ def diodevdd_4kv_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.diodevdd_4kv()
+      c = ihp.cells.diodevdd_4kv_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "diodevdd_4kv.gds")
@@ -920,7 +920,7 @@ def diodevss_2kv_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.diodevss_2kv()
+      c = ihp.cells.diodevss_2kv_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "diodevss_2kv.gds")
@@ -936,7 +936,7 @@ def diodevss_4kv_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.diodevss_4kv()
+      c = ihp.cells.diodevss_4kv_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "diodevss_4kv.gds")
@@ -968,7 +968,7 @@ def dummy1_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.dummy1()
+      c = ihp.cells.dummy1_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "dummy1.gds")
@@ -1016,7 +1016,7 @@ def iprobe_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.iprobe()
+      c = ihp.cells.iprobe_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "iprobe.gds")
@@ -1032,7 +1032,7 @@ def isolbox_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.isolbox()
+      c = ihp.cells.isolbox_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "isolbox.gds")
@@ -1048,7 +1048,7 @@ def lvsres_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.lvsres()
+      c = ihp.cells.lvsres_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "lvsres.gds")
@@ -1080,7 +1080,7 @@ def nmosHV_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.nmosHV()
+      c = ihp.cells.nmosHV_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "nmosHV.gds")
@@ -1096,7 +1096,7 @@ def nmoscl_2_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.nmoscl_2()
+      c = ihp.cells.nmoscl_2_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "nmoscl_2.gds")
@@ -1112,7 +1112,7 @@ def nmoscl_4_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.nmoscl_4()
+      c = ihp.cells.nmoscl_4_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "nmoscl_4.gds")
@@ -1176,7 +1176,7 @@ def npn13G2_base_CDNS_675179387640_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.npn13G2_base_CDNS_675179387640()
+      c = ihp.cells.npn13G2_base_CDNS_675179387640_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "npn13G2_base_CDNS_675179387640.gds")
@@ -1192,7 +1192,7 @@ def ntap_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.ntap()
+      c = ihp.cells.ntap_fixed()
       c.plot()
     """
     # TODO: What is this and how is it different from ntap1?
@@ -1241,7 +1241,7 @@ def pmosHV_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.pmosHV()
+      c = ihp.cells.pmosHV_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "pmosHV.gds")
@@ -1273,7 +1273,7 @@ def ptap_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.ptap()
+      c = ihp.cells.ptap_fixed()
       c.plot()
     """
     # TODO: What is this and how is it different from ptap1?
@@ -1338,7 +1338,7 @@ def rfnmosHV_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.rfnmosHV()
+      c = ihp.cells.rfnmosHV_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "rfnmosHV.gds")
@@ -1370,7 +1370,7 @@ def rfpmosHV_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.rfpmosHV()
+      c = ihp.cells.rfpmosHV_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "rfpmosHV.gds")
@@ -1434,7 +1434,7 @@ def schottky_nbl1_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.schottky_nbl1()
+      c = ihp.cells.schottky_nbl1_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "schottky_nbl1.gds")
@@ -1450,7 +1450,7 @@ def scr1_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.scr1()
+      c = ihp.cells.scr1_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "scr1.gds")
@@ -1466,7 +1466,7 @@ def sealring_CDNS_675179387642_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.sealring_CDNS_675179387642()
+      c = ihp.cells.sealring_CDNS_675179387642_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "sealring_CDNS_675179387642.gds")
@@ -1482,7 +1482,7 @@ def sealring_complete_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.sealring_complete()
+      c = ihp.cells.sealring_complete_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "sealring_complete.gds")
@@ -1498,7 +1498,7 @@ def sealring_corner_CDNS_675179387641_fixed() -> gf.Component:
 
       import ihp
 
-      c = ihp.cells.sealring_corner_CDNS_675179387641()
+      c = ihp.cells.sealring_corner_CDNS_675179387641_fixed()
       c.plot()
     """
     return import_gds(gdsdir / "sealring_corner_CDNS_675179387641.gds")
