@@ -211,7 +211,7 @@ def _dummy1_fixed_schematic() -> DSchematic:
 def _isolbox_fixed_schematic() -> DSchematic:
     s = DSchematic()
     s.info["tags"] = ["IHP", "diode", "antenna"]
-    s.info["symbol"] = "subcircuit"
+    s.info["symbol"] = "ckt"
     s.info["ports"] = {"left": ["isoub"], "right": ["NWell"], "bottom": ["bn"]}
     s.info["models"] = [
         {
