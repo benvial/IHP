@@ -50,7 +50,7 @@ def _svaricap_fixed_schematic() -> DSchematic:
         {"name": "bn", "side": "top", "type": "electric"},
         {"name": "G2", "side": "bottom", "type": "electric"},
         {"name": "G1", "side": "left", "type": "electric"},
-        {"name": "W", "side": "right", "type": "electric"}
+        {"name": "W", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -96,7 +96,7 @@ def _cmim_fixed_schematic() -> DSchematic:
     s.info["symbol"] = "capacitor"
     s.info["ports"] = [
         {"name": "MINUS", "side": "left", "type": "electric"},
-        {"name": "PLUS", "side": "right", "type": "electric"}
+        {"name": "PLUS", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -120,7 +120,7 @@ def _dantenna_fixed_schematic() -> DSchematic:
     s.info["symbol"] = "diode"
     s.info["ports"] = [
         {"name": "1", "side": "top", "type": "electric"},
-        {"name": "2", "side": "bottom", "type": "electric"}
+        {"name": "2", "side": "bottom", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -146,7 +146,7 @@ def _esd_diode_fixed_schematic(model_name: str) -> DSchematic:
     s.info["ports"] = [
         {"name": "VDD", "side": "top", "type": "electric"},
         {"name": "VSS", "side": "bottom", "type": "electric"},
-        {"name": "PAD", "side": "right", "type": "electric"}
+        {"name": "PAD", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -187,7 +187,7 @@ def _dpantenna_fixed_schematic() -> DSchematic:
     s.info["symbol"] = "diode"
     s.info["ports"] = [
         {"name": "1", "side": "top", "type": "electric"},
-        {"name": "2", "side": "bottom", "type": "electric"}
+        {"name": "2", "side": "bottom", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -211,7 +211,7 @@ def _dummy1_fixed_schematic() -> DSchematic:
     s.info["symbol"] = "resistor"
     s.info["ports"] = [
         {"name": "W", "side": "left", "type": "electric"},
-        {"name": "2", "side": "right", "type": "electric"}
+        {"name": "2", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -236,7 +236,7 @@ def _isolbox_fixed_schematic() -> DSchematic:
     s.info["ports"] = [
         {"name": "bn", "side": "bottom", "type": "electric"},
         {"name": "isoub", "side": "left", "type": "electric"},
-        {"name": "NWell", "side": "right", "type": "electric"}
+        {"name": "NWell", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -264,7 +264,7 @@ def _lv_mos_fixed_schematic(model_name: str, symbol: str) -> DSchematic:
         {"name": "d", "side": "top", "type": "electric"},
         {"name": "s", "side": "bottom", "type": "electric"},
         {"name": "g", "side": "left", "type": "electric"},
-        {"name": "b", "side": "right", "type": "electric"}
+        {"name": "b", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -293,7 +293,7 @@ def _hv_mos_fixed_schematic(model_name: str, symbol: str) -> DSchematic:
         {"name": "d", "side": "top", "type": "electric"},
         {"name": "s", "side": "bottom", "type": "electric"},
         {"name": "g", "side": "left", "type": "electric"},
-        {"name": "b", "side": "right", "type": "electric"}
+        {"name": "b", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -322,7 +322,7 @@ def _rf_lv_mos_fixed_schematic(model_name: str, symbol: str) -> DSchematic:
         {"name": "d", "side": "top", "type": "electric"},
         {"name": "s", "side": "bottom", "type": "electric"},
         {"name": "g", "side": "left", "type": "electric"},
-        {"name": "b", "side": "right", "type": "electric"}
+        {"name": "b", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -351,7 +351,7 @@ def _rf_hv_mos_fixed_schematic(model_name: str, symbol: str) -> DSchematic:
         {"name": "d", "side": "top", "type": "electric"},
         {"name": "s", "side": "bottom", "type": "electric"},
         {"name": "g", "side": "left", "type": "electric"},
-        {"name": "b", "side": "right", "type": "electric"}
+        {"name": "b", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -386,7 +386,7 @@ def _nmoscl_lv_fixed_schematic(model_name: str) -> DSchematic:
     s.info["symbol"] = "nmos"
     s.info["ports"] = [
         {"name": "VDD", "side": "top", "type": "electric"},
-        {"name": "VSS", "side": "bottom", "type": "electric"}
+        {"name": "VSS", "side": "bottom", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -421,7 +421,7 @@ def _npn_fixed_schematic(model_name: str) -> DSchematic:
         {"name": "bn", "side": "top", "type": "electric"},
         {"name": "e", "side": "bottom", "type": "electric"},
         {"name": "b", "side": "left", "type": "electric"},
-        {"name": "c", "side": "right", "type": "electric"}
+        {"name": "c", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -460,7 +460,7 @@ def _tap_fixed_schematic(model_name: str) -> DSchematic:
     s.info["symbol"] = "tap"
     s.info["ports"] = [
         {"name": "1", "side": "top", "type": "electric"},
-        {"name": "2", "side": "bottom", "type": "electric"}
+        {"name": "2", "side": "bottom", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -501,7 +501,7 @@ def _pnpMPA_fixed_schematic() -> DSchematic:
     s.info["ports"] = [
         {"name": "e", "side": "bottom", "type": "electric"},
         {"name": "b", "side": "left", "type": "electric"},
-        {"name": "c", "side": "right", "type": "electric"}
+        {"name": "c", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -527,7 +527,7 @@ def _rfcmim_fixed_schematic() -> DSchematic:
     s.info["ports"] = [
         {"name": "bn", "side": "bottom", "type": "electric"},
         {"name": "MINUS", "side": "left", "type": "electric"},
-        {"name": "PLUS", "side": "right", "type": "electric"}
+        {"name": "PLUS", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -570,7 +570,7 @@ def _resistor_3port_fixed_schematic(model_name: str) -> DSchematic:
     s.info["ports"] = [
         {"name": "1", "side": "top", "type": "electric"},
         {"name": "3", "side": "bottom", "type": "electric"},
-        {"name": "bn", "side": "right", "type": "electric"}
+        {"name": "bn", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -608,7 +608,7 @@ def _schottky_nbl1_fixed_schematic() -> DSchematic:
     s.info["ports"] = [
         {"name": "A", "side": "top", "type": "electric"},
         {"name": "C", "side": "bottom", "type": "electric"},
-        {"name": "S", "side": "right", "type": "electric"}
+        {"name": "S", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {

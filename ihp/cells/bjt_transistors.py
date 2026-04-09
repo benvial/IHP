@@ -54,7 +54,7 @@ def npn13G2_schematic(
         {"name": "BN", "side": "top", "type": "electric"},
         {"name": "E", "side": "bottom", "type": "electric"},
         {"name": "B", "side": "left", "type": "electric"},
-        {"name": "C", "side": "right", "type": "electric"}
+        {"name": "C", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -787,7 +787,7 @@ def npn13G2L_schematic(
         {"name": "BN", "side": "top", "type": "electric"},
         {"name": "E", "side": "bottom", "type": "electric"},
         {"name": "B", "side": "left", "type": "electric"},
-        {"name": "C", "side": "right", "type": "electric"}
+        {"name": "C", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -1380,7 +1380,7 @@ def npn13G2V_schematic(
         {"name": "BN", "side": "top", "type": "electric"},
         {"name": "E", "side": "bottom", "type": "electric"},
         {"name": "B", "side": "left", "type": "electric"},
-        {"name": "C", "side": "right", "type": "electric"}
+        {"name": "C", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -2078,7 +2078,7 @@ def pnpMPA_schematic(length: float = 2, width: float = 0.7) -> DSchematic:
     s.info["ports"] = [
         {"name": "E", "side": "bottom", "type": "electric"},
         {"name": "B", "side": "left", "type": "electric"},
-        {"name": "C", "side": "right", "type": "electric"}
+        {"name": "C", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {

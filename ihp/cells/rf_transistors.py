@@ -904,7 +904,7 @@ def rfnmos_schematic(
         {"name": "D", "side": "top", "type": "electric"},
         {"name": "S", "side": "bottom", "type": "electric"},
         {"name": "G", "side": "left", "type": "electric"},
-        {"name": "B", "side": "right", "type": "electric"}
+        {"name": "B", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -1003,7 +1003,7 @@ def rfpmos_schematic(
         {"name": "D", "side": "top", "type": "electric"},
         {"name": "S", "side": "bottom", "type": "electric"},
         {"name": "G", "side": "left", "type": "electric"},
-        {"name": "B", "side": "right", "type": "electric"}
+        {"name": "B", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -1102,7 +1102,7 @@ def rfnmos_hv_schematic(
         {"name": "D", "side": "top", "type": "electric"},
         {"name": "S", "side": "bottom", "type": "electric"},
         {"name": "G", "side": "left", "type": "electric"},
-        {"name": "B", "side": "right", "type": "electric"}
+        {"name": "B", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -1201,7 +1201,7 @@ def rfpmos_hv_schematic(
         {"name": "D", "side": "top", "type": "electric"},
         {"name": "S", "side": "bottom", "type": "electric"},
         {"name": "G", "side": "left", "type": "electric"},
-        {"name": "B", "side": "right", "type": "electric"}
+        {"name": "B", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {

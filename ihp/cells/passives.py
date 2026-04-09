@@ -29,7 +29,7 @@ def svaricap_schematic(
         {"name": "BN", "side": "top", "type": "electric"},
         {"name": "G2", "side": "bottom", "type": "electric"},
         {"name": "G1", "side": "left", "type": "electric"},
-        {"name": "W", "side": "right", "type": "electric"}
+        {"name": "W", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -223,7 +223,7 @@ def esd_nmos_schematic(
     s.info["symbol"] = "nmos"
     s.info["ports"] = [
         {"name": "VDD", "side": "top", "type": "electric"},
-        {"name": "VSS", "side": "bottom", "type": "electric"}
+        {"name": "VSS", "side": "bottom", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -424,7 +424,7 @@ def ptap1_schematic(
     s.info["symbol"] = "tap"
     s.info["ports"] = [
         {"name": "P1", "side": "top", "type": "electric"},
-        {"name": "P2", "side": "bottom", "type": "electric"}
+        {"name": "P2", "side": "bottom", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -566,7 +566,7 @@ def ntap1_schematic(
     s.info["symbol"] = "tap"
     s.info["ports"] = [
         {"name": "P1", "side": "top", "type": "electric"},
-        {"name": "P2", "side": "bottom", "type": "electric"}
+        {"name": "P2", "side": "bottom", "type": "electric"},
     ]
     s.info["models"] = [
         {

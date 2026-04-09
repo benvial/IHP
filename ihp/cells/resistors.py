@@ -35,7 +35,7 @@ def rsil_schematic(
     s.info["ports"] = [
         {"name": "P1", "side": "top", "type": "electric"},
         {"name": "P2", "side": "bottom", "type": "electric"},
-        {"name": "BN", "side": "right", "type": "electric"}
+        {"name": "BN", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -244,7 +244,7 @@ def rppd_schematic(
     s.info["ports"] = [
         {"name": "P1", "side": "top", "type": "electric"},
         {"name": "P2", "side": "bottom", "type": "electric"},
-        {"name": "BN", "side": "right", "type": "electric"}
+        {"name": "BN", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -467,7 +467,7 @@ def rhigh_schematic(
     s.info["ports"] = [
         {"name": "P1", "side": "top", "type": "electric"},
         {"name": "P2", "side": "bottom", "type": "electric"},
-        {"name": "BN", "side": "right", "type": "electric"}
+        {"name": "BN", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {

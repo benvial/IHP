@@ -323,7 +323,7 @@ def cmim_schematic(
     s.info["symbol"] = "capacitor"
     s.info["ports"] = [
         {"name": "MINUS", "side": "left", "type": "electric"},
-        {"name": "PLUS", "side": "right", "type": "electric"}
+        {"name": "PLUS", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -568,7 +568,7 @@ def rfcmim_schematic(
     s.info["ports"] = [
         {"name": "BN", "side": "bottom", "type": "electric"},
         {"name": "MINUS", "side": "left", "type": "electric"},
-        {"name": "PLUS", "side": "right", "type": "electric"}
+        {"name": "PLUS", "side": "right", "type": "electric"},
     ]
     s.info["models"] = [
         {

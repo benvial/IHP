@@ -135,7 +135,7 @@ def dantenna_schematic(
     s.info["symbol"] = "diode"
     s.info["ports"] = [
         {"name": "1", "side": "top", "type": "electric"},
-        {"name": "2", "side": "bottom", "type": "electric"}
+        {"name": "2", "side": "bottom", "type": "electric"},
     ]
     s.info["models"] = [
         {
@@ -273,7 +273,7 @@ def dpantenna_schematic(
     s.info["symbol"] = "diode"
     s.info["ports"] = [
         {"name": "1", "side": "top", "type": "electric"},
-        {"name": "2", "side": "bottom", "type": "electric"}
+        {"name": "2", "side": "bottom", "type": "electric"},
     ]
     s.info["models"] = [
         {
