@@ -900,7 +900,12 @@ def rfnmos_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "mos", "lv", "rf"]
     s.info["symbol"] = "nmos"
-    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
+    s.info["ports"] = [
+        {"name": "D", "side": "top", "type": "electric"},
+        {"name": "S", "side": "bottom", "type": "electric"},
+        {"name": "G", "side": "left", "type": "electric"},
+        {"name": "B", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -994,7 +999,12 @@ def rfpmos_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "mos", "lv", "rf"]
     s.info["symbol"] = "pmos"
-    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
+    s.info["ports"] = [
+        {"name": "D", "side": "top", "type": "electric"},
+        {"name": "S", "side": "bottom", "type": "electric"},
+        {"name": "G", "side": "left", "type": "electric"},
+        {"name": "B", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -1088,7 +1098,12 @@ def rfnmos_hv_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "mos", "hv", "rf"]
     s.info["symbol"] = "nmos"
-    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
+    s.info["ports"] = [
+        {"name": "D", "side": "top", "type": "electric"},
+        {"name": "S", "side": "bottom", "type": "electric"},
+        {"name": "G", "side": "left", "type": "electric"},
+        {"name": "B", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -1182,7 +1197,12 @@ def rfpmos_hv_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "mos", "hv", "rf"]
     s.info["symbol"] = "pmos"
-    s.info["ports"] = {"top": ["D"], "bottom": ["S"], "left": ["G"], "right": ["B"]}
+    s.info["ports"] = [
+        {"name": "D", "side": "top", "type": "electric"},
+        {"name": "S", "side": "bottom", "type": "electric"},
+        {"name": "G", "side": "left", "type": "electric"},
+        {"name": "B", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",

@@ -321,7 +321,10 @@ def cmim_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "capacitor", "mim"]
     s.info["symbol"] = "capacitor"
-    s.info["ports"] = {"left": ["MINUS"], "right": ["PLUS"]}
+    s.info["ports"] = [
+        {"name": "MINUS", "side": "left", "type": "electric"},
+        {"name": "PLUS", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -562,7 +565,11 @@ def rfcmim_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "capacitor", "mim", "rf"]
     s.info["symbol"] = "capacitor"
-    s.info["ports"] = {"left": ["MINUS"], "right": ["PLUS"], "bottom": ["BN"]}
+    s.info["ports"] = [
+        {"name": "BN", "side": "bottom", "type": "electric"},
+        {"name": "MINUS", "side": "left", "type": "electric"},
+        {"name": "PLUS", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",

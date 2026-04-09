@@ -33,7 +33,7 @@ def bondpad_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "bondpad"]
     s.info["symbol"] = "pad"
-    s.info["ports"] = {"top": ["PAD"]}
+    s.info["ports"] = [{"name": "PAD", "side": "top", "type": "electric"}]
     s.info["models"] = [
         {
             "language": "spice",

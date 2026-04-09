@@ -133,7 +133,10 @@ def dantenna_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "diode", "antenna"]
     s.info["symbol"] = "diode"
-    s.info["ports"] = {"top": ["1"], "bottom": ["2"]}
+    s.info["ports"] = [
+        {"name": "1", "side": "top", "type": "electric"},
+        {"name": "2", "side": "bottom", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -268,7 +271,10 @@ def dpantenna_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "diode", "antenna"]
     s.info["symbol"] = "diode"
-    s.info["ports"] = {"top": ["1"], "bottom": ["2"]}
+    s.info["ports"] = [
+        {"name": "1", "side": "top", "type": "electric"},
+        {"name": "2", "side": "bottom", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",

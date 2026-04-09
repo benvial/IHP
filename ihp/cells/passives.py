@@ -25,7 +25,12 @@ def svaricap_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "varicap", "hv"]
     s.info["symbol"] = "varicap"
-    s.info["ports"] = {"top": ["BN"], "left": ["G1"], "right": ["W"], "bottom": ["G2"]}
+    s.info["ports"] = [
+        {"name": "BN", "side": "top", "type": "electric"},
+        {"name": "G2", "side": "bottom", "type": "electric"},
+        {"name": "G1", "side": "left", "type": "electric"},
+        {"name": "W", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -216,7 +221,10 @@ def esd_nmos_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "esd", "lv"]
     s.info["symbol"] = "nmos"
-    s.info["ports"] = {"top": ["VDD"], "bottom": ["VSS"]}
+    s.info["ports"] = [
+        {"name": "VDD", "side": "top", "type": "electric"},
+        {"name": "VSS", "side": "bottom", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -414,7 +422,10 @@ def ptap1_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "tap", "p-type"]
     s.info["symbol"] = "tap"
-    s.info["ports"] = {"top": ["P1"], "bottom": ["P2"]}
+    s.info["ports"] = [
+        {"name": "P1", "side": "top", "type": "electric"},
+        {"name": "P2", "side": "bottom", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -553,7 +564,10 @@ def ntap1_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "tap", "n-type"]
     s.info["symbol"] = "tap"
-    s.info["ports"] = {"top": ["P1"], "bottom": ["P2"]}
+    s.info["ports"] = [
+        {"name": "P1", "side": "top", "type": "electric"},
+        {"name": "P2", "side": "bottom", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",

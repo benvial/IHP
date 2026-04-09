@@ -50,7 +50,12 @@ def npn13G2_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
-    s.info["ports"] = {"top": ["BN"], "left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["ports"] = [
+        {"name": "BN", "side": "top", "type": "electric"},
+        {"name": "E", "side": "bottom", "type": "electric"},
+        {"name": "B", "side": "left", "type": "electric"},
+        {"name": "C", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -778,7 +783,12 @@ def npn13G2L_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
-    s.info["ports"] = {"top": ["BN"], "left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["ports"] = [
+        {"name": "BN", "side": "top", "type": "electric"},
+        {"name": "E", "side": "bottom", "type": "electric"},
+        {"name": "B", "side": "left", "type": "electric"},
+        {"name": "C", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -1366,7 +1376,12 @@ def npn13G2V_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
-    s.info["ports"] = {"top": ["BN"], "left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["ports"] = [
+        {"name": "BN", "side": "top", "type": "electric"},
+        {"name": "E", "side": "bottom", "type": "electric"},
+        {"name": "B", "side": "left", "type": "electric"},
+        {"name": "C", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -2060,7 +2075,11 @@ def pnpMPA_schematic(length: float = 2, width: float = 0.7) -> DSchematic:
     s = DSchematic()
     s.info["tags"] = ["IHP", "bjt", "pnp"]
     s.info["symbol"] = "pnp"
-    s.info["ports"] = {"left": ["B"], "right": ["C"], "bottom": ["E"]}
+    s.info["ports"] = [
+        {"name": "E", "side": "bottom", "type": "electric"},
+        {"name": "B", "side": "left", "type": "electric"},
+        {"name": "C", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",

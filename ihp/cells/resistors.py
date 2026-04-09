@@ -32,7 +32,11 @@ def rsil_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "resistor", "silicided"]
     s.info["symbol"] = "resistor"
-    s.info["ports"] = {"top": ["P1"], "bottom": ["P2"], "right": ["BN"]}
+    s.info["ports"] = [
+        {"name": "P1", "side": "top", "type": "electric"},
+        {"name": "P2", "side": "bottom", "type": "electric"},
+        {"name": "BN", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -237,7 +241,11 @@ def rppd_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "resistor", "unsilicided"]
     s.info["symbol"] = "resistor"
-    s.info["ports"] = {"top": ["P1"], "bottom": ["P2"], "right": ["BN"]}
+    s.info["ports"] = [
+        {"name": "P1", "side": "top", "type": "electric"},
+        {"name": "P2", "side": "bottom", "type": "electric"},
+        {"name": "BN", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
@@ -456,7 +464,11 @@ def rhigh_schematic(
     s = DSchematic()
     s.info["tags"] = ["IHP", "resistor", "high-r"]
     s.info["symbol"] = "resistor"
-    s.info["ports"] = {"top": ["P1"], "bottom": ["P2"], "right": ["BN"]}
+    s.info["ports"] = [
+        {"name": "P1", "side": "top", "type": "electric"},
+        {"name": "P2", "side": "bottom", "type": "electric"},
+        {"name": "BN", "side": "right", "type": "electric"}
+    ]
     s.info["models"] = [
         {
             "language": "spice",
