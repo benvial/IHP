@@ -1,10 +1,3 @@
-info:
-  vlsir:
-    model: bondpad
-    port_map: {}
-    port_order:
-    - PAD
-    spice_lib: sg13g2_bondpad.lib
-    spice_type: SUBCKT
+info: {}
 name: bondpad_fixed
 settings: {}

@@ -1,11 +1,3 @@
-info:
-  vlsir:
-    model: dantenna
-    port_map: {}
-    port_order:
-    - '1'
-    - '2'
-    spice_lib: diodes.lib
-    spice_type: SUBCKT
+info: {}
 name: dantenna_fixed
 settings: {}

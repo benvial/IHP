@@ -3,16 +3,6 @@ info:
   capacitance_fF: 55.142
   length: 6
   model: cmim
-  vlsir:
-    model: cap_cmim
-    params:
-      l: 0.0
-      w: 0.0
-    port_order:
-    - PLUS
-    - MINUS
-    spice_lib: capacitors_mod.lib
-    spice_type: SUBCKT
   width: 6
 name: cmim_W6_L6_LMMetal5drawing_LMMIMdrawing_LVVmimdrawing_L_8b51f9e9
 settings:

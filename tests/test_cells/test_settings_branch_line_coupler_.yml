@@ -1,9 +1,0 @@
-info: {}
-name: branch_line_coupler_W10_WC14_QWL500_CL100_SCStopmetal2__59fd7670
-settings:
-  connection_length: 100
-  ground_cross_section: metal3_routing
-  quarter_wave_length: 500
-  signal_cross_section: topmetal2_routing
-  width: 10
-  width_coupled: 14

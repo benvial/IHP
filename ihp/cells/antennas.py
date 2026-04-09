@@ -5,8 +5,11 @@ from typing import Literal
 
 import gdsfactory as gf
 from gdsfactory.typings import LayerSpec
+from kfactory.schematic import DSchematic
 
 from ihp.tech import TECH as _TECH
+
+_XS = "metal1_routing"
 
 
 def fix(value: float) -> int:
@@ -120,7 +123,37 @@ def DrawContArray(
     return x_min, y_min, x_max, y_max
 
 
-@gf.cell
+def dantenna_schematic(
+    width: float = 0.78,
+    length: float = 0.78,
+    addRecLayer: Literal["t", "f"] = "t",
+    guardRingType: Literal["none", "psub"] = "none",
+    guardRingDistance: float = 1.0,
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "diode", "antenna"]
+    s.info["symbol"] = "diode"
+    s.info["ports"] = [
+        {"name": "1", "side": "top", "type": "electric"},
+        {"name": "2", "side": "bottom", "type": "electric"},
+    ]
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "dantenna",
+            "spice_type": "SUBCKT",
+            "library": "ihp/models/ngspice/models/cornerDIO.lib",
+            "sections": ["dio_tt", "dio_ss", "dio_ff"],
+            "port_order": ["1", "2"],
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6"},
+        }
+    ]
+    s.create_port(name="1", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="2", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+@gf.cell(schematic_function=dantenna_schematic)
 def dantenna(
     width: float = 0.78,
     length: float = 0.78,
@@ -225,20 +258,40 @@ def dantenna(
             )
         ).move((-diods_over, -diods_over))
 
-    # VLSIR Simulation Metadata
-    c.info["vlsir"] = {
-        "model": "dantenna",
-        "spice_type": "SUBCKT",
-        "spice_lib": "diodes.lib",
-        "port_order": ["1", "2"],
-        "port_map": {},  # No physical ports defined on component
-        "params": {"w": width * 1e-6, "l": length * 1e-6},
-    }
-
     return c
 
 
-@gf.cell
+def dpantenna_schematic(
+    width: float = 0.78,
+    length: float = 0.78,
+    addRecLayer: Literal["t", "f"] = "t",
+    guardRingType: Literal["none", "nwell"] = "none",
+    guardRingDistance: float = 1.0,
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "diode", "antenna"]
+    s.info["symbol"] = "diode"
+    s.info["ports"] = [
+        {"name": "1", "side": "top", "type": "electric"},
+        {"name": "2", "side": "bottom", "type": "electric"},
+    ]
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "dpantenna",
+            "spice_type": "SUBCKT",
+            "library": "ihp/models/ngspice/models/cornerDIO.lib",
+            "sections": ["dio_tt", "dio_ss", "dio_ff"],
+            "port_order": ["1", "2"],
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6"},
+        }
+    ]
+    s.create_port(name="1", cross_section=_XS, x=0, y=1, orientation=90)
+    s.create_port(name="2", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+@gf.cell(schematic_function=dpantenna_schematic)
 def dpantenna(
     width: float = 0.78,
     length: float = 0.78,
@@ -347,16 +400,6 @@ def dpantenna(
             layer=layer_nwell,
         )
     ).move((-NW_c, -NW_c))
-
-    # VLSIR Simulation Metadata
-    c.info["vlsir"] = {
-        "model": "dpantenna",
-        "spice_type": "SUBCKT",
-        "spice_lib": "diodes.lib",
-        "port_order": ["1", "2"],
-        "port_map": {},  # No physical ports defined on component
-        "params": {"w": width * 1e-6, "l": length * 1e-6},
-    }
 
     return c
 

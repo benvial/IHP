@@ -80,7 +80,6 @@ ihp/
 │   ├── capacitors.py       #   MIM & MOS capacitors
 │   ├── inductors.py        #   Spiral inductors
 │   ├── passives.py         #   Diodes, varactors, guard rings
-│   ├── primitives.py       #   Schematic-only VLSIR elements (R, L, C, sources)
 │   ├── via_stacks.py       #   Via stack generators
 │   └── fixed.py            #   Pre-built GDS imports (SiGe HBTs, etc.)
 ├── cells2/                 # Legacy PyCell reference implementations (CNI-based)
@@ -100,8 +99,7 @@ docs/                       # Jupyter Book documentation (Sphinx)
 
 - **`cells/`** contains pure GDSFactory implementations — each `@gf.cell` function builds geometry from scratch using `add_polygon` and design rule constants from `tech.py`. No external layout tools are needed at runtime.
 - **`cells2/`** holds the original IHP PyCell implementations (CNI/OpenAccess-based). These serve as the reference for XOR verification — every polygon in `cells/` is tested to match `cells2/` exactly.
-- **`models/`** provides SAX-compatible S-parameter models and a VLSIR bridge (`to_vlsir.py`) for SPICE netlist export.
-- **`primitives.py`** provides schematic-only elements (ideal R, L, C, voltage/current sources) with VLSIR metadata for circuit simulation — these have no physical GDS geometry.
+- **`models/`** provides SAX-compatible S-parameter models for circuit simulation.
 
 ## Installation
 

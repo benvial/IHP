@@ -1,11 +1,3 @@
-info:
-  vlsir:
-    model: dummy1
-    port_map: {}
-    port_order:
-    - W
-    - '2'
-    spice_lib: sg13g2_svaricaphv_mod.lib
-    spice_type: RESISTOR
+info: {}
 name: dummy1_fixed
 settings: {}

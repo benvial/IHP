@@ -3,12 +3,15 @@
 import gdsfactory as gf
 from gdsfactory import Component
 from gdsfactory.typings import LayerSpec
+from kfactory.schematic import DSchematic
 from numpy import floor
 
 from ihp import tech
 from ihp.cells.passives import guard_ring
 from ihp.cells.via_stacks import via_array, via_stack
 from ihp.tech import CbCapCalc
+
+_XS = "metal1_routing"
 
 
 def snap_to_grid(p, grid: float = 0.005):
@@ -311,7 +314,34 @@ def cmom(
     return c
 
 
-@gf.cell
+def cmim_schematic(
+    width: float = 6.0,
+    length: float = 6.0,
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "capacitor", "mim"]
+    s.info["symbol"] = "capacitor"
+    s.info["ports"] = [
+        {"name": "MINUS", "side": "left", "type": "electric"},
+        {"name": "PLUS", "side": "right", "type": "electric"},
+    ]
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "cap_cmim",
+            "spice_type": "SUBCKT",
+            "library": "ihp/models/ngspice/models/cornerCAP.lib",
+            "sections": ["cap_typ", "cap_bcs", "cap_wcs"],
+            "port_order": ["PLUS", "MINUS"],
+            "params": {"w": "width * 1e-6", "l": "length * 1e-6"},
+        }
+    ]
+    s.create_port(name="PLUS", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="MINUS", cross_section=_XS, x=-1, y=0, orientation=180)
+    return s
+
+
+@gf.cell(schematic_function=cmim_schematic)
 def cmim(
     width: float = 6.0,
     length: float = 6.0,
@@ -525,19 +555,39 @@ def cmim(
     c.info["capacitance_fF"] = capacitance
     c.info["area_um2"] = width * length
 
-    # VLSIR simulation metadata
-    c.info["vlsir"] = {
-        "model": "cap_cmim",
-        "spice_type": "SUBCKT",
-        "spice_lib": "capacitors_mod.lib",
-        "port_order": ["PLUS", "MINUS"],
-        "params": {"w": width * 1e-6, "l": length * 1e-6},
-    }
-
     return c
 
 
-@gf.cell
+def rfcmim_schematic(
+    width: float = 7.0,
+    length: float = 7.0,
+) -> DSchematic:
+    s = DSchematic()
+    s.info["tags"] = ["IHP", "capacitor", "mim", "rf"]
+    s.info["symbol"] = "capacitor"
+    s.info["ports"] = [
+        {"name": "BN", "side": "bottom", "type": "electric"},
+        {"name": "MINUS", "side": "left", "type": "electric"},
+        {"name": "PLUS", "side": "right", "type": "electric"},
+    ]
+    s.info["models"] = [
+        {
+            "language": "spice",
+            "name": "cap_rfcmim",
+            "spice_type": "SUBCKT",
+            "library": "ihp/models/ngspice/models/cornerCAP.lib",
+            "sections": ["cap_typ", "cap_bcs", "cap_wcs"],
+            "port_order": ["PLUS", "MINUS", "BN"],
+            "params": {"l": "length * 1e-6", "w": "width * 1e-6"},
+        }
+    ]
+    s.create_port(name="PLUS", cross_section=_XS, x=1, y=0, orientation=0)
+    s.create_port(name="MINUS", cross_section=_XS, x=-1, y=0, orientation=180)
+    s.create_port(name="BN", cross_section=_XS, x=0, y=-1, orientation=270)
+    return s
+
+
+@gf.cell(schematic_function=rfcmim_schematic)
 def rfcmim(
     width: float = 7.0,
     length: float = 7.0,
@@ -633,6 +683,7 @@ def rfcmim(
         model=model,
     )
     c.info = cap.info
+    c.info["model"] = "cap_rfcmim"
     c.add_ref(cap)
     c.ports = cap.ports
     # add pwell block
@@ -714,16 +765,6 @@ def rfcmim(
     )
     c.add_label(text="TIE_LOW", position=(tie.x, tie.y), layer=layer_metal1label)
     c.add_label(text="TIE_LOW", position=(tie.x, tie.y), layer=layer_text)
-
-    # VLSIR simulation metadata
-    c.info["vlsir"] = {
-        "model": "cap_rfcmim",
-        "spice_type": "SUBCKT",
-        "spice_lib": "capacitors_mod.lib",
-        "port_order": ["PLUS", "MINUS", "bn"],
-        "port_map": {"PLUS": "PLUS", "MINUS": "MINUS"},
-        "params": {"l": length * 1e-6, "w": width * 1e-6},
-    }
 
     return c
 
