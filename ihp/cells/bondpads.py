@@ -195,24 +195,3 @@ def bondpad_array(
     # TODO: Bondpad array VLSIR Metadata
 
     return c
-
-
-if __name__ == "__main__":
-    from gdsfactory.difftest import xor
-
-    from ihp import PDK
-    from ihp.cells import fixed
-
-    PDK.activate()
-
-    # Test the components
-    c0 = fixed.bondpad()  # original
-    c1 = bondpad(shape="octagon")  # new
-    c = xor(c0, c1)
-    c.show()
-
-    # c2 = bondpad(shape="square", flip_chip=True)
-    # c2.show()
-
-    # c3 = bondpad_array(n_pads=6)
-    # c3.show()

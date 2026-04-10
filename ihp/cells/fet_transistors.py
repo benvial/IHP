@@ -795,17 +795,3 @@ def pmos_hv(
 
     c = _mos_core(width, length, nf, is_pmos=True, is_hv=True)
     return c
-
-
-if __name__ == "__main__":
-    from gdsfactory.difftest import xor
-
-    from ihp import PDK
-    from ihp import cells2 as pycell
-
-    PDK.activate()
-
-    c0 = pycell.nmos()  # PyCell reference
-    c1 = nmos()  # Pure GDSFactory
-    c = xor(c0, c1)
-    c.show()

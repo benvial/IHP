@@ -170,11 +170,3 @@ def pack_doe_grid(
         with_text=with_text,
         **kwargs,
     )
-
-
-if __name__ == "__main__":
-    from ihp import PDK
-
-    PDK.activate()
-    c = add_pads_top()
-    c.show()

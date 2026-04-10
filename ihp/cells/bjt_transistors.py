@@ -2552,30 +2552,3 @@ def pnpMPA(length: float = 2, width: float = 0.7) -> gf.Component:
     )
 
     return c
-
-
-if __name__ == "__main__":
-    from gdsfactory.difftest import xor
-
-    from ihp import PDK, cells2
-
-    PDK.activate()
-    # c0 = cells2.npn13G2()
-    # c1 = npn13G2()
-    # c = xor(c0, c1)
-    # c.show()
-
-    # c0 = cells2.npn13G2L(Nx=2)
-    # c1 = npn13G2L(Nx=2)
-    # c = xor(c0, c1)
-    # c.show()
-
-    # c0 = cells2.npn13G2V(Nx=3)
-    # c1 = npn13G2V(Nx=3)
-    # c = xor(c0, c1)
-    # c.show()
-
-    c0 = cells2.pnpMPA()
-    c1 = pnpMPA()
-    c = xor(c0, c1)
-    c.show()

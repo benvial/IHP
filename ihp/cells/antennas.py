@@ -402,15 +402,3 @@ def dpantenna(
     ).move((-NW_c, -NW_c))
 
     return c
-
-
-if __name__ == "__main__":
-    from gdsfactory.difftest import xor
-
-    from ihp import PDK, cells2
-
-    PDK.activate()
-    c1 = dpantenna()
-    c0 = cells2.dpantenna(guardRingType="nwell")
-    c = xor(c0, c1)
-    c.show()

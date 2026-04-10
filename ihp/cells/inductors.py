@@ -370,26 +370,3 @@ def inductor3(
         layer_via=layer_via,
         layers_no_fill=layers_no_fill,
     )
-
-
-if __name__ == "__main__":
-    from gdsfactory.difftest import xor
-
-    from ihp import PDK
-    from ihp.cells import fixed
-
-    PDK.activate()
-
-    # Test the components
-    c0 = fixed.inductor3()  # original
-    c1 = inductor3()  # New
-    c = xor(c0, c1)
-    c.show()
-
-    # c0 = fixed.inductor2()  # original
-    # c1 = inductor2()  # New
-    # c = xor(c0, c1)
-    # c.show()
-
-    # c = inductor2(turns=100)
-    # c.show()
