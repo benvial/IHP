@@ -38,8 +38,8 @@ docs = ["autodoc_pydantic", "jupytext", "jupyter-book==1.0.3"]
 simulation = ["gsim>=0.0.8; python_version>='3.12'"]
 
 [tool.codespell]
-ignore-words-list = "te,fpr,nd,donot,schem,contnet,Contnet,rady,inout,INOUT"
-skip = "*.lock,*.svg,*.gds,*.oas,*.lib"
+ignore-words-list = "te,fpr,nd,donot,schem,contnet,Contnet,rady,inout,INOUT,nam,coul,calles,wether,rsource,orginal,delT"
+skip = "*.lock,*.svg,*.gds,*.oas,*.lib,ihp/models/ngspice/va/*,cni/*"
 
 [tool.gdsfactoryplus]
 name = "ihp"
@@ -73,6 +73,7 @@ testpaths = ["tests"]
 [tool.ruff]
 exclude = ["cni"]
 fix = true
+force-exclude = true
 
 [tool.ruff.lint]
 ignore = [

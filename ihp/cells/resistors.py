@@ -678,28 +678,3 @@ def rhigh(
     )
 
     return c
-
-
-if __name__ == "__main__":
-    from gdsfactory.difftest import xor
-
-    from ihp import PDK
-    from ihp.cells import fixed
-
-    PDK.activate()
-
-    # Test the components
-    c0 = fixed.rsil()  # original
-    c1 = rsil()  # New
-    c = xor(c0, c1)
-    c.show()
-
-    # c0 = fixed.rppd()  # original
-    # c1 = rppd()  # New
-    # c = xor(c0, c1)
-    # c.show()
-
-    # c0 = fixed.rhigh()  # original
-    # c1 = rhigh()  # New
-    # c = xor(c0, c1)
-    # c.show()

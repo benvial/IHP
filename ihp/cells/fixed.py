@@ -7,6 +7,7 @@ import gdsfactory as gf
 from kfactory.schematic import DSchematic
 
 from ..config import PATH
+from ..tech import LAYER
 
 _XS = "metal1_routing"
 
@@ -27,10 +28,14 @@ def deprecated(func):
 
 
 _add_ports_metal1 = partial(
-    gf.add_ports.add_ports_from_markers_inside, pin_layer=(8, 2), port_layer=(8, 0)
+    gf.add_ports.add_ports_from_markers_inside,
+    pin_layer=LAYER.Metal1pin,
+    port_layer=LAYER.Metal1drawing,
 )
 _add_ports_metal2 = partial(
-    gf.add_ports.add_ports_from_markers_inside, pin_layer=(10, 2), port_layer=(10, 0)
+    gf.add_ports.add_ports_from_markers_inside,
+    pin_layer=LAYER.Metal2pin,
+    port_layer=LAYER.Metal2drawing,
 )
 _add_ports = (_add_ports_metal1, _add_ports_metal2)
 gdsdir = PATH.gds
@@ -1574,13 +1579,3 @@ def sealring_corner_CDNS_675179387641_fixed() -> gf.Component:
       c.plot()
     """
     return import_gds(gdsdir / "sealring_corner_CDNS_675179387641.gds")
-
-
-if __name__ == "__main__":
-    from ihp import PDK
-
-    PDK.activate()
-    # c = sealring_corner_CDNS_675179387641()
-    c = CuPillarPad_fixed()
-    c.pprint_ports()
-    c.show()

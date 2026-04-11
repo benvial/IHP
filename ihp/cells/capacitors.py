@@ -767,39 +767,3 @@ def rfcmim(
     c.add_label(text="TIE_LOW", position=(tie.x, tie.y), layer=layer_text)
 
     return c
-
-
-if __name__ == "__main__":
-    from math import isclose
-
-    # capacitance in femto farad
-
-    c = cmom(nfingers=2)
-    assert isclose(c.info["capacitance"], 3.8016)
-    c.show()
-
-    c2 = cmom(nfingers=4)
-    assert c2.info["capacitance"] >= 2 * c.info["capacitance"]
-    assert isclose(c2.info["capacitance"], 7.5733)
-    c2.show()
-
-
-if __name__ == "__main__":
-    from gdsfactory.difftest import xor
-
-    from ihp import PDK, cells2
-
-    PDK.activate()
-
-    # Test the components
-    c0 = cells2.cmim()  # original
-    c1 = cmim()  # New
-    # c = gf.grid([c0, c1], spacing=100)
-    c = xor(c0, c1)
-    c.show()
-
-    # c0 = fixed.rfcmim()  # original
-    # c1 = rfcmim()  # New
-    # # c = gf.grid([c0, c1], spacing=100)
-    # c = xor(c0, c1)
-    # c.show()

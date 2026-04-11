@@ -1079,34 +1079,3 @@ def guard_ring(
     c.info["guardRingSpacing"] = guardRingSpacing
 
     return c
-
-
-if __name__ == "__main__":
-    from gdsfactory.difftest import xor
-
-    from ihp import PDK
-    from ihp.cells import fixed
-
-    PDK.activate()
-
-    # Test the components
-    # c0 = cells.svaricap()  # original
-    # c1 = svaricap()  # New
-    # # c = gf.grid([c0, c1], spacing=100)
-    # c = xor(c0, c1)
-    # c.show()
-
-    # c0 = cells.esd_nmos()  # original
-    # c1 = esd_nmos()  # New
-    # c = xor(c0, c1)
-    # c.show()
-
-    c0 = fixed.ptap1()  # original
-    c1 = ptap1()  # New
-    c = xor(c0, c1)
-    c.show()
-
-    # c0 = fixed.sealring()  # original
-    # c1 = sealring()  # New
-    # c = xor(c0, c1)
-    # c.show()
