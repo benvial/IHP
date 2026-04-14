@@ -10,7 +10,7 @@ from .ihp_pycell import dpantenna as dpantennaIHP
 from .utils import *
 
 
-@gf.cell
+@gf.cell(tags={"type": "antennas"})
 def dantenna(
     width: float = 0.78,
     length: float = 0.78,
@@ -80,7 +80,7 @@ def dantenna(
     return c
 
 
-@gf.cell
+@gf.cell(tags={"type": "antennas"})
 def dpantenna(
     width: float = 0.78,
     length: float = 0.78,

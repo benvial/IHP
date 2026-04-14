@@ -79,7 +79,7 @@ def npn13G2_schematic(
     return s
 
 
-@gf.cell(schematic_function=npn13G2_schematic)
+@gf.cell(schematic_function=npn13G2_schematic, tags={"type": "bjt_transistors"})
 def npn13G2(
     baspolyx: float = 0.3,
     bipwinx: float = 0.07,
@@ -810,7 +810,7 @@ def npn13G2L_schematic(
     return s
 
 
-@gf.cell(schematic_function=npn13G2L_schematic)
+@gf.cell(schematic_function=npn13G2L_schematic, tags={"type": "bjt_transistors"})
 def npn13G2L(
     emitter_length: float = 1,
     emitter_width: float = 0.07,
@@ -1403,7 +1403,7 @@ def npn13G2V_schematic(
     return s
 
 
-@gf.cell(schematic_function=npn13G2V_schematic)
+@gf.cell(schematic_function=npn13G2V_schematic, tags={"type": "bjt_transistors"})
 def npn13G2V(
     emitter_length: float = 1,
     emitter_width: float = 0.12,
@@ -2097,7 +2097,7 @@ def pnpMPA_schematic(length: float = 2, width: float = 0.7) -> DSchematic:
     return s
 
 
-@gf.cell(schematic_function=pnpMPA_schematic)
+@gf.cell(schematic_function=pnpMPA_schematic, tags={"type": "bjt_transistors"})
 def pnpMPA(length: float = 2, width: float = 0.7) -> gf.Component:
     """Returns the IHP pnpMPA BJT transistor as a gdsfactory Component.
 

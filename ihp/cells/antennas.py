@@ -153,7 +153,7 @@ def dantenna_schematic(
     return s
 
 
-@gf.cell(schematic_function=dantenna_schematic)
+@gf.cell(schematic_function=dantenna_schematic, tags={"type": "antennas"})
 def dantenna(
     width: float = 0.78,
     length: float = 0.78,
@@ -291,7 +291,7 @@ def dpantenna_schematic(
     return s
 
 
-@gf.cell(schematic_function=dpantenna_schematic)
+@gf.cell(schematic_function=dpantenna_schematic, tags={"type": "antennas"})
 def dpantenna(
     width: float = 0.78,
     length: float = 0.78,

@@ -638,7 +638,7 @@ def _schottky_nbl1_fixed_schematic() -> DSchematic:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def CuPillarPad_fixed() -> gf.Component:
     """Returns CuPillarPad fixed cell.
 
@@ -668,7 +668,7 @@ def CuPillarPad_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def L2_IND_LVS_fixed() -> gf.Component:
     """Returns L2_IND_LVS fixed cell.
 
@@ -684,7 +684,7 @@ def L2_IND_LVS_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def M1_GatPoly_CDNS_675179387644_fixed() -> gf.Component:
     """Returns M1_GatPoly_CDNS_675179387644 fixed cell.
 
@@ -700,7 +700,7 @@ def M1_GatPoly_CDNS_675179387644_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def M2_M1_CDNS_675179387643_fixed() -> gf.Component:
     """Returns M2_M1_CDNS_675179387643 fixed cell.
 
@@ -716,7 +716,7 @@ def M2_M1_CDNS_675179387643_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def M3_M2_CDNS_675179387642_fixed() -> gf.Component:
     """Returns M3_M2_CDNS_675179387642 fixed cell.
 
@@ -732,7 +732,7 @@ def M3_M2_CDNS_675179387642_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def M4_M3_CDNS_675179387641_fixed() -> gf.Component:
     """Returns M4_M3_CDNS_675179387641 fixed cell.
 
@@ -748,7 +748,7 @@ def M4_M3_CDNS_675179387641_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def M5_M4_CDNS_675179387640_fixed() -> gf.Component:
     """Returns M5_M4_CDNS_675179387640 fixed cell.
 
@@ -764,7 +764,7 @@ def M5_M4_CDNS_675179387640_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def NoFillerStack_fixed() -> gf.Component:
     """Returns NoFillerStack fixed cell.
 
@@ -780,7 +780,7 @@ def NoFillerStack_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_svaricap_fixed_schematic)
+@gf.cell(schematic_function=_svaricap_fixed_schematic, tags={"type": "fixed"})
 def SVaricap_fixed() -> gf.Component:
     """Returns SVaricap fixed cell.
 
@@ -796,7 +796,7 @@ def SVaricap_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def TM1_M5_CDNS_675179387645_fixed() -> gf.Component:
     """Returns TM1_M5_CDNS_675179387645 fixed cell.
 
@@ -812,7 +812,7 @@ def TM1_M5_CDNS_675179387645_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def TM2_TM1_CDNS_675179387646_fixed() -> gf.Component:
     """Returns TM2_TM1_CDNS_675179387646 fixed cell.
 
@@ -828,7 +828,7 @@ def TM2_TM1_CDNS_675179387646_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def TSV_fixed() -> gf.Component:
     """Returns TSV fixed cell.
 
@@ -844,7 +844,7 @@ def TSV_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def ViaStack_fixed() -> gf.Component:
     """Returns ViaStack fixed cell.
 
@@ -860,7 +860,7 @@ def ViaStack_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_bondpad_fixed_schematic)
+@gf.cell(schematic_function=_bondpad_fixed_schematic, tags={"type": "fixed"})
 def bondpad_fixed() -> gf.Component:
     """Returns bondpad fixed cell.
 
@@ -876,7 +876,7 @@ def bondpad_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def chipText_fixed() -> gf.Component:
     """Returns chipText fixed cell.
 
@@ -892,7 +892,7 @@ def chipText_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_cmim_fixed_schematic)
+@gf.cell(schematic_function=_cmim_fixed_schematic, tags={"type": "fixed"})
 def cmim_fixed() -> gf.Component:
     """Returns cmim fixed cell.
 
@@ -908,7 +908,7 @@ def cmim_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def colors_and_stipples_fixed() -> gf.Component:
     """Returns colors_and_stipples fixed cell.
 
@@ -924,7 +924,7 @@ def colors_and_stipples_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_dantenna_fixed_schematic)
+@gf.cell(schematic_function=_dantenna_fixed_schematic, tags={"type": "fixed"})
 def dantenna_fixed() -> gf.Component:
     """Returns dantenna fixed cell.
 
@@ -940,7 +940,7 @@ def dantenna_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def diffstbprobe_fixed() -> gf.Component:
     """Returns diffstbprobe fixed cell.
 
@@ -956,7 +956,7 @@ def diffstbprobe_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_diodevdd_2kv_fixed_schematic)
+@gf.cell(schematic_function=_diodevdd_2kv_fixed_schematic, tags={"type": "fixed"})
 def diodevdd_2kv_fixed() -> gf.Component:
     """Returns diodevdd_2kv fixed cell.
 
@@ -972,7 +972,7 @@ def diodevdd_2kv_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_diodevdd_4kv_fixed_schematic)
+@gf.cell(schematic_function=_diodevdd_4kv_fixed_schematic, tags={"type": "fixed"})
 def diodevdd_4kv_fixed() -> gf.Component:
     """Returns diodevdd_4kv fixed cell.
 
@@ -988,7 +988,7 @@ def diodevdd_4kv_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_diodevss_2kv_fixed_schematic)
+@gf.cell(schematic_function=_diodevss_2kv_fixed_schematic, tags={"type": "fixed"})
 def diodevss_2kv_fixed() -> gf.Component:
     """Returns diodevss_2kv fixed cell.
 
@@ -1004,7 +1004,7 @@ def diodevss_2kv_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_diodevss_4kv_fixed_schematic)
+@gf.cell(schematic_function=_diodevss_4kv_fixed_schematic, tags={"type": "fixed"})
 def diodevss_4kv_fixed() -> gf.Component:
     """Returns diodevss_4kv fixed cell.
 
@@ -1020,7 +1020,7 @@ def diodevss_4kv_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_dpantenna_fixed_schematic)
+@gf.cell(schematic_function=_dpantenna_fixed_schematic, tags={"type": "fixed"})
 def dpantenna_fixed() -> gf.Component:
     """Returns dpantenna fixed cell.
 
@@ -1036,7 +1036,7 @@ def dpantenna_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_dummy1_fixed_schematic)
+@gf.cell(schematic_function=_dummy1_fixed_schematic, tags={"type": "fixed"})
 def dummy1_fixed() -> gf.Component:
     """Returns dummy1 fixed cell.
 
@@ -1052,7 +1052,7 @@ def dummy1_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def inductor2_fixed() -> gf.Component:
     """Returns inductor2 fixed cell.
 
@@ -1068,7 +1068,7 @@ def inductor2_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def inductor3_fixed() -> gf.Component:
     """Returns inductor3 fixed cell.
 
@@ -1084,7 +1084,7 @@ def inductor3_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def iprobe_fixed() -> gf.Component:
     """Returns iprobe fixed cell.
 
@@ -1100,7 +1100,7 @@ def iprobe_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_isolbox_fixed_schematic)
+@gf.cell(schematic_function=_isolbox_fixed_schematic, tags={"type": "fixed"})
 def isolbox_fixed() -> gf.Component:
     """Returns isolbox fixed cell.
 
@@ -1116,7 +1116,7 @@ def isolbox_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def lvsres_fixed() -> gf.Component:
     """Returns lvsres fixed cell.
 
@@ -1132,7 +1132,7 @@ def lvsres_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_nmos_fixed_schematic)
+@gf.cell(schematic_function=_nmos_fixed_schematic, tags={"type": "fixed"})
 def nmos_fixed() -> gf.Component:
     """Returns nmos fixed cell.
 
@@ -1148,7 +1148,7 @@ def nmos_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_nmosHV_fixed_schematic)
+@gf.cell(schematic_function=_nmosHV_fixed_schematic, tags={"type": "fixed"})
 def nmosHV_fixed() -> gf.Component:
     """Returns nmosHV fixed cell.
 
@@ -1164,7 +1164,7 @@ def nmosHV_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_nmoscl_2_fixed_schematic)
+@gf.cell(schematic_function=_nmoscl_2_fixed_schematic, tags={"type": "fixed"})
 def nmoscl_2_fixed() -> gf.Component:
     """Returns nmoscl_2 fixed cell.
 
@@ -1180,7 +1180,7 @@ def nmoscl_2_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_nmoscl_4_fixed_schematic)
+@gf.cell(schematic_function=_nmoscl_4_fixed_schematic, tags={"type": "fixed"})
 def nmoscl_4_fixed() -> gf.Component:
     """Returns nmoscl_4 fixed cell.
 
@@ -1196,7 +1196,7 @@ def nmoscl_4_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_npn13G2_fixed_schematic)
+@gf.cell(schematic_function=_npn13G2_fixed_schematic, tags={"type": "fixed"})
 def npn13G2_fixed() -> gf.Component:
     """Returns npn13G2 fixed cell.
 
@@ -1212,7 +1212,7 @@ def npn13G2_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_npn13G2L_fixed_schematic)
+@gf.cell(schematic_function=_npn13G2L_fixed_schematic, tags={"type": "fixed"})
 def npn13G2L_fixed() -> gf.Component:
     """Returns npn13G2L fixed cell.
 
@@ -1228,7 +1228,7 @@ def npn13G2L_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_npn13G2V_fixed_schematic)
+@gf.cell(schematic_function=_npn13G2V_fixed_schematic, tags={"type": "fixed"})
 def npn13G2V_fixed() -> gf.Component:
     """Returns npn13G2V fixed cell.
 
@@ -1244,7 +1244,7 @@ def npn13G2V_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def npn13G2_base_CDNS_675179387640_fixed() -> gf.Component:
     """Returns npn13G2_base_CDNS_675179387640 fixed cell.
 
@@ -1260,7 +1260,7 @@ def npn13G2_base_CDNS_675179387640_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def ntap_fixed() -> gf.Component:
     """Returns ntap fixed cell.
 
@@ -1277,7 +1277,7 @@ def ntap_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_ntap1_fixed_schematic)
+@gf.cell(schematic_function=_ntap1_fixed_schematic, tags={"type": "fixed"})
 def ntap1_fixed() -> gf.Component:
     """Returns ntap1 fixed cell.
 
@@ -1293,7 +1293,7 @@ def ntap1_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_pmos_fixed_schematic)
+@gf.cell(schematic_function=_pmos_fixed_schematic, tags={"type": "fixed"})
 def pmos_fixed() -> gf.Component:
     """Returns pmos fixed cell.
 
@@ -1309,7 +1309,7 @@ def pmos_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_pmosHV_fixed_schematic)
+@gf.cell(schematic_function=_pmosHV_fixed_schematic, tags={"type": "fixed"})
 def pmosHV_fixed() -> gf.Component:
     """Returns pmosHV fixed cell.
 
@@ -1325,7 +1325,7 @@ def pmosHV_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_pnpMPA_fixed_schematic)
+@gf.cell(schematic_function=_pnpMPA_fixed_schematic, tags={"type": "fixed"})
 def pnpMPA_fixed() -> gf.Component:
     """Returns pnpMPA fixed cell.
 
@@ -1341,7 +1341,7 @@ def pnpMPA_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def ptap_fixed() -> gf.Component:
     """Returns ptap fixed cell.
 
@@ -1358,7 +1358,7 @@ def ptap_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_ptap1_fixed_schematic)
+@gf.cell(schematic_function=_ptap1_fixed_schematic, tags={"type": "fixed"})
 def ptap1_fixed() -> gf.Component:
     """Returns ptap1 fixed cell.
 
@@ -1374,7 +1374,7 @@ def ptap1_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_rfcmim_fixed_schematic)
+@gf.cell(schematic_function=_rfcmim_fixed_schematic, tags={"type": "fixed"})
 def rfcmim_fixed() -> gf.Component:
     """Returns rfcmim fixed cell.
 
@@ -1390,7 +1390,7 @@ def rfcmim_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_rfnmos_fixed_schematic)
+@gf.cell(schematic_function=_rfnmos_fixed_schematic, tags={"type": "fixed"})
 def rfnmos_fixed() -> gf.Component:
     """Returns rfnmos fixed cell.
 
@@ -1406,7 +1406,7 @@ def rfnmos_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_rfnmosHV_fixed_schematic)
+@gf.cell(schematic_function=_rfnmosHV_fixed_schematic, tags={"type": "fixed"})
 def rfnmosHV_fixed() -> gf.Component:
     """Returns rfnmosHV fixed cell.
 
@@ -1422,7 +1422,7 @@ def rfnmosHV_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_rfpmos_fixed_schematic)
+@gf.cell(schematic_function=_rfpmos_fixed_schematic, tags={"type": "fixed"})
 def rfpmos_fixed() -> gf.Component:
     """Returns rfpmos fixed cell.
 
@@ -1438,7 +1438,7 @@ def rfpmos_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_rfpmosHV_fixed_schematic)
+@gf.cell(schematic_function=_rfpmosHV_fixed_schematic, tags={"type": "fixed"})
 def rfpmosHV_fixed() -> gf.Component:
     """Returns rfpmosHV fixed cell.
 
@@ -1454,7 +1454,7 @@ def rfpmosHV_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_rhigh_fixed_schematic)
+@gf.cell(schematic_function=_rhigh_fixed_schematic, tags={"type": "fixed"})
 def rhigh_fixed() -> gf.Component:
     """Returns rhigh fixed cell.
 
@@ -1470,7 +1470,7 @@ def rhigh_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_rppd_fixed_schematic)
+@gf.cell(schematic_function=_rppd_fixed_schematic, tags={"type": "fixed"})
 def rppd_fixed() -> gf.Component:
     """Returns rppd fixed cell.
 
@@ -1486,7 +1486,7 @@ def rppd_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_rsil_fixed_schematic)
+@gf.cell(schematic_function=_rsil_fixed_schematic, tags={"type": "fixed"})
 def rsil_fixed() -> gf.Component:
     """Returns rsil fixed cell.
 
@@ -1502,7 +1502,7 @@ def rsil_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_schottky_nbl1_fixed_schematic)
+@gf.cell(schematic_function=_schottky_nbl1_fixed_schematic, tags={"type": "fixed"})
 def schottky_nbl1_fixed() -> gf.Component:
     """Returns schottky_nbl1 fixed cell.
 
@@ -1518,7 +1518,7 @@ def schottky_nbl1_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def scr1_fixed() -> gf.Component:
     """Returns scr1 fixed cell.
 
@@ -1534,7 +1534,7 @@ def scr1_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def sealring_CDNS_675179387642_fixed() -> gf.Component:
     """Returns sealring_CDNS_675179387642 fixed cell.
 
@@ -1550,7 +1550,7 @@ def sealring_CDNS_675179387642_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def sealring_complete_fixed() -> gf.Component:
     """Returns sealring_complete fixed cell.
 
@@ -1566,7 +1566,7 @@ def sealring_complete_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell
+@gf.cell(tags={"type": "fixed"})
 def sealring_corner_CDNS_675179387641_fixed() -> gf.Component:
     """Returns sealring_corner_CDNS_675179387641 fixed cell.
 

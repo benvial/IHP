@@ -930,7 +930,7 @@ def rfnmos_schematic(
     return s
 
 
-@gf.cell(schematic_function=rfnmos_schematic)
+@gf.cell(schematic_function=rfnmos_schematic, tags={"type": "rf_transistors"})
 def rfnmos(
     width: float = 1.0,
     length: float = 0.13,
@@ -1029,7 +1029,7 @@ def rfpmos_schematic(
     return s
 
 
-@gf.cell(schematic_function=rfpmos_schematic)
+@gf.cell(schematic_function=rfpmos_schematic, tags={"type": "rf_transistors"})
 def rfpmos(
     width: float = 1.0,
     length: float = 0.13,
@@ -1128,7 +1128,7 @@ def rfnmos_hv_schematic(
     return s
 
 
-@gf.cell(schematic_function=rfnmos_hv_schematic)
+@gf.cell(schematic_function=rfnmos_hv_schematic, tags={"type": "rf_transistors"})
 def rfnmos_hv(
     width: float = 1.0,
     length: float = 0.45,
@@ -1227,7 +1227,7 @@ def rfpmos_hv_schematic(
     return s
 
 
-@gf.cell(schematic_function=rfpmos_hv_schematic)
+@gf.cell(schematic_function=rfpmos_hv_schematic, tags={"type": "rf_transistors"})
 def rfpmos_hv(
     width: float = 1.0,
     length: float = 0.40,

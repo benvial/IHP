@@ -10,7 +10,7 @@ from .ihp_pycell import via_stack as via_stackIHP
 from .utils import *
 
 
-@gf.cell
+@gf.cell(tags={"type": "via_stacks"})
 def via_stack(
     bottom_layer: Literal[
         "Activ",
@@ -111,7 +111,7 @@ def via_stack(
     return c
 
 
-@gf.cell
+@gf.cell(tags={"type": "via_stacks"})
 def no_filler_stack(
     width: int = 10,
     length: int = 10,

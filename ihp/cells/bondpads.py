@@ -53,7 +53,7 @@ def bondpad_schematic(
     return s
 
 
-@gf.cell(schematic_function=bondpad_schematic)
+@gf.cell(schematic_function=bondpad_schematic, tags={"type": "bondpads"})
 def bondpad(
     shape: Literal["octagon", "square", "circle"] = "octagon",
     diameter: float = 80.0,
@@ -136,7 +136,7 @@ def bondpad(
     return c
 
 
-@gf.cell
+@gf.cell(tags={"type": "bondpads"})
 def bondpad_array(
     n_pads: int = 4,
     pad_pitch: float = 100.0,
