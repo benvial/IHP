@@ -59,7 +59,7 @@ def cmom_extractor(
     return total_cap * (1 + fringe_field_factor)
 
 
-@gf.cell
+@gf.cell(tags={"type": "capacitors"})
 def cmom(
     nfingers: int = 1,
     length: float = 4.0,
@@ -341,7 +341,7 @@ def cmim_schematic(
     return s
 
 
-@gf.cell(schematic_function=cmim_schematic)
+@gf.cell(schematic_function=cmim_schematic, tags={"type": "capacitors"})
 def cmim(
     width: float = 6.0,
     length: float = 6.0,
@@ -587,7 +587,7 @@ def rfcmim_schematic(
     return s
 
 
-@gf.cell(schematic_function=rfcmim_schematic)
+@gf.cell(schematic_function=rfcmim_schematic, tags={"type": "capacitors"})
 def rfcmim(
     width: float = 7.0,
     length: float = 7.0,

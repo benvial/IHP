@@ -8,7 +8,7 @@ from .ihp_pycell import pnpMPA as pnpMPAIHP
 from .utils import *
 
 
-@gf.cell
+@gf.cell(tags={"type": "bjt_transistors"})
 def npn13G2(
     STI: float = 0.44,
     baspolyx: float = 0.3,
@@ -104,7 +104,7 @@ def npn13G2(
     return c
 
 
-@gf.cell
+@gf.cell(tags={"type": "bjt_transistors"})
 def npn13G2L(
     Nx: int = 1,
     emitter_length: float = 1,
@@ -168,7 +168,7 @@ def npn13G2L(
     return c
 
 
-@gf.cell
+@gf.cell(tags={"type": "bjt_transistors"})
 def npn13G2V(
     Nx: int = 1,
     emitter_length: float = 1,
@@ -232,7 +232,7 @@ def npn13G2V(
     return c
 
 
-@gf.cell
+@gf.cell(tags={"type": "bjt_transistors"})
 def pnpMPA(
     width: float = 0.7,
     length: float = 2,

@@ -9,7 +9,7 @@ from .ihp_pycell import bondpad as bondpadIHP
 from .utils import *
 
 
-@gf.cell
+@gf.cell(tags={"type": "bondpads"})
 def bondpad(
     shape: Literal["octagon", "square", "circle"] = "octagon",
     stack: Literal["t", "nil"] = "t",
@@ -72,7 +72,7 @@ def bondpad(
     return c
 
 
-@gf.cell
+@gf.cell(tags={"type": "bondpads"})
 def bondpad_array(
     n_pads: int = 4,
     pad_pitch: float = 100.0,

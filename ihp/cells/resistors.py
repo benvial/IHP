@@ -54,7 +54,7 @@ def rsil_schematic(
     return s
 
 
-@gf.cell(schematic_function=rsil_schematic)
+@gf.cell(schematic_function=rsil_schematic, tags={"type": "resistors"})
 def rsil(
     dy: float = 0.5,
     dx: float = 0.5,
@@ -263,7 +263,7 @@ def rppd_schematic(
     return s
 
 
-@gf.cell(schematic_function=rppd_schematic)
+@gf.cell(schematic_function=rppd_schematic, tags={"type": "resistors"})
 def rppd(
     dy: float = 0.5,
     dx: float = 0.5,
@@ -486,7 +486,7 @@ def rhigh_schematic(
     return s
 
 
-@gf.cell(schematic_function=rhigh_schematic)
+@gf.cell(schematic_function=rhigh_schematic, tags={"type": "resistors"})
 def rhigh(
     dy: float = 0.96,
     dx: float = 0.5,

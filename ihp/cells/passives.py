@@ -49,7 +49,7 @@ def svaricap_schematic(
     return s
 
 
-@gf.cell(schematic_function=svaricap_schematic)
+@gf.cell(schematic_function=svaricap_schematic, tags={"type": "passives"})
 def svaricap(
     width: float = 1.0,
     length: float = 1.0,
@@ -241,7 +241,7 @@ def esd_nmos_schematic(
     return s
 
 
-@gf.cell(schematic_function=esd_nmos_schematic)
+@gf.cell(schematic_function=esd_nmos_schematic, tags={"type": "passives"})
 def esd_nmos(
     width: float = 50.0,
     length: float = 0.5,
@@ -442,7 +442,7 @@ def ptap1_schematic(
     return s
 
 
-@gf.cell(schematic_function=ptap1_schematic)
+@gf.cell(schematic_function=ptap1_schematic, tags={"type": "passives"})
 def ptap1(
     width: float = 1.0,
     length: float = 1.0,
@@ -584,7 +584,7 @@ def ntap1_schematic(
     return s
 
 
-@gf.cell(schematic_function=ntap1_schematic)
+@gf.cell(schematic_function=ntap1_schematic, tags={"type": "passives"})
 def ntap1(
     width: float = 1.0,
     length: float = 1.0,
@@ -708,7 +708,7 @@ def ntap1(
     return c
 
 
-@gf.cell
+@gf.cell(tags={"type": "passives"})
 def sealring(
     width: float = 200.0,
     height: float = 200.0,
@@ -891,7 +891,7 @@ def sealring(
     return c
 
 
-@gf.cell
+@gf.cell(tags={"type": "passives"})
 def guard_ring(
     width: float = 0.5,
     guardRingSpacing: float = 0.14,

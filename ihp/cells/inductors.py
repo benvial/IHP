@@ -11,7 +11,7 @@ def snap_to_grid(p, grid: float = 0.005):
     return round(p / grid) * grid
 
 
-@gf.cell
+@gf.cell(tags={"type": "inductors"})
 def inductor2(
     width: float = 2.0,
     space: float = 2.1,
@@ -305,7 +305,7 @@ def inductor2(
     return c
 
 
-@gf.cell
+@gf.cell(tags={"type": "inductors"})
 def inductor3(
     width: float = 2.0,
     space: float = 2.1,

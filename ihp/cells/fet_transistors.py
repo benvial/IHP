@@ -546,7 +546,7 @@ def nmos_schematic(
     return s
 
 
-@gf.cell(schematic_function=nmos_schematic)
+@gf.cell(schematic_function=nmos_schematic, tags={"type": "fet_transistors"})
 def nmos(
     width: float = 0.15,
     length: float = 0.13,
@@ -617,7 +617,7 @@ def pmos_schematic(
     return s
 
 
-@gf.cell(schematic_function=pmos_schematic)
+@gf.cell(schematic_function=pmos_schematic, tags={"type": "fet_transistors"})
 def pmos(
     width: float = 0.15,
     length: float = 0.13,
@@ -688,7 +688,7 @@ def nmos_hv_schematic(
     return s
 
 
-@gf.cell(schematic_function=nmos_hv_schematic)
+@gf.cell(schematic_function=nmos_hv_schematic, tags={"type": "fet_transistors"})
 def nmos_hv(
     width: float = 0.60,
     length: float = 0.45,
@@ -759,7 +759,7 @@ def pmos_hv_schematic(
     return s
 
 
-@gf.cell(schematic_function=pmos_hv_schematic)
+@gf.cell(schematic_function=pmos_hv_schematic, tags={"type": "fet_transistors"})
 def pmos_hv(
     width: float = 0.30,
     length: float = 0.40,
