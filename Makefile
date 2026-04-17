@@ -32,7 +32,11 @@ build:
 	pip install build
 	python -m build
 
-docs-clean:
+gmsh:
+	sudo apt-get update
+	sudo apt-get install -y python3-gmsh gmsh libglu1-mesa libxi-dev libxmu-dev libglu1-mesa-dev
+
+docs-clean: gmsh
 	rm -rf docs/_build
 
 docs: docs-clean
