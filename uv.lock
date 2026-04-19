@@ -1329,7 +1329,7 @@ simulation = [
 requires-dist = [
     { name = "autodoc-pydantic", marker = "extra == 'docs'" },
     { name = "doroutes", specifier = ">=0.2.1" },
-    { name = "gdsfactory", specifier = ">=9.39.3" },
+    { name = "gdsfactory", specifier = "~=9.40.1" },
     { name = "gdsfactoryplus" },
     { name = "gplugins", extras = ["sax"], specifier = "~=2.0.0" },
     { name = "gsim", marker = "python_full_version >= '3.12' and extra == 'simulation'", specifier = ">=0.0.8" },
