@@ -34,7 +34,7 @@ build:
 
 gmsh:
 	sudo apt-get update
-	sudo apt-get install -y python3-gmsh gmsh libglu1-mesa libxi-dev libxmu-dev libglu1-mesa-dev
+	sudo apt-get install -y python3-gmsh gmsh libglu1-mesa libxi-dev libxmu-dev libglu1-mesa-dev libosmesa6 libegl1
 
 docs-clean: gmsh
 	rm -rf docs/_build
