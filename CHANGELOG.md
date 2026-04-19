@@ -3,6 +3,13 @@
 
 <!-- towncrier release notes start -->
 
+## [0.2.8](https://github.com/gdsfactory/ihp/releases/tag/v0.2.8) - 2026-04-19
+
+
+### Added
+
+- SAX frequency-domain models for resistors (rsil, rppd, rhigh), capacitors (cmim, rfcmim, cmom), and inductors (inductor2, inductor3). [#105](https://github.com/gdsfactory/ihp/issues/105)
+
 ## [0.2.0](https://github.com/gdsfactory/ihp/releases/tag/v0.2.0) - 2026-02-15
 
 ### Deprecated
