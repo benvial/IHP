@@ -13,7 +13,7 @@ from .ihp_pycell import sealring as sealringIHP
 from .utils import *
 
 
-@gf.cell(tags={"type": "passives"})
+@gf.cell(tags=["IHP", "esd", "lv"])
 def esd(
     model: Literal[
         "diodevdd_2kv",
@@ -135,7 +135,7 @@ def esd(
     return c
 
 
-@gf.cell(tags={"type": "passives"})
+@gf.cell(tags=["IHP", "tap", "p-type"])
 def ptap1(
     width: float = 0.78,
     length: float = 0.78,
@@ -188,7 +188,7 @@ def ptap1(
     return c
 
 
-@gf.cell(tags={"type": "passives"})
+@gf.cell(tags=["IHP", "tap", "n-type"])
 def ntap1(
     width=0.78,
     length=0.78,
@@ -238,7 +238,7 @@ def ntap1(
     return c
 
 
-@gf.cell(tags={"type": "passives"})
+@gf.cell(tags=["IHP", "sealring"])
 def sealring(
     width: float = 400.0,
     height: float = 400.0,

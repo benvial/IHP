@@ -30,7 +30,6 @@ def rsil_schematic(
     resistance: float | None = None,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "resistor", "silicided"]
     s.info["symbol"] = "resistor"
     s.info["ports"] = [
         {"name": "P1", "side": "top", "type": "electric"},
@@ -54,7 +53,7 @@ def rsil_schematic(
     return s
 
 
-@gf.cell(schematic_function=rsil_schematic, tags={"type": "resistors"})
+@gf.cell(schematic_function=rsil_schematic, tags=["IHP", "resistor", "silicided"])
 def rsil(
     dy: float = 0.5,
     dx: float = 0.5,
@@ -239,7 +238,6 @@ def rppd_schematic(
     resistance: float | None = None,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "resistor", "unsilicided"]
     s.info["symbol"] = "resistor"
     s.info["ports"] = [
         {"name": "P1", "side": "top", "type": "electric"},
@@ -263,7 +261,7 @@ def rppd_schematic(
     return s
 
 
-@gf.cell(schematic_function=rppd_schematic, tags={"type": "resistors"})
+@gf.cell(schematic_function=rppd_schematic, tags=["IHP", "resistor", "unsilicided"])
 def rppd(
     dy: float = 0.5,
     dx: float = 0.5,
@@ -462,7 +460,6 @@ def rhigh_schematic(
     resistance: float | None = None,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "resistor", "high-r"]
     s.info["symbol"] = "resistor"
     s.info["ports"] = [
         {"name": "P1", "side": "top", "type": "electric"},
@@ -486,7 +483,7 @@ def rhigh_schematic(
     return s
 
 
-@gf.cell(schematic_function=rhigh_schematic, tags={"type": "resistors"})
+@gf.cell(schematic_function=rhigh_schematic, tags=["IHP", "resistor", "high-r"])
 def rhigh(
     dy: float = 0.96,
     dx: float = 0.5,

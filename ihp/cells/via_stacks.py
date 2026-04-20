@@ -76,7 +76,7 @@ def get_via_name(bottom_metal: str, top_metal: str) -> str | None:
     return None
 
 
-@gf.cell(tags={"type": "via_stacks"})
+@gf.cell(tags=["IHP", "via", "array"])
 def via_array(
     via_type: str = "Via1",
     columns: int = 2,
@@ -167,7 +167,7 @@ def via_array(
     return c
 
 
-@gf.cell(tags={"type": "via_stacks"})
+@gf.cell(tags=["IHP", "via", "stack"])
 def via_stack(
     bottom_layer: str = "Metal1",
     top_layer: str = "Metal2",
@@ -387,7 +387,7 @@ def via_stack(
     return c
 
 
-@gf.cell(tags={"type": "via_stacks"})
+@gf.cell(tags=["IHP", "via", "stack"])
 def via_stack_with_pads(
     bottom_layer: str = "Metal1",
     top_layer: str = "TopMetal2",

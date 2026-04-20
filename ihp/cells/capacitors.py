@@ -59,7 +59,7 @@ def cmom_extractor(
     return total_cap * (1 + fringe_field_factor)
 
 
-@gf.cell(tags={"type": "capacitors"})
+@gf.cell(tags=["IHP", "capacitor", "mom"])
 def cmom(
     nfingers: int = 1,
     length: float = 4.0,
@@ -319,7 +319,6 @@ def cmim_schematic(
     length: float = 6.0,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "capacitor", "mim"]
     s.info["symbol"] = "capacitor"
     s.info["ports"] = [
         {"name": "MINUS", "side": "left", "type": "electric"},
@@ -341,7 +340,7 @@ def cmim_schematic(
     return s
 
 
-@gf.cell(schematic_function=cmim_schematic, tags={"type": "capacitors"})
+@gf.cell(schematic_function=cmim_schematic, tags=["IHP", "capacitor", "mim"])
 def cmim(
     width: float = 6.0,
     length: float = 6.0,
@@ -563,7 +562,6 @@ def rfcmim_schematic(
     length: float = 7.0,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "capacitor", "mim", "rf"]
     s.info["symbol"] = "capacitor"
     s.info["ports"] = [
         {"name": "BN", "side": "bottom", "type": "electric"},
@@ -587,7 +585,7 @@ def rfcmim_schematic(
     return s
 
 
-@gf.cell(schematic_function=rfcmim_schematic, tags={"type": "capacitors"})
+@gf.cell(schematic_function=rfcmim_schematic, tags=["IHP", "capacitor", "mim", "rf"])
 def rfcmim(
     width: float = 7.0,
     length: float = 7.0,

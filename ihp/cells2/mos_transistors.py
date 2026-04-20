@@ -15,7 +15,7 @@ from .ihp_pycell import rfpmosHV as rfpmosHVIHP
 from .utils import *
 
 
-@gf.cell(tags={"type": "mos_transistors"})
+@gf.cell(tags=["IHP", "mos", "lv"])
 def nmos(
     w: float = 0.15,
     l: float = 0.13,
@@ -88,7 +88,7 @@ def nmos(
     return c
 
 
-@gf.cell(tags={"type": "mos_transistors"})
+@gf.cell(tags=["IHP", "mos", "hv"])
 def nmosHV(
     w: float = 0.60,
     l: float = 0.45,
@@ -163,7 +163,7 @@ def nmosHV(
     return c
 
 
-@gf.cell(tags={"type": "mos_transistors"})
+@gf.cell(tags=["IHP", "mos", "lv"])
 def pmos(
     w: float = 0.15,
     l: float = 0.13,
@@ -236,7 +236,7 @@ def pmos(
     return c
 
 
-@gf.cell(tags={"type": "mos_transistors"})
+@gf.cell(tags=["IHP", "mos", "hv"])
 def pmosHV(
     w: float = 0.30,
     l: float = 0.40,
@@ -310,7 +310,7 @@ def pmosHV(
     return c
 
 
-@gf.cell(tags={"type": "mos_transistors"})
+@gf.cell(tags=["IHP", "mos", "lv", "rf"])
 def rfnmos(
     w: float = 1.0,
     l: float = 0.72,
@@ -395,7 +395,7 @@ def rfnmos(
     return c
 
 
-@gf.cell(tags={"type": "mos_transistors"})
+@gf.cell(tags=["IHP", "mos", "hv", "rf"])
 def rfnmosHV(
     w: float = 1.0,
     l: float = 0.72,
@@ -459,7 +459,7 @@ def rfnmosHV(
     return c
 
 
-@gf.cell(tags={"type": "mos_transistors"})
+@gf.cell(tags=["IHP", "mos", "lv", "rf"])
 def rfpmos(
     w: float = 1.0,
     l: float = 0.72,
@@ -523,7 +523,7 @@ def rfpmos(
     return c
 
 
-@gf.cell(tags={"type": "mos_transistors"})
+@gf.cell(tags=["IHP", "mos", "hv", "rf"])
 def rfpmosHV(
     w: float = 1.0,
     l: float = 0.72,

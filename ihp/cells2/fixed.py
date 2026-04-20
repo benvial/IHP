@@ -17,7 +17,7 @@ gdsdir = PATH.gds
 import_gds = partial(gf.import_gds, post_process=_add_ports)
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "bondpad"])
 def CuPillarPad() -> gf.Component:
     """Returns CuPillarPad fixed cell.
 
@@ -46,7 +46,7 @@ def CuPillarPad() -> gf.Component:
     return c
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "inductor"])
 def L2_IND_LVS() -> gf.Component:
     """Returns L2_IND_LVS fixed cell.
 
@@ -61,7 +61,7 @@ def L2_IND_LVS() -> gf.Component:
     return import_gds(gdsdir / "L2_IND_LVS.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "via"])
 def M1_GatPoly_CDNS_675179387644() -> gf.Component:
     """Returns M1_GatPoly_CDNS_675179387644 fixed cell.
 
@@ -76,7 +76,7 @@ def M1_GatPoly_CDNS_675179387644() -> gf.Component:
     return import_gds(gdsdir / "M1_GatPoly_CDNS_675179387644.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "via"])
 def M2_M1_CDNS_675179387643() -> gf.Component:
     """Returns M2_M1_CDNS_675179387643 fixed cell.
 
@@ -91,7 +91,7 @@ def M2_M1_CDNS_675179387643() -> gf.Component:
     return import_gds(gdsdir / "M2_M1_CDNS_675179387643.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "via"])
 def M3_M2_CDNS_675179387642() -> gf.Component:
     """Returns M3_M2_CDNS_675179387642 fixed cell.
 
@@ -106,7 +106,7 @@ def M3_M2_CDNS_675179387642() -> gf.Component:
     return import_gds(gdsdir / "M3_M2_CDNS_675179387642.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "via"])
 def M4_M3_CDNS_675179387641() -> gf.Component:
     """Returns M4_M3_CDNS_675179387641 fixed cell.
 
@@ -121,7 +121,7 @@ def M4_M3_CDNS_675179387641() -> gf.Component:
     return import_gds(gdsdir / "M4_M3_CDNS_675179387641.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "via"])
 def M5_M4_CDNS_675179387640() -> gf.Component:
     """Returns M5_M4_CDNS_675179387640 fixed cell.
 
@@ -136,7 +136,7 @@ def M5_M4_CDNS_675179387640() -> gf.Component:
     return import_gds(gdsdir / "M5_M4_CDNS_675179387640.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "fill"])
 def NoFillerStack() -> gf.Component:
     """Returns NoFillerStack fixed cell.
 
@@ -151,7 +151,7 @@ def NoFillerStack() -> gf.Component:
     return import_gds(gdsdir / "NoFillerStack.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "varicap", "hv"])
 def SVaricap() -> gf.Component:
     """Returns SVaricap fixed cell.
 
@@ -166,7 +166,7 @@ def SVaricap() -> gf.Component:
     return import_gds(gdsdir / "SVaricap.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "via"])
 def TM1_M5_CDNS_675179387645() -> gf.Component:
     """Returns TM1_M5_CDNS_675179387645 fixed cell.
 
@@ -181,7 +181,7 @@ def TM1_M5_CDNS_675179387645() -> gf.Component:
     return import_gds(gdsdir / "TM1_M5_CDNS_675179387645.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "via"])
 def TM2_TM1_CDNS_675179387646() -> gf.Component:
     """Returns TM2_TM1_CDNS_675179387646 fixed cell.
 
@@ -196,7 +196,7 @@ def TM2_TM1_CDNS_675179387646() -> gf.Component:
     return import_gds(gdsdir / "TM2_TM1_CDNS_675179387646.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "via", "tsv"])
 def TSV() -> gf.Component:
     """Returns TSV fixed cell.
 
@@ -211,7 +211,7 @@ def TSV() -> gf.Component:
     return import_gds(gdsdir / "TSV.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "via", "stack"])
 def ViaStack() -> gf.Component:
     """Returns ViaStack fixed cell.
 
@@ -226,7 +226,7 @@ def ViaStack() -> gf.Component:
     return import_gds(gdsdir / "ViaStack.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "bondpad"])
 def bondpad() -> gf.Component:
     """Returns bondpad fixed cell.
 
@@ -241,7 +241,7 @@ def bondpad() -> gf.Component:
     return import_gds(gdsdir / "bondpad.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "text"])
 def chipText() -> gf.Component:
     """Returns chipText fixed cell.
 
@@ -256,7 +256,7 @@ def chipText() -> gf.Component:
     return import_gds(gdsdir / "chipText.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "capacitor", "mim"])
 def cmim() -> gf.Component:
     """Returns cmim fixed cell.
 
@@ -271,7 +271,7 @@ def cmim() -> gf.Component:
     return import_gds(gdsdir / "cmim.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "layer"])
 def colors_and_stipples() -> gf.Component:
     """Returns colors_and_stipples fixed cell.
 
@@ -286,7 +286,7 @@ def colors_and_stipples() -> gf.Component:
     return import_gds(gdsdir / "colors_and_stipples.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "diode", "antenna"])
 def dantenna() -> gf.Component:
     """Returns dantenna fixed cell.
 
@@ -301,7 +301,7 @@ def dantenna() -> gf.Component:
     return import_gds(gdsdir / "dantenna.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "probe"])
 def diffstbprobe() -> gf.Component:
     """Returns diffstbprobe fixed cell.
 
@@ -316,7 +316,7 @@ def diffstbprobe() -> gf.Component:
     return import_gds(gdsdir / "diffstbprobe.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "esd"])
 def diodevdd_2kv() -> gf.Component:
     """Returns diodevdd_2kv fixed cell.
 
@@ -331,7 +331,7 @@ def diodevdd_2kv() -> gf.Component:
     return import_gds(gdsdir / "diodevdd_2kv.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "esd"])
 def diodevdd_4kv() -> gf.Component:
     """Returns diodevdd_4kv fixed cell.
 
@@ -346,7 +346,7 @@ def diodevdd_4kv() -> gf.Component:
     return import_gds(gdsdir / "diodevdd_4kv.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "esd"])
 def diodevss_2kv() -> gf.Component:
     """Returns diodevss_2kv fixed cell.
 
@@ -361,7 +361,7 @@ def diodevss_2kv() -> gf.Component:
     return import_gds(gdsdir / "diodevss_2kv.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "esd"])
 def diodevss_4kv() -> gf.Component:
     """Returns diodevss_4kv fixed cell.
 
@@ -376,7 +376,7 @@ def diodevss_4kv() -> gf.Component:
     return import_gds(gdsdir / "diodevss_4kv.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "diode", "antenna"])
 def dpantenna() -> gf.Component:
     """Returns dpantenna fixed cell.
 
@@ -391,7 +391,7 @@ def dpantenna() -> gf.Component:
     return import_gds(gdsdir / "dpantenna.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "resistor"])
 def dummy1() -> gf.Component:
     """Returns dummy1 fixed cell.
 
@@ -406,7 +406,7 @@ def dummy1() -> gf.Component:
     return import_gds(gdsdir / "dummy1.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "inductor"])
 def inductor2() -> gf.Component:
     """Returns inductor2 fixed cell.
 
@@ -421,7 +421,7 @@ def inductor2() -> gf.Component:
     return import_gds(gdsdir / "inductor2.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "inductor"])
 def inductor3() -> gf.Component:
     """Returns inductor3 fixed cell.
 
@@ -436,7 +436,7 @@ def inductor3() -> gf.Component:
     return import_gds(gdsdir / "inductor3.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "probe"])
 def iprobe() -> gf.Component:
     """Returns iprobe fixed cell.
 
@@ -451,7 +451,7 @@ def iprobe() -> gf.Component:
     return import_gds(gdsdir / "iprobe.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "diode", "antenna"])
 def isolbox() -> gf.Component:
     """Returns isolbox fixed cell.
 
@@ -466,7 +466,7 @@ def isolbox() -> gf.Component:
     return import_gds(gdsdir / "isolbox.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "resistor"])
 def lvsres() -> gf.Component:
     """Returns lvsres fixed cell.
 
@@ -481,7 +481,7 @@ def lvsres() -> gf.Component:
     return import_gds(gdsdir / "lvsres.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "mos", "lv"])
 def nmos() -> gf.Component:
     """Returns nmos fixed cell.
 
@@ -496,7 +496,7 @@ def nmos() -> gf.Component:
     return import_gds(gdsdir / "nmos.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "mos", "hv"])
 def nmosHV() -> gf.Component:
     """Returns nmosHV fixed cell.
 
@@ -511,7 +511,7 @@ def nmosHV() -> gf.Component:
     return import_gds(gdsdir / "nmosHV.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "mos", "lv"])
 def nmoscl_2() -> gf.Component:
     """Returns nmoscl_2 fixed cell.
 
@@ -526,7 +526,7 @@ def nmoscl_2() -> gf.Component:
     return import_gds(gdsdir / "nmoscl_2.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "mos", "lv"])
 def nmoscl_4() -> gf.Component:
     """Returns nmoscl_4 fixed cell.
 
@@ -541,7 +541,7 @@ def nmoscl_4() -> gf.Component:
     return import_gds(gdsdir / "nmoscl_4.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "bjt", "npn"])
 def npn13G2() -> gf.Component:
     """Returns npn13G2 fixed cell.
 
@@ -556,7 +556,7 @@ def npn13G2() -> gf.Component:
     return import_gds(gdsdir / "npn13G2.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "bjt", "npn"])
 def npn13G2L() -> gf.Component:
     """Returns npn13G2L fixed cell.
 
@@ -571,7 +571,7 @@ def npn13G2L() -> gf.Component:
     return import_gds(gdsdir / "npn13G2L.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "bjt", "npn"])
 def npn13G2V() -> gf.Component:
     """Returns npn13G2V fixed cell.
 
@@ -586,7 +586,7 @@ def npn13G2V() -> gf.Component:
     return import_gds(gdsdir / "npn13G2V.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "bjt", "npn"])
 def npn13G2_base_CDNS_675179387640() -> gf.Component:
     """Returns npn13G2_base_CDNS_675179387640 fixed cell.
 
@@ -601,7 +601,7 @@ def npn13G2_base_CDNS_675179387640() -> gf.Component:
     return import_gds(gdsdir / "npn13G2_base_CDNS_675179387640.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "tap", "n-type"])
 def ntap() -> gf.Component:
     """Returns ntap fixed cell.
 
@@ -616,7 +616,7 @@ def ntap() -> gf.Component:
     return import_gds(gdsdir / "ntap.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "tap", "n-type"])
 def ntap1() -> gf.Component:
     """Returns ntap1 fixed cell.
 
@@ -631,7 +631,7 @@ def ntap1() -> gf.Component:
     return import_gds(gdsdir / "ntap1.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "mos", "lv"])
 def pmos() -> gf.Component:
     """Returns pmos fixed cell.
 
@@ -646,7 +646,7 @@ def pmos() -> gf.Component:
     return import_gds(gdsdir / "pmos.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "mos", "hv"])
 def pmosHV() -> gf.Component:
     """Returns pmosHV fixed cell.
 
@@ -661,7 +661,7 @@ def pmosHV() -> gf.Component:
     return import_gds(gdsdir / "pmosHV.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "bjt", "pnp"])
 def pnpMPA() -> gf.Component:
     """Returns pnpMPA fixed cell.
 
@@ -676,7 +676,7 @@ def pnpMPA() -> gf.Component:
     return import_gds(gdsdir / "pnpMPA.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "tap", "p-type"])
 def ptap() -> gf.Component:
     """Returns ptap fixed cell.
 
@@ -691,7 +691,7 @@ def ptap() -> gf.Component:
     return import_gds(gdsdir / "ptap.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "tap", "p-type"])
 def ptap1() -> gf.Component:
     """Returns ptap1 fixed cell.
 
@@ -706,7 +706,7 @@ def ptap1() -> gf.Component:
     return import_gds(gdsdir / "ptap1.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "capacitor", "mim", "rf"])
 def rfcmim() -> gf.Component:
     """Returns rfcmim fixed cell.
 
@@ -721,7 +721,7 @@ def rfcmim() -> gf.Component:
     return import_gds(gdsdir / "rfcmim.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "mos", "lv", "rf"])
 def rfnmos() -> gf.Component:
     """Returns rfnmos fixed cell.
 
@@ -736,7 +736,7 @@ def rfnmos() -> gf.Component:
     return import_gds(gdsdir / "rfnmos.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "mos", "hv", "rf"])
 def rfnmosHV() -> gf.Component:
     """Returns rfnmosHV fixed cell.
 
@@ -751,7 +751,7 @@ def rfnmosHV() -> gf.Component:
     return import_gds(gdsdir / "rfnmosHV.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "mos", "lv", "rf"])
 def rfpmos() -> gf.Component:
     """Returns rfpmos fixed cell.
 
@@ -766,7 +766,7 @@ def rfpmos() -> gf.Component:
     return import_gds(gdsdir / "rfpmos.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "mos", "hv", "rf"])
 def rfpmosHV() -> gf.Component:
     """Returns rfpmosHV fixed cell.
 
@@ -781,7 +781,7 @@ def rfpmosHV() -> gf.Component:
     return import_gds(gdsdir / "rfpmosHV.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "resistor", "high-r"])
 def rhigh() -> gf.Component:
     """Returns rhigh fixed cell.
 
@@ -796,7 +796,7 @@ def rhigh() -> gf.Component:
     return import_gds(gdsdir / "rhigh.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "resistor", "unsilicided"])
 def rppd() -> gf.Component:
     """Returns rppd fixed cell.
 
@@ -811,7 +811,7 @@ def rppd() -> gf.Component:
     return import_gds(gdsdir / "rppd.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "resistor", "silicided"])
 def rsil() -> gf.Component:
     """Returns rsil fixed cell.
 
@@ -826,7 +826,7 @@ def rsil() -> gf.Component:
     return import_gds(gdsdir / "rsil.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "diode", "schottky"])
 def schottky_nbl1() -> gf.Component:
     """Returns schottky_nbl1 fixed cell.
 
@@ -841,7 +841,7 @@ def schottky_nbl1() -> gf.Component:
     return import_gds(gdsdir / "schottky_nbl1.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "esd"])
 def scr1() -> gf.Component:
     """Returns scr1 fixed cell.
 
@@ -856,7 +856,7 @@ def scr1() -> gf.Component:
     return import_gds(gdsdir / "scr1.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "sealring"])
 def sealring_CDNS_675179387642() -> gf.Component:
     """Returns sealring_CDNS_675179387642 fixed cell.
 
@@ -871,7 +871,7 @@ def sealring_CDNS_675179387642() -> gf.Component:
     return import_gds(gdsdir / "sealring_CDNS_675179387642.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "sealring"])
 def sealring_complete() -> gf.Component:
     """Returns sealring_complete fixed cell.
 
@@ -886,7 +886,7 @@ def sealring_complete() -> gf.Component:
     return import_gds(gdsdir / "sealring_complete.gds")
 
 
-@gf.cell(tags={"type": "fixed"})
+@gf.cell(tags=["IHP", "sealring"])
 def sealring_corner_CDNS_675179387641() -> gf.Component:
     """Returns sealring_corner_CDNS_675179387641 fixed cell.
 

@@ -48,7 +48,6 @@ def npn13G2_schematic(
     CMetY2: float = 0,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
     s.info["ports"] = [
         {"name": "BN", "side": "top", "type": "electric"},
@@ -79,7 +78,7 @@ def npn13G2_schematic(
     return s
 
 
-@gf.cell(schematic_function=npn13G2_schematic, tags={"type": "bjt_transistors"})
+@gf.cell(schematic_function=npn13G2_schematic, tags=["IHP", "bjt", "npn"])
 def npn13G2(
     baspolyx: float = 0.3,
     bipwinx: float = 0.07,
@@ -781,7 +780,6 @@ def npn13G2L_schematic(
     Nx: int = 1,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
     s.info["ports"] = [
         {"name": "BN", "side": "top", "type": "electric"},
@@ -810,7 +808,7 @@ def npn13G2L_schematic(
     return s
 
 
-@gf.cell(schematic_function=npn13G2L_schematic, tags={"type": "bjt_transistors"})
+@gf.cell(schematic_function=npn13G2L_schematic, tags=["IHP", "bjt", "npn"])
 def npn13G2L(
     emitter_length: float = 1,
     emitter_width: float = 0.07,
@@ -1374,7 +1372,6 @@ def npn13G2V_schematic(
     Nx: int = 1,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "bjt", "npn"]
     s.info["symbol"] = "npn"
     s.info["ports"] = [
         {"name": "BN", "side": "top", "type": "electric"},
@@ -1403,7 +1400,7 @@ def npn13G2V_schematic(
     return s
 
 
-@gf.cell(schematic_function=npn13G2V_schematic, tags={"type": "bjt_transistors"})
+@gf.cell(schematic_function=npn13G2V_schematic, tags=["IHP", "bjt", "npn"])
 def npn13G2V(
     emitter_length: float = 1,
     emitter_width: float = 0.12,
@@ -2073,7 +2070,6 @@ def contactArray(
 
 def pnpMPA_schematic(length: float = 2, width: float = 0.7) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "bjt", "pnp"]
     s.info["symbol"] = "pnp"
     s.info["ports"] = [
         {"name": "E", "side": "bottom", "type": "electric"},
@@ -2097,7 +2093,7 @@ def pnpMPA_schematic(length: float = 2, width: float = 0.7) -> DSchematic:
     return s
 
 
-@gf.cell(schematic_function=pnpMPA_schematic, tags={"type": "bjt_transistors"})
+@gf.cell(schematic_function=pnpMPA_schematic, tags=["IHP", "bjt", "pnp"])
 def pnpMPA(length: float = 2, width: float = 0.7) -> gf.Component:
     """Returns the IHP pnpMPA BJT transistor as a gdsfactory Component.
 

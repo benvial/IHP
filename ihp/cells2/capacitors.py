@@ -12,7 +12,7 @@ from .ihp_pycell import rfcmim as rfcmimIHP
 from .utils import *
 
 
-@gf.cell(tags={"type": "capacitors"})
+@gf.cell(tags=["IHP", "capacitor", "mim"])
 def cmim(
     width: float = 6.99,
     length: float = 6.99,
@@ -86,7 +86,7 @@ def cmim(
     return c
 
 
-@gf.cell(tags={"type": "capacitors"})
+@gf.cell(tags=["IHP", "capacitor", "mim", "rf"])
 def rfcmim(
     width: float = 6.99,
     length: float = 6.99,
@@ -159,7 +159,7 @@ def rfcmim(
     return c
 
 
-@gf.cell(tags={"type": "capacitors"})
+@gf.cell(tags=["IHP", "varicap", "hv"])
 def svaricap(
     width: Literal["3.74u", "9.74u"] = "9.74u",
     length: Literal["0.3u", "0.8u"] = "0.8u",

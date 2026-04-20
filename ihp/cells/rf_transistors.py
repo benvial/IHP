@@ -898,7 +898,6 @@ def rfnmos_schematic(
     guard_ring: str = "Yes",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "mos", "lv", "rf"]
     s.info["symbol"] = "nmos"
     s.info["ports"] = [
         {"name": "D", "side": "top", "type": "electric"},
@@ -930,7 +929,7 @@ def rfnmos_schematic(
     return s
 
 
-@gf.cell(schematic_function=rfnmos_schematic, tags={"type": "rf_transistors"})
+@gf.cell(schematic_function=rfnmos_schematic, tags=["IHP", "mos", "lv", "rf"])
 def rfnmos(
     width: float = 1.0,
     length: float = 0.13,
@@ -997,7 +996,6 @@ def rfpmos_schematic(
     guard_ring: str = "Yes",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "mos", "lv", "rf"]
     s.info["symbol"] = "pmos"
     s.info["ports"] = [
         {"name": "D", "side": "top", "type": "electric"},
@@ -1029,7 +1027,7 @@ def rfpmos_schematic(
     return s
 
 
-@gf.cell(schematic_function=rfpmos_schematic, tags={"type": "rf_transistors"})
+@gf.cell(schematic_function=rfpmos_schematic, tags=["IHP", "mos", "lv", "rf"])
 def rfpmos(
     width: float = 1.0,
     length: float = 0.13,
@@ -1096,7 +1094,6 @@ def rfnmos_hv_schematic(
     guard_ring: str = "Yes",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "mos", "hv", "rf"]
     s.info["symbol"] = "nmos"
     s.info["ports"] = [
         {"name": "D", "side": "top", "type": "electric"},
@@ -1128,7 +1125,7 @@ def rfnmos_hv_schematic(
     return s
 
 
-@gf.cell(schematic_function=rfnmos_hv_schematic, tags={"type": "rf_transistors"})
+@gf.cell(schematic_function=rfnmos_hv_schematic, tags=["IHP", "mos", "hv", "rf"])
 def rfnmos_hv(
     width: float = 1.0,
     length: float = 0.45,
@@ -1195,7 +1192,6 @@ def rfpmos_hv_schematic(
     guard_ring: str = "Yes",
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "mos", "hv", "rf"]
     s.info["symbol"] = "pmos"
     s.info["ports"] = [
         {"name": "D", "side": "top", "type": "electric"},
@@ -1227,7 +1223,7 @@ def rfpmos_hv_schematic(
     return s
 
 
-@gf.cell(schematic_function=rfpmos_hv_schematic, tags={"type": "rf_transistors"})
+@gf.cell(schematic_function=rfpmos_hv_schematic, tags=["IHP", "mos", "hv", "rf"])
 def rfpmos_hv(
     width: float = 1.0,
     length: float = 0.40,
