@@ -31,7 +31,6 @@ def bondpad_schematic(
 ) -> DSchematic:
     _shape_map = {"octagon": 0, "square": 1, "circle": 2}
     s = DSchematic()
-    s.info["tags"] = ["IHP", "bondpad"]
     s.info["symbol"] = "pad"
     s.info["ports"] = [{"name": "PAD", "side": "top", "type": "electric"}]
     s.info["models"] = [
@@ -53,7 +52,7 @@ def bondpad_schematic(
     return s
 
 
-@gf.cell(schematic_function=bondpad_schematic, tags={"type": "bondpads"})
+@gf.cell(schematic_function=bondpad_schematic, tags=["IHP", "bondpad"])
 def bondpad(
     shape: Literal["octagon", "square", "circle"] = "octagon",
     diameter: float = 80.0,
@@ -136,7 +135,7 @@ def bondpad(
     return c
 
 
-@gf.cell(tags={"type": "bondpads"})
+@gf.cell(tags=["IHP", "bondpad", "array"])
 def bondpad_array(
     n_pads: int = 4,
     pad_pitch: float = 100.0,

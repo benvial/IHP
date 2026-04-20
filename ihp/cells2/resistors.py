@@ -12,7 +12,7 @@ from .ihp_pycell import rsil as rsilIHP
 from .utils import *
 
 
-@gf.cell(tags={"type": "resistors"})
+@gf.cell(tags=["IHP", "resistor", "high-r"])
 def rhigh(
     length: float = 0.96,
     width: float = 0.5,
@@ -101,7 +101,7 @@ def rhigh(
     return c
 
 
-@gf.cell(tags={"type": "resistors"})
+@gf.cell(tags=["IHP", "resistor", "unsilicided"])
 def rppd(
     length: float = 0.5,
     width: float = 0.5,
@@ -190,7 +190,7 @@ def rppd(
     return c
 
 
-@gf.cell(tags={"type": "resistors"})
+@gf.cell(tags=["IHP", "resistor", "silicided"])
 def rsil(
     length: float = 0.5,
     width: float = 0.5,

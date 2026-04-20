@@ -515,7 +515,6 @@ def nmos_schematic(
     m: int = 1,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "mos", "lv"]
     s.info["symbol"] = "nmos"
     s.info["ports"] = [
         {"name": "D", "side": "top", "type": "electric"},
@@ -546,7 +545,7 @@ def nmos_schematic(
     return s
 
 
-@gf.cell(schematic_function=nmos_schematic, tags={"type": "fet_transistors"})
+@gf.cell(schematic_function=nmos_schematic, tags=["IHP", "mos", "lv"])
 def nmos(
     width: float = 0.15,
     length: float = 0.13,
@@ -591,7 +590,6 @@ def pmos_schematic(
     m: int = 1,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "mos", "lv"]
     s.info["symbol"] = "pmos"
     s.info["ports"] = [
         {"name": "D", "side": "top", "type": "electric"},
@@ -617,7 +615,7 @@ def pmos_schematic(
     return s
 
 
-@gf.cell(schematic_function=pmos_schematic, tags={"type": "fet_transistors"})
+@gf.cell(schematic_function=pmos_schematic, tags=["IHP", "mos", "lv"])
 def pmos(
     width: float = 0.15,
     length: float = 0.13,
@@ -662,7 +660,6 @@ def nmos_hv_schematic(
     m: int = 1,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "mos", "hv"]
     s.info["symbol"] = "nmos"
     s.info["ports"] = [
         {"name": "D", "side": "top", "type": "electric"},
@@ -688,7 +685,7 @@ def nmos_hv_schematic(
     return s
 
 
-@gf.cell(schematic_function=nmos_hv_schematic, tags={"type": "fet_transistors"})
+@gf.cell(schematic_function=nmos_hv_schematic, tags=["IHP", "mos", "hv"])
 def nmos_hv(
     width: float = 0.60,
     length: float = 0.45,
@@ -733,7 +730,6 @@ def pmos_hv_schematic(
     m: int = 1,
 ) -> DSchematic:
     s = DSchematic()
-    s.info["tags"] = ["IHP", "mos", "hv"]
     s.info["symbol"] = "pmos"
     s.info["ports"] = [
         {"name": "D", "side": "top", "type": "electric"},
@@ -759,7 +755,7 @@ def pmos_hv_schematic(
     return s
 
 
-@gf.cell(schematic_function=pmos_hv_schematic, tags={"type": "fet_transistors"})
+@gf.cell(schematic_function=pmos_hv_schematic, tags=["IHP", "mos", "hv"])
 def pmos_hv(
     width: float = 0.30,
     length: float = 0.40,

@@ -8,7 +8,7 @@ from .ihp_pycell import inductor3 as inductor3IHP
 from .utils import *
 
 
-@gf.cell(tags={"type": "inductors"})
+@gf.cell(tags=["IHP", "inductor"])
 def inductor2(
     width: float = 2,
     space: float = 2.1,
@@ -88,7 +88,7 @@ def inductor2(
     return c
 
 
-@gf.cell(tags={"type": "inductors"})
+@gf.cell(tags=["IHP", "inductor"])
 def inductor3(
     width: float = 2,
     space: float = 2.1,

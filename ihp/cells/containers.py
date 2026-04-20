@@ -16,7 +16,7 @@ from ..cells_fixed import CuPillarPad_fixed
 __all__ = ["add_pads_top", "pack_doe", "pack_doe_grid"]
 
 
-@gf.cell(tags={"type": "containers"})
+@gf.cell(tags=["IHP", "container"])
 def add_pads_top(
     component: ComponentSpec = "straight",
     port_names: Strs | None = None,
@@ -89,7 +89,7 @@ def add_pads_top(
     )
 
 
-@gf.cell(tags={"type": "containers"})
+@gf.cell(tags=["IHP", "container"])
 def pack_doe(
     doe: ComponentSpec,
     settings: dict[str, tuple[Any, ...]],
@@ -132,7 +132,7 @@ def pack_doe(
     )
 
 
-@gf.cell(tags={"type": "containers"})
+@gf.cell(tags=["IHP", "container"])
 def pack_doe_grid(
     doe: ComponentSpec,
     settings: dict[str, tuple[Any, ...]],
