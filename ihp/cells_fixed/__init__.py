@@ -1001,7 +1001,9 @@ def diodevss_4kv_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_dpantenna_fixed_schematic, tags=["IHP", "diode", "antenna"])
+@gf.cell(
+    schematic_function=_dpantenna_fixed_schematic, tags=["IHP", "diode", "antenna"]
+)
 def dpantenna_fixed() -> gf.Component:
     """Returns dpantenna fixed cell.
 
@@ -1355,7 +1357,9 @@ def ptap1_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_rfcmim_fixed_schematic, tags=["IHP", "capacitor", "mim", "rf"])
+@gf.cell(
+    schematic_function=_rfcmim_fixed_schematic, tags=["IHP", "capacitor", "mim", "rf"]
+)
 def rfcmim_fixed() -> gf.Component:
     """Returns rfcmim fixed cell.
 
@@ -1483,7 +1487,9 @@ def rsil_fixed() -> gf.Component:
 
 
 @deprecated
-@gf.cell(schematic_function=_schottky_nbl1_fixed_schematic, tags=["IHP", "diode", "schottky"])
+@gf.cell(
+    schematic_function=_schottky_nbl1_fixed_schematic, tags=["IHP", "diode", "schottky"]
+)
 def schottky_nbl1_fixed() -> gf.Component:
     """Returns schottky_nbl1 fixed cell.
 
