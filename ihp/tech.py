@@ -11,7 +11,6 @@ from functools import partial
 from typing import Any
 
 import gdsfactory as gf
-from doroutes.bundles import add_bundle_astar
 from gdsfactory import typings
 from gdsfactory.component import Component
 from gdsfactory.cross_section import (
@@ -1152,7 +1151,7 @@ cross_sections = get_cross_sections(sys.modules[__name__])
 # Routing functions
 ############################
 
-route_bundle = partial(gf.routing.route_bundle, cross_section="strip", sbend="bend_s")
+route_bundle = partial(gf.routing.route_bundle, cross_section="strip")
 route_bundle_rib = partial(
     route_bundle,
     cross_section="rib",
@@ -1174,32 +1173,12 @@ route_bundle_metal_corner = partial(
     port_type="electrical",
 )
 
-route_astar = partial(
-    add_bundle_astar,
-    layers=["TOPMETAL2"],
-    bend="bend_euler",
-    straight="straight",
-    grid_unit=500,
-    spacing=3,
-)
-
-route_astar_metal = partial(
-    add_bundle_astar,
-    layers=["TOPMETAL2"],
-    bend="wire_corner",
-    straight="straight_metal",
-    grid_unit=500,
-    spacing=15,
-)
-
 
 routing_strategies = dict(
     route_bundle=route_bundle,
     route_bundle_rib=route_bundle_rib,
     route_bundle_metal=route_bundle_metal,
     route_bundle_metal_corner=route_bundle_metal_corner,
-    route_astar=route_astar,
-    route_astar_metal=route_astar_metal,
 )
 
 # techParams from CNI layer for cells2 compatibility

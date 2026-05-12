@@ -58,6 +58,7 @@ Cells
 ----------------------------------------------------
 
 .. autofunction:: ihp.cells.{name}
+   :noindex:
 
 """
             )
@@ -69,6 +70,7 @@ Cells
 ----------------------------------------------------
 
 .. autofunction:: ihp.cells.{name}
+   :noindex:
 
 .. plot::
   :include-source:

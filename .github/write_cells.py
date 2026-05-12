@@ -86,6 +86,7 @@ def write_cell_entry(f, name, cell_dict, module_path="ihp.cells", import_alias="
 ----------------------------------------------------
 
 .. autofunction:: {module_path}.{name}
+   :noindex:
 
 """
         )
@@ -97,6 +98,7 @@ def write_cell_entry(f, name, cell_dict, module_path="ihp.cells", import_alias="
 ----------------------------------------------------
 
 .. autofunction:: {module_path}.{name}
+   :noindex:
 
 .. plot::
   :include-source:
