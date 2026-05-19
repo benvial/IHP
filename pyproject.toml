@@ -84,28 +84,28 @@ force-exclude = true
 
 [tool.ruff.lint]
 ignore = [
-  "E501", # line too long, handled by black
-  "B008", # do not perform function calls in argument defaults
-  "C901", # too complex
-  "B905", # `zip()` without an explicit `strict=` parameter
-  "C408" # C408 Unnecessary `dict` call (rewrite as a literal)
+  "E501",  # line too long, handled by black
+  "B008",  # do not perform function calls in argument defaults
+  "C901",  # too complex
+  "B905",  # `zip()` without an explicit `strict=` parameter
+  "C408"  # C408 Unnecessary `dict` call (rewrite as a literal)
 ]
 select = [
-  "E", # pycodestyle errors
-  "W", # pycodestyle warnings
-  "F", # pyflakes
-  "I", # isort
-  "C", # flake8-comprehensions
-  "B", # flake8-bugbear
+  "E",  # pycodestyle errors
+  "W",  # pycodestyle warnings
+  "F",  # pyflakes
+  "I",  # isort
+  "C",  # flake8-comprehensions
+  "B",  # flake8-bugbear
   "UP"
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"ihp/cells/__init__.py" = ["F403"] # allowing star imports to aggregate cells
-"ihp/cells2/*.py" = ["F403", "F405", "E741"] # allowing star imports and common variable names
-"ihp/cells2/ihp_pycell/*.py" = ["B007", "B018", "B904", "E402", "E711", "E721", "E722", "E741", "F811", "F821", "F841", "UP008", "UP031"] # legacy code patterns
-"ihp/cells2/ihp_pycell/__init__.py" = ["F401"] # explicit re-exports
-"ihp/models/__init__.py" = ["F403"] # allowing star imports to aggregate cells
+"ihp/cells/__init__.py" = ["F403"]  # allowing star imports to aggregate cells
+"ihp/cells2/*.py" = ["F403", "F405", "E741"]  # allowing star imports and common variable names
+"ihp/cells2/ihp_pycell/*.py" = ["B007", "B018", "B904", "E402", "E711", "E721", "E722", "E741", "F811", "F821", "F841", "UP008", "UP031"]  # legacy code patterns
+"ihp/cells2/ihp_pycell/__init__.py" = ["F401"]  # explicit re-exports
+"ihp/models/__init__.py" = ["F403"]  # allowing star imports to aggregate cells
 
 [tool.setuptools]
 include-package-data = true
