@@ -4,6 +4,7 @@ site_dir: build/pdf
 nav:
   - Home: index.md
   - Reference:
+      - Cells: cells.md
       - Changelog: changelog.md
 plugins:
   - search
