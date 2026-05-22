@@ -1,11 +1,13 @@
 [project]
+docs_dir = "."
 nav = [
   {"Home" = "index.md"},
   {"Reference" = [
+    {"Cells" = "cells.md"},
     {"Changelog" = "changelog.md"}
   ]}
 ]
-site_dir = "docs/_build/html"
+site_dir = "_build/html"
 site_name = "IHP pdk"
 site_url = "https://gdsfactory.github.io/ihp"
 
