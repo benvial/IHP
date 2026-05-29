@@ -10,20 +10,74 @@ nav = [
 site_dir = "_build/html"
 site_name = "IHP pdk"
 site_url = "https://gdsfactory.github.io/ihp"
+repo_url = "https://github.com/gdsfactory/IHP"
+repo_name = "gdsfactory/IHP"
+extra_javascript = ["_static/extra.js"]
+copyright = "&copy; 2026 GDSFactory"
+
 
 [project.plugins.autorefs]
 
-[project.plugins.mkdocstrings]
-
 [project.plugins.mkdocstrings.handlers.python]
+preload_modules = ["math"]
+inventories = ["https://docs.python.org/3/objects.inv"]
 
 [project.plugins.mkdocstrings.handlers.python.options]
-docstring_style = "google"
-show_root_toc_entry = false
-show_source = false
+force_inspection = true
+show_submodules = false
 
 [project.plugins.search]
 
 [project.theme]
-logo = "logo.png"
+logo = "logo.svg"
 name = "material"
+favicon = "favicon.ico"
+features = [
+    "navigation.footer"
+]
+
+# Palette toggle for automatic mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+primary = "red"
+accent = "red"
+
+# Palette toggle for light mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+primary = "red"
+accent = "red"
+
+# Palette toggle for dark mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
+primary = "red"
+accent = "red"
+
+[[project.extra.social]]
+icon = "fontawesome/solid/home"
+link = "https://gdsfactory.com"
+name = "GDSFactory website"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/gdsfactory"
+name = "Github"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/linkedin"
+link = "https://www.linkedin.com/company/gdsfactory"
+name = "Linkedin"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/slack"
+link = "https://join.slack.com/t/gdsfactory-community/shared_invite/zt-3aoygv7cg-r5BH6yvL4YlHfY8~UXp0Wg"
+name = "Slack channel"
