@@ -2,13 +2,17 @@ function syncViewerBg() {
   const color = getComputedStyle(document.body)
     .getPropertyValue('--md-code-bg-color').trim();
   document.querySelectorAll('iframe.viewer-3d').forEach(f => {
-    f.contentWindow?.postMessage({ bg: color }, '*');
+    // Send message to iframe's origin only
+    f.contentWindow?.postMessage({ bg: color }, f.src.split('?')[0]);
   });
 }
 
 // reply to iframes that request the color on load
 window.addEventListener('message', (e) => {
-  if (e.data?.requestBg) syncViewerBg();
+  // Validate origin before processing iframe requests
+  if (e.origin === window.location.origin && e.data?.requestBg) {
+    syncViewerBg();
+  }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
