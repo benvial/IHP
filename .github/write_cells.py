@@ -119,8 +119,7 @@ c.plot()
         if glb_file:
             f.write(
                 f"""
-
-   <iframe class="viewer-3d" src="_static/3d/viewer.html?file={glb_file}" width="100%" height="500px" frameborder="0" loading="lazy"></iframe>
+<iframe class="viewer-3d" src="_static/3d/viewer.html?file={glb_file}" width="100%" height="500px" frameborder="0" loading="lazy"></iframe>
 
 """
             )
