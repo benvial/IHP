@@ -133,12 +133,14 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
       });
 
-
+      // Validate origin before processing background color messages from parent
       window.addEventListener('message', (e) => {
-        if (e.data?.bg) document.body.style.background = e.data.bg;
+        // Only accept messages from parent window (same origin)
+        if (e.origin === window.location.origin && e.data?.bg) {
+          document.body.style.background = e.data.bg;
+        }
       });
-      window.parent.postMessage({ requestBg: true }, '*');
-
+      window.parent.postMessage({ requestBg: true }, window.location.origin);
 
       function animate() {
         requestAnimationFrame(animate);
