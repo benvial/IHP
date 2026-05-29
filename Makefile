@@ -59,10 +59,9 @@ cp-docs:
 	cp CHANGELOG.md docs/changelog.md
 
 docs: cp-docs cells
-	uv run python .github/write_cells.py
 	uv run --extra docs zensical build -f docs/zensical.toml
 
-docs-serve: cp-docs
+docs-serve: cp-docs cells
 	cp CHANGELOG.md docs/changelog.md
 	uv run --extra docs zensical serve -f docs/zensical.toml -a localhost:8080
 
